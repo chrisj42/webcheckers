@@ -7,7 +7,7 @@ a web micro-framework.
 ## Team
 
 - Ryan Kohn
-- MEMBER2
+- Steven McLeod
 - MEMBER3
 - MEMBER4
 
