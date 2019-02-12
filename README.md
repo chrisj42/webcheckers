@@ -9,7 +9,7 @@ a web micro-framework.
 - Ryan Kohn
 - Steven McLeod
 - Christopher Johns
-- MEMBER4
+- Stone Warren
 - MEMBER5
 
 
