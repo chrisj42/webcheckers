@@ -8,8 +8,9 @@ a web micro-framework.
 
 - Ryan Kohn
 - Steven McLeod
-- MEMBER3
+- Christopher Johns
 - MEMBER4
+- MEMBER5
 
 
 ## Prerequisites
