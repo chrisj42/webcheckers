@@ -1,10 +1,14 @@
 package com.webcheckers.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.util.Color;
+import com.webcheckers.util.Player;
+import com.webcheckers.util.ViewMode;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -57,8 +61,18 @@ public class GetHomeRoute implements Route {
 
     // display a user message in the Home page
     vm.put("message", WELCOME_MSG);
+    
+    vm.put("currentUser", new Player("Chris"));
+    vm.put("redPlayer", new Player("Chris"));
+    vm.put("whitePlayer", new Player("Steve"));
+    
+    vm.put("activeColor", Color.RED);
+    
+    vm.put("viewMode", ViewMode.PLAY);
+    
+    vm.put("board", new BoardView());
 
     // render the View
-    return templateEngine.render(new ModelAndView(vm , "home.ftl"));
+    return templateEngine.render(new ModelAndView(vm , "game.ftl"));
   }
 }
