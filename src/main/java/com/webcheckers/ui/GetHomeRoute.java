@@ -1,21 +1,19 @@
 package com.webcheckers.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import com.webcheckers.util.Color;
-import com.webcheckers.util.Player;
+import com.webcheckers.model.Color;
+import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import com.webcheckers.util.ViewMode;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.TemplateEngine;
-
-import com.webcheckers.util.Message;
 
 /**
  * The UI Controller to GET the Home page.

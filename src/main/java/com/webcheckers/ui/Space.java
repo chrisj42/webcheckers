@@ -1,22 +1,25 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.util.Color;
-import com.webcheckers.util.Piece;
-import com.webcheckers.util.Type;
+import com.webcheckers.model.Color;
+import com.webcheckers.model.Piece;
+import com.webcheckers.model.Type;
 
 public class Space {
 	
-	private int idx;
+	private int row;
+	private int col;
 	private Piece piece;
 	
-	Space(int idx) {
-		this.idx = idx;
-		this.piece = (idx + BoardView.SIZE / 2) % 2 == 0 ? null : new Piece(Type.KING, Color.RED);
+	Space(int row, int column/*, Piece piece*/) {
+		this.row = row;
+		this.col = column;
+		// 0,0 = top left = white
+		this.piece = isValid() && (row < 2 || row >= BoardView.SIZE-2) ? new Piece(Type.SINGLE, Color.RED) : null;
 	}
 	
-	public int getCellIdx() { return idx; }
+	public int getCellIdx() { return col; }
 	
-	public boolean isValid() { return true; }
+	public boolean isValid() { return (row+col) % 2 == 1 && piece == null; }
 	
 	public Piece getPiece() {
 		return piece;

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 
+import spark.Filter;
 import spark.TemplateEngine;
 
 
@@ -138,6 +139,18 @@ public class WebServer {
 
     // Shows the Checkers game Home page.
     get(HOME_URL, new GetHomeRoute(templateEngine));
+    
+    /*before((request, response) -> {
+      System.out.println(request.requestMethod()+" request made to path "+request.pathInfo());
+    });*/
+    
+    /*post("/validateMove", (request, response) -> {
+      System.out.println("body: "+request.body());
+      System.out.println("params: "+request.queryParams());
+      response.redirect(HOME_URL);
+      halt();
+      return null;
+    });*/
 
     //
     LOG.config("WebServer is initialized.");

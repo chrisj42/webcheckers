@@ -12,7 +12,7 @@ public class Row implements Iterable<Space> {
 		this.idx = idx;
 		
 		for(int i = 0; i < BoardView.SIZE; i++)
-			list.add(new Space(i));
+			list.add(new Space(idx, i));
 	}
 	
 	public int getIndex() { return idx; }
