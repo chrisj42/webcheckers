@@ -17,8 +17,19 @@
 
   <div class="body">
 
-    <!-- Provide a message to the user, if supplied. -->
-    <#include "message.ftl">
+    <#if currentUser??>
+      <!-- Provide a message to the user, if supplied. -->
+          <#include "message.ftl">
+      <p>
+        <h1>Players Online</h1>
+        <br> There are no other players available to play at this time
+      </p>
+    <#else>
+        <!-- Provide a message to the user, if supplied. -->
+            <#include "message.ftl">
+
+
+    </#if>
 
     <!-- TODO: future content on the Home:
             to start games,

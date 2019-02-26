@@ -60,7 +60,7 @@ public class GetHomeRoute implements Route {
 		// display a user message in the Home page
 		vm.put("message", WELCOME_MSG);
 		
-		vm.put("currentUser", new Player("Chris"));
+		//vm.put("currentUser", new Player("Chris"));
 		vm.put("redPlayer", new Player("Chris"));
 		vm.put("whitePlayer", new Player("Steve"));
 		
@@ -71,6 +71,6 @@ public class GetHomeRoute implements Route {
 		vm.put("board", new BoardView());
 		
 		// render the View
-		return templateEngine.render(new ModelAndView(vm , "game.ftl"));
+		return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
 	}
 }
