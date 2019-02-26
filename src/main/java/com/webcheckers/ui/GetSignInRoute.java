@@ -15,7 +15,7 @@ import spark.Response;
 import spark.Route;
 import spark.TemplateEngine;
 
-public class GetSignIn implements Route {
+public class GetSignInRoute implements Route {
     private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
     private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
@@ -28,7 +28,7 @@ public class GetSignIn implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetSignIn(final TemplateEngine templateEngine) {
+    public GetSignInRoute(final TemplateEngine templateEngine) {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         //
         LOG.config("GetHomeRoute is initialized.");
@@ -47,7 +47,7 @@ public class GetSignIn implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        LOG.finer("GetSignIn is invoked.");
+        LOG.finer("GetSignInRoute is invoked.");
         //
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", "Welcome!");
