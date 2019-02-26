@@ -71,6 +71,6 @@ public class GetHomeRoute implements Route {
 		vm.put("board", new BoardView());
 		
 		// render the View
-		return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
+		return templateEngine.render(new ModelAndView(vm , "home.ftl"));
 	}
 }

@@ -52,20 +52,8 @@ public class GetSignInRoute implements Route {
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", "Welcome!");
 
-        // display a user message in the Home page
-        vm.put("message", WELCOME_MSG);
-
-        //vm.put("currentUser", new Player("Chris"));
-        vm.put("redPlayer", new Player("Chris"));
-        vm.put("whitePlayer", new Player("Steve"));
-
-        vm.put("activeColor", Color.RED);
-
-        vm.put("viewMode", ViewMode.PLAY);
-
-        vm.put("board", new BoardView());
 
         // render the View
-        return templateEngine.render(new ModelAndView(vm , "home.ftl"));
+        return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
     }
 }
