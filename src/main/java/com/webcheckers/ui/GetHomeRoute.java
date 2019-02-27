@@ -26,6 +26,8 @@ public class GetHomeRoute implements Route {
 	
 	private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 	
+	public static final String PLAYER_ATTR = "Player";
+	
 	private final TemplateEngine templateEngine;
 	
 	/**
@@ -63,15 +65,21 @@ public class GetHomeRoute implements Route {
 		// display a user message in the Home page
 		vm.put("message", WELCOME_MSG);
 		
-		//vm.put("currentUser", new Player("Chris"));
-		vm.put("redPlayer", new Player("Chris"));
-		vm.put("whitePlayer", new Player("Steve"));
 		
-		vm.put("activeColor", Color.RED);
+		// vm.put("currentUser", new Player("Chris"));
 		
-		vm.put("viewMode", ViewMode.PLAY);
-		
-		vm.put("board", new BoardView());
+		Player p = session.attribute(PLAYER_ATTR);
+		if(p != null) {
+			/*vm.put("redPlayer", p);
+			vm.put("whitePlayer", new Player("Steve"));
+			
+			vm.put("activeColor", Color.RED);
+			
+			vm.put("viewMode", ViewMode.PLAY);
+			
+			vm.put("board", new BoardView());*/
+			vm.put("currentUser", p);
+		}
 		
 		// render the View
 		return templateEngine.render(new ModelAndView(vm , "home.ftl"));

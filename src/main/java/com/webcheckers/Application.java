@@ -6,6 +6,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.WebServer;
 
 import spark.TemplateEngine;
@@ -56,11 +57,14 @@ public final class Application {
 		// response to Ajax requests.
 		final Gson gson = new Gson();
 		
+		// Global Application state
+		PlayerLobby serverManager = new PlayerLobby();
+		
 		// inject the game center and freemarker engine into web server
-		final WebServer webServer = new WebServer(templateEngine, gson);
+		final WebServer webServer = new WebServer(serverManager, templateEngine, gson);
 		
 		// inject web server into application
-		final Application app = new Application(webServer);
+		final Application app = new Application(serverManager, webServer);
 		
 		// start the application up
 		app.initialize();
@@ -71,12 +75,14 @@ public final class Application {
 	//
 	
 	private final WebServer webServer;
+	private final PlayerLobby playerLobby;
 	
 	//
 	// Constructor
 	//
 	
-	private Application(final WebServer webServer) {
+	private Application(final PlayerLobby playerLobby, final WebServer webServer) {
+		this.playerLobby = playerLobby;
 		// validation
 		Objects.requireNonNull(webServer, "webServer must not be null");
 		//
