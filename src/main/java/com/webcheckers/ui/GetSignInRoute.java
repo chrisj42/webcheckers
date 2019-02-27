@@ -16,9 +16,7 @@ import spark.Route;
 import spark.TemplateEngine;
 
 public class GetSignInRoute implements Route {
-    private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
-
-    private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
+    private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
 
     private final TemplateEngine templateEngine;
 
@@ -31,7 +29,7 @@ public class GetSignInRoute implements Route {
     public GetSignInRoute(final TemplateEngine templateEngine) {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         //
-        LOG.config("GetHomeRoute is initialized.");
+        LOG.config("GetSignInRoute is initialized.");
     }
 
     /**
@@ -50,9 +48,10 @@ public class GetSignInRoute implements Route {
         LOG.finer("GetSignInRoute is invoked.");
         //
         Map<String, Object> vm = new HashMap<>();
-        vm.put("title", "Welcome!");
-
-
+        
+        vm.put("title", "Sign In");
+        // vm.put("message", WELCOME_MSG);
+        
         // render the View
         return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
     }

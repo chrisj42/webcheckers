@@ -13,6 +13,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 import spark.TemplateEngine;
 
 /**
@@ -56,6 +57,8 @@ public class GetHomeRoute implements Route {
 		//
 		Map<String, Object> vm = new HashMap<>();
 		vm.put("title", "Welcome!");
+		
+		Session session = request.session();
 		
 		// display a user message in the Home page
 		vm.put("message", WELCOME_MSG);
