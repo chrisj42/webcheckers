@@ -1,7 +1,7 @@
 package com.webcheckers.appl;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Iterator;
 
 import com.webcheckers.model.Player;
 
@@ -24,5 +24,9 @@ public class PlayerLobby {
 	public void logoutPlayer(String username) {
 		players.remove(username);
 	}
+	
+	public boolean hasPlayers() { return players.size() > 1; }
+	
+	public Iterator<String> getPlayers() { return players.keySet().iterator(); }
 	
 }
