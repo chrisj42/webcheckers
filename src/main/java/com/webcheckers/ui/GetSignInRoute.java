@@ -5,20 +5,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.ViewMode;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.TemplateEngine;
+import spark.*;
 
 public class GetSignInRoute implements Route {
     private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
-
+    
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
     
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -26,10 +24,13 @@ public class GetSignInRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetSignInRoute(final TemplateEngine templateEngine) {
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+    public GetSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine){
+        // validation
+        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
-        LOG.config("GetSignInRoute is initialized.");
+        this.playerLobby = playerLobby;
+        this.templateEngine = templateEngine;
     }
 
     /**
@@ -46,6 +47,15 @@ public class GetSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("GetSignInRoute is invoked.");
+    
+        Session session = request.session();
+        Player p = session.attribute(GetHomeRoute.PLAYER_ATTR);
+        if(p != null) {
+            response.redirect(WebServer.HOME_URL);
+            Spark.halt();
+            return null;
+        }
+        
         //
         Map<String, Object> vm = new HashMap<>();
         

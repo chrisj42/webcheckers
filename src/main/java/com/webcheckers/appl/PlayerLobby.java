@@ -21,4 +21,8 @@ public class PlayerLobby {
 		return p;
 	}
 	
+	public void logoutPlayer(String username) {
+		players.remove(username);
+	}
+	
 }

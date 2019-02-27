@@ -14,20 +14,16 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 import spark.TemplateEngine;
+
 import static spark.Spark.halt;
 
 
-public class PostSignInRoute implements Route {
-	static final String USERNAME = "userName";
-	
-	static final String VIEW_NAME = "signin.ftl";
-	
-	private static String username = null;
+public class PostSignOutRoute implements Route {
 	
 	private final TemplateEngine templateEngine;
 	private final PlayerLobby playerLobby;
 	
-	PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine){
+	PostSignOutRoute(PlayerLobby playerLobby, TemplateEngine templateEngine){
 		// validation
 		Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 		Objects.requireNonNull(templateEngine, "templateEngine must not be null");
@@ -49,26 +45,12 @@ public class PostSignInRoute implements Route {
 		
 		final Session session = request.session();
 		
-		vm.put("title", "Sign In");
-		
-		username = request.queryParams(USERNAME);
-		
-		System.out.println("username: \""+username+"\"");
-		
-		if(username.length() == 0) {
-			vm.put("message", Message.error("Username must contain at least 1 character."));
-			
-			return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
+		Player p = session.attribute(GetHomeRoute.PLAYER_ATTR);
+		if(p != null) {
+			playerLobby.logoutPlayer(p.getName());
 		}
 		
-		Player p = playerLobby.tryLoginPlayer(username);
-		if(p == null) {
-			vm.put("message", Message.error("Username already taken. Please choose another."));
-			
-			return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
-		}
-		
-		session.attribute(GetHomeRoute.PLAYER_ATTR, p);
+		session.removeAttribute(GetHomeRoute.PLAYER_ATTR);
 		response.redirect(WebServer.HOME_URL);
 		halt();
 		return null;
