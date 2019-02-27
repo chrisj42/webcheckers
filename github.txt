@@ -1,0 +1,41 @@
+commit 8e099c3c8a24e382e23a4c5445810fe07e0b4a1b
+Author: Ryan Floersch <rmf9285@rit.edu>
+Date:   Wed Feb 13 18:07:27 2019 -0500
+
+    Added name
+
+commit c17ef5a51ac5e9afa7121c74aa3b7cf929fa0a18
+Author: Stone Warren <sww8073@rit.edu>
+Date:   Tue Feb 12 11:24:33 2019 -0500
+
+    Stone Warren is here
+
+commit 571b08e33426a0dfc2716c57a892802c46a9fe3a
+Author: Christopher Johns <cmj9076@rit.edu>
+Date:   Mon Feb 11 19:23:42 2019 -0500
+
+    added name to readme
+
+commit 47753e98c2a2c217d64bfa95cca73333392af7df
+Author: U-SE\sxm3271 <sxm3271@GUARD.se.rit.edu>
+Date:   Mon Feb 11 18:22:25 2019 -0500
+
+    added nme
+
+commit 2bc1cd3b45f55c82b39b3f7af9edac667a728681
+Author: U-SE\rtk1357 <rtk1357@NOTHIC.se.rit.edu>
+Date:   Mon Feb 11 18:09:18 2019 -0500
+
+    Added Ryan Kohn as team member name
+
+commit 1a8c0b2e216ee0b89ce69a70ec46837b1d7c7f60
+Author: Kenn Martinez <KennUbuntu@ACHEPEHnvy.com>
+Date:   Thu Feb 7 16:01:14 2019 -0500
+
+    For your benefit
+
+commit 7aaad62534cec1f265ced16951251c2db0109408
+Author: KennBMartinez <kbmvse@rit.edu>
+Date:   Thu Feb 7 15:51:00 2019 -0500
+
+    Initial WEBCHECKERS SEED REPO for 2185
