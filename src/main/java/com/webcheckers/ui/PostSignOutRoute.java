@@ -23,7 +23,7 @@ public class PostSignOutRoute implements Route {
 	private final TemplateEngine templateEngine;
 	private final PlayerLobby playerLobby;
 	
-	PostSignOutRoute(PlayerLobby playerLobby, TemplateEngine templateEngine){
+	PostSignOutRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
 		// validation
 		Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 		Objects.requireNonNull(templateEngine, "templateEngine must not be null");
@@ -40,17 +40,14 @@ public class PostSignOutRoute implements Route {
 	 */
 	@Override
 	public String handle(Request request, Response response) {
-		// start building the View-Model
-		final Map<String, Object> vm = new HashMap<>();
-		
 		final Session session = request.session();
 		
-		Player p = session.attribute(GetHomeRoute.PLAYER_ATTR);
+		Player p = session.attribute(WebServer.PLAYER_ATTR);
 		if(p != null) {
 			playerLobby.logoutPlayer(p.getName());
 		}
 		
-		session.removeAttribute(GetHomeRoute.PLAYER_ATTR);
+		session.removeAttribute(WebServer.PLAYER_ATTR);
 		response.redirect(WebServer.HOME_URL);
 		halt();
 		return null;

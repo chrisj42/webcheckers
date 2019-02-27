@@ -18,11 +18,9 @@ import static spark.Spark.halt;
 
 
 public class PostSignInRoute implements Route {
-	static final String USERNAME = "userName";
 	
-	static final String VIEW_NAME = "signin.ftl";
-	
-	private static String username = null;
+	// query parameters (matches name attribute of input elements inside a form element in ftl files)
+	private static final String USERNAME_PARAM = "userName";
 	
 	private final TemplateEngine templateEngine;
 	private final PlayerLobby playerLobby;
@@ -49,26 +47,22 @@ public class PostSignInRoute implements Route {
 		
 		final Session session = request.session();
 		
-		vm.put("title", "Sign In");
-		
-		username = request.queryParams(USERNAME);
-		
-		System.out.println("username: \""+username+"\"");
+		String username = request.queryParams(USERNAME_PARAM);
 		
 		if(username.length() == 0) {
-			vm.put("message", Message.error("Username must contain at least 1 character."));
+			vm.put(WebServer.MESSAGE_KEY, Message.error("Username must contain at least 1 character."));
 			
-			return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
+			return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
 		}
 		
 		Player p = playerLobby.tryLoginPlayer(username);
 		if(p == null) {
-			vm.put("message", Message.error("Username already taken. Please choose another."));
+			vm.put(WebServer.MESSAGE_KEY, Message.error("Username already taken. Please choose another."));
 			
-			return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
+			return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
 		}
 		
-		session.attribute(GetHomeRoute.PLAYER_ATTR, p);
+		session.attribute(WebServer.PLAYER_ATTR, p);
 		response.redirect(WebServer.HOME_URL);
 		halt();
 		return null;

@@ -54,17 +54,25 @@ public class WebServer {
 	 * The URL pattern to request the Home page.
 	 */
 	public static final String HOME_URL = "/";
-	public static final String SIGN_IN = "/signin";
-	public static final String SIGN_OUT = "/signout";
+	public static final String SIGN_IN_URL = "/signin";
+	public static final String SIGN_OUT_URL = "/signout";
 	public static final String GAME_URL = "/game";
+	
+	// session attributes
+	public static final String PLAYER_ATTR = "player";
+	
+	// object map keys (referenced in ftl files) common to many routes
+	public static final String MESSAGE_KEY = "message";
+	public static final String USER_KEY = "currentUser";
+	public static final String PLAYER_LOBBY_KEY = "lobby";
 	
 	//
 	// Attributes
 	//
 	
+	private final PlayerLobby playerLobby;
 	private final TemplateEngine templateEngine;
 	private final Gson gson;
-	private final PlayerLobby serverManager;
 	
 	//
 	// Constructor
@@ -81,13 +89,13 @@ public class WebServer {
 	 * @throws NullPointerException
 	 *    If any of the parameters are {@code null}.
 	 */
-	public WebServer(final PlayerLobby serverManager, final TemplateEngine templateEngine, final Gson gson) {
+	public WebServer(final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
 		// validation
-		Objects.requireNonNull(serverManager, "serverManager must not be null");
+		Objects.requireNonNull(playerLobby, "serverManager must not be null");
 		Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 		Objects.requireNonNull(gson, "gson must not be null");
 		//
-		this.serverManager = serverManager;
+		this.playerLobby = playerLobby;
 		this.templateEngine = templateEngine;
 		this.gson = gson;
 	}
@@ -144,12 +152,16 @@ public class WebServer {
 		//// code clean; using small classes.
 		
 		// Shows the Checkers game Home page.
-		get(HOME_URL, new GetHomeRoute(templateEngine));
+		get(HOME_URL, new GetHomeRoute(playerLobby, templateEngine));
+		post(HOME_URL, new PostHomeRoute(playerLobby, templateEngine));
 		
-		get(SIGN_IN, new GetSignInRoute(serverManager, templateEngine));
+		get(SIGN_IN_URL, new GetSignInRoute(playerLobby, templateEngine));
 		
-		post(SIGN_IN, new PostSignInRoute(serverManager, templateEngine));
-		post(SIGN_OUT, new PostSignOutRoute(serverManager, templateEngine));
+		post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));
+		post(SIGN_OUT_URL, new PostSignOutRoute(playerLobby, templateEngine));
+		
+		get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
+		
 		//
 		LOG.config("WebServer is initialized.");
 	}

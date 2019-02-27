@@ -25,8 +25,9 @@ public class PlayerLobby {
 		players.remove(username);
 	}
 	
-	public boolean hasPlayers() { return players.size() > 1; }
+	public int getPlayerCount() { return players.size(); }
 	
-	public Iterator<String> getPlayers() { return players.keySet().iterator(); }
+	public Iterator<Player> iterator() { return players.values().iterator(); }
 	
+	// TODO methods to start a game with a player. Should return a CheckersGame on success, and store the game in a map of username String to CheckersGame instance, for later in GetHomeRoute when checking if a player is already in a game.
 }

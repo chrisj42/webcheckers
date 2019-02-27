@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -26,8 +27,9 @@ public class GetHomeRoute implements Route {
 	
 	private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 	
-	public static final String PLAYER_ATTR = "Player";
+	static final String VIEW_NAME = "home.ftl";
 	
+	private final PlayerLobby playerLobby;
 	private final TemplateEngine templateEngine;
 	
 	/**
@@ -36,7 +38,8 @@ public class GetHomeRoute implements Route {
 	 * @param templateEngine
 	 *   the HTML template rendering engine
 	 */
-	public GetHomeRoute(final TemplateEngine templateEngine) {
+	public GetHomeRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+		this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");;
 		this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
 		//
 		LOG.config("GetHomeRoute is initialized.");
@@ -58,30 +61,24 @@ public class GetHomeRoute implements Route {
 		LOG.finer("GetHomeRoute is invoked.");
 		//
 		Map<String, Object> vm = new HashMap<>();
-		vm.put("title", "Welcome!");
 		
 		Session session = request.session();
 		
-		// display a user message in the Home page
-		vm.put("message", WELCOME_MSG);
-		
-		
-		// vm.put("currentUser", new Player("Chris"));
-		
-		Player p = session.attribute(PLAYER_ATTR);
+		// check if the user is signed in
+		Player p = session.attribute(WebServer.PLAYER_ATTR);
 		if(p != null) {
-			/*vm.put("redPlayer", p);
-			vm.put("whitePlayer", new Player("Steve"));
+			// TODO check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
 			
-			vm.put("activeColor", Color.RED);
-			
-			vm.put("viewMode", ViewMode.PLAY);
-			
-			vm.put("board", new BoardView());*/
-			vm.put("currentUser", p);
+			// add user object
+			vm.put(WebServer.USER_KEY, p);
 		}
 		
+		// display a user message in the Home page
+		vm.put(WebServer.MESSAGE_KEY, WELCOME_MSG);
+		
+		vm.put(WebServer.PLAYER_LOBBY_KEY, playerLobby);
+		
 		// render the View
-		return templateEngine.render(new ModelAndView(vm , "home.ftl"));
+		return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
 	}
 }
