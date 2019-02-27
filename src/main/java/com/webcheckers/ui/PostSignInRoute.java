@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
@@ -55,9 +56,24 @@ public class PostSignInRoute implements Route {
 			return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
 		}
 		
+		if(!username.matches("[a-zA-Z0-9 ]+")) {
+			vm.put(WebServer.MESSAGE_KEY, Message.error("Username can consist only of alphanumeric characters and spaces."));
+			
+			return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+		}
+		
+		if(!username.matches(".*[a-zA-Z0-9]+.*")) {
+			vm.put(WebServer.MESSAGE_KEY, Message.error("Username must contain at least one alphanumeric character."));
+			
+			return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
+		}
+		
+		// trim removes trailing and leading whitespace, and replaces sequential whitespace with a single instance.
+		username = username.trim();
+		
 		Player p = playerLobby.tryLoginPlayer(username);
 		if(p == null) {
-			vm.put(WebServer.MESSAGE_KEY, Message.error("Username already taken. Please choose another."));
+			vm.put(WebServer.MESSAGE_KEY, Message.error("Username '"+username+"' already taken. Please choose another."));
 			
 			return templateEngine.render(new ModelAndView(vm, GetSignInRoute.VIEW_NAME));
 		}
