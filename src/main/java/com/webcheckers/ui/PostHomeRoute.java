@@ -53,7 +53,7 @@ public class PostHomeRoute implements Route {
 	public Object handle(Request request, Response response) {
 		LOG.finer("PostHomeRoute is invoked.");
 		//
-		Map<String, Object> vm = new HashMap<>();
+		//Map<String, Object> vm = new HashMap<>();
 		
 		Session session = request.session();
 		
@@ -69,21 +69,14 @@ public class PostHomeRoute implements Route {
 		
 		// get name of player that we want to start a game with
 		String opponent = request.queryParams(OPPONENT_PARAM);
+		Player o = playerLobby.returnPlayer(opponent);
 		
 		// TODO make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean, or an error message?
 
-        Iterator<Player> players = playerLobby.iterator();
-        while(players.hasNext()){
-        	Player Opponent =  players.next();
-        	if(Opponent.getName().equals(opponent)){
-        		if(!Opponent.hasGame()){
-        			Opponent.game = true;
-					p.game = true;
-					response.redirect(WebServer.GAME_URL);
-					Spark.halt();
-					return null;
-				}
-			}
+		if(playerLobby.startGame(p,o)){
+			response.redirect(WebServer.GAME_URL);
+			Spark.halt();
+			return null;
 		}
 		// successful game start
 		response.redirect(WebServer.HOME_URL);

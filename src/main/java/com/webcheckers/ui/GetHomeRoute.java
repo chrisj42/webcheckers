@@ -10,12 +10,7 @@ import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.ViewMode;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.Session;
-import spark.TemplateEngine;
+import spark.*;
 
 /**
  * The UI Controller to GET the Home page.
@@ -68,6 +63,11 @@ public class GetHomeRoute implements Route {
 		Player p = session.attribute(WebServer.PLAYER_ATTR);
 		if(p != null) {
 			// TODO check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
+			if(playerLobby.getGame(p) != null){
+				response.redirect(WebServer.GAME_URL);
+				Spark.halt();
+				return null;
+			}
 			
 			// add user object
 			vm.put(WebServer.USER_KEY, p);

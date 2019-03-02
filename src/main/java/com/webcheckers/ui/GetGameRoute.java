@@ -1,12 +1,12 @@
 package com.webcheckers.ui;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.ViewMode;
@@ -68,27 +68,14 @@ public class GetGameRoute implements Route {
         }
         
         // TODO if player is not in a game, redirect to home screen
-        if(!p.hasGame()){
+        if(!playerLobby.playerHasGame(p)){
             response.redirect(WebServer.HOME_URL);
             Spark.halt();
             return null;
         }
-        String opponent = request.queryParams(OPPONENT_PARAM);
-        Player Opponent = null;
-        Iterator<Player> players = playerLobby.iterator();
-        while(players.hasNext()){
-            Opponent =  players.next();
-            if(Opponent.getName().equals(opponent)){
-                break;
-            }
-        }
-        if(Opponent != null){
-            if(!Opponent.getName().equals(opponent)){
-                response.redirect(WebServer.HOME_URL);
-                Spark.halt();
-                return null;
-            }
-        }
+        CheckersGame game = playerLobby.getGame(p);
+		Player opponent = game.getOpponent(p);
+
 
         
         // TODO else player is in a game; fill with params; fetch current game model to do so
@@ -97,7 +84,7 @@ public class GetGameRoute implements Route {
         
         vm.put("currentUser", p);
         vm.put("redPlayer", p);
-        vm.put("whitePlayer", Opponent); // replace with actual opponent player
+        vm.put("whitePlayer", opponent); // replace with actual opponent player
     
         vm.put("activeColor", Color.RED); // replace with actual active player
     
