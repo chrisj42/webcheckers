@@ -26,7 +26,7 @@ public class PostSignInRoute implements Route {
 	private final TemplateEngine templateEngine;
 	private final PlayerLobby playerLobby;
 	
-	PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine){
+	PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
 		// validation
 		Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 		Objects.requireNonNull(templateEngine, "templateEngine must not be null");

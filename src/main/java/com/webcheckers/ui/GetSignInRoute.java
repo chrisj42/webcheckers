@@ -23,7 +23,7 @@ public class GetSignInRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine){
+    public GetSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
         // validation
         Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");

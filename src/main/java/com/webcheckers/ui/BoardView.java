@@ -3,14 +3,18 @@ package com.webcheckers.ui;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.webcheckers.model.Piece;
+
 public class BoardView implements Iterable<Row> {
 	
 	public static final int SIZE = 8;
 	private final ArrayList<Row> list = new ArrayList<>(SIZE);
 	
-	BoardView() {
-		for(int i = 0; i < SIZE; i++)
-			list.add(new Row(i));
+	BoardView(Piece[][] board, boolean isPlayer1) {
+		for(int i = 0; i < SIZE; i++) {
+			int idx = isPlayer1 ? i : board.length - i - 1;
+			list.add(new Row(idx, board[idx], isPlayer1));
+		}
 	}
 	
 	@Override

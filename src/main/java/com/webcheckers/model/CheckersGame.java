@@ -16,7 +16,7 @@ public class CheckersGame {
 		
 		board = new Piece[BoardView.SIZE][BoardView.SIZE];
 		for(int y = 0; y < board.length; y++) {
-			if(y <= 2) {
+			if(y < 2) {
 				for(int x = 0; x < board[y].length; x++)
 					if((x+y) % 2 == 1)
 						board[y][x] = new Piece(Type.SINGLE, Color.WHITE);
@@ -38,18 +38,16 @@ public class CheckersGame {
 			return null;
 	}
 	
-	public Piece[][] getBoardFor(Player player) {
-		if(player != player1 && player != player2)
-			return null;
+	public boolean isPlayer1(Player player) { return player == player1; }
+	
+	public Piece[][] getBoard() {
+		return board;
 		
-		if(player == player1)
-			return board;
-		
-		Piece[][] flip = new Piece[BoardView.SIZE][BoardView.SIZE];
+		/*Piece[][] flip = new Piece[BoardView.SIZE][BoardView.SIZE];
 		for(int y = 0; y < flip.length; y++)
 			for(int x = 0; x < flip[y].length; x++)
 				flip[BoardView.SIZE-y-1][BoardView.SIZE-x-1] = board[y][x];
 			
-		return flip;
+		return flip;*/
 	}
 }

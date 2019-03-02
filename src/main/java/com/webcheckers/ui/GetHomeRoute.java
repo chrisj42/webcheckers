@@ -6,10 +6,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
-import com.webcheckers.util.ViewMode;
 import spark.*;
 
 /**
@@ -62,8 +60,8 @@ public class GetHomeRoute implements Route {
 		// check if the user is signed in
 		Player p = session.attribute(WebServer.PLAYER_ATTR);
 		if(p != null) {
-			// TODO check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
-			if(playerLobby.getGame(p) != null){
+			// check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
+			if(playerLobby.hasGame(p)) {
 				response.redirect(WebServer.GAME_URL);
 				Spark.halt();
 				return null;

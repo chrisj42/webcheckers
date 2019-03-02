@@ -61,7 +61,6 @@ public class PostHomeRoute implements Route {
 		Player p = session.attribute(WebServer.PLAYER_ATTR);
 		if(p == null) {
 			// cannot start game if player isn't signed in
-			System.out.println("redirect");
 			response.redirect(WebServer.HOME_URL);
 			Spark.halt();
 			return null;
@@ -69,18 +68,23 @@ public class PostHomeRoute implements Route {
 		
 		// get name of player that we want to start a game with
 		String opponent = request.queryParams(OPPONENT_PARAM);
-		Player o = playerLobby.returnPlayer(opponent);
 		
-		// TODO make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean, or an error message?
-
-		if(playerLobby.startGame(p,o)){
+		// make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean.
+		if(playerLobby.startGame(p.getName(), opponent)) {
+			System.out.println("starting game");
 			response.redirect(WebServer.GAME_URL);
 			Spark.halt();
 			return null;
 		}
-		// successful game start
-		response.redirect(WebServer.HOME_URL);
-		Spark.halt();
-		return null;
+		
+		// game could not start, other player has game in progress
+		Map<String, Object> vm = new HashMap<>();
+		vm.put(WebServer.USER_KEY, p);
+		vm.put(WebServer.MESSAGE_KEY, Message.error("Player is already in a game."));
+		vm.put(WebServer.PLAYER_LOBBY_KEY, playerLobby);
+		// response.redirect(WebServer.HOME_URL);
+		// Spark.halt();
+		// return null;
+		return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
 	}
 }
