@@ -71,7 +71,6 @@ public class GetGameRoute implements Route {
             Spark.halt();
             return null;
         }
-        System.out.println("building game view");
         CheckersGame game = playerLobby.getCurrentGame(p);
 		Player opponent = game.getOpponent(p);
         
