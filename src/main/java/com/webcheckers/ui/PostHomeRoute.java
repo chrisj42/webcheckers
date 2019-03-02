@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -70,9 +71,22 @@ public class PostHomeRoute implements Route {
 		String opponent = request.queryParams(OPPONENT_PARAM);
 		
 		// TODO make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean, or an error message?
-		
+
+        Iterator<Player> players = playerLobby.iterator();
+        while(players.hasNext()){
+        	Player Opponent =  players.next();
+        	if(Opponent.getName().equals(opponent)){
+        		if(!Opponent.hasGame()){
+        			Opponent.game = true;
+					p.game = true;
+					response.redirect(WebServer.GAME_URL);
+					Spark.halt();
+					return null;
+				}
+			}
+		}
 		// successful game start
-		response.redirect(WebServer.GAME_URL);
+		response.redirect(WebServer.HOME_URL);
 		Spark.halt();
 		return null;
 	}

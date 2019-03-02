@@ -3,11 +3,14 @@ package com.webcheckers.model;
 public class Player {
 	
 	private final String name;
+	public boolean game = false;
 	
 	public Player(String name) {
 		this.name = name;
 	}
-	
+
+	public boolean hasGame() { return game; }
+
 	public String getName() {
 		return name;
 	}

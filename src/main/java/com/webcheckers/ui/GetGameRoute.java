@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -17,6 +18,8 @@ public class GetGameRoute implements Route {
     private static final String VIEW_NAME = "game.ftl";
     
     private static final String TITLE_KEY = "title";
+
+    private static final String OPPONENT_PARAM = "opponent";
     
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
@@ -64,6 +67,28 @@ public class GetGameRoute implements Route {
         }
         
         // TODO if player is not in a game, redirect to home screen
+        if(!p.hasGame()){
+            response.redirect(WebServer.HOME_URL);
+            Spark.halt();
+            return null;
+        }
+        String opponent = request.queryParams(OPPONENT_PARAM);
+        Player Opponent = null;
+        Iterator<Player> players = playerLobby.iterator();
+        while(players.hasNext()){
+            Opponent =  players.next();
+            if(Opponent.getName().equals(opponent)){
+                break;
+            }
+        }
+        if(Opponent != null){
+            if(!Opponent.getName().equals(opponent)){
+                response.redirect(WebServer.HOME_URL);
+                Spark.halt();
+                return null;
+            }
+        }
+
         
         // TODO else player is in a game; fill with params; fetch current game model to do so
         
@@ -71,7 +96,7 @@ public class GetGameRoute implements Route {
         
         vm.put("currentUser", p);
         vm.put("redPlayer", p);
-        vm.put("whitePlayer", new Player("Steve")); // replace with actual opponent player
+        vm.put("whitePlayer", Opponent); // replace with actual opponent player
     
         vm.put("activeColor", Color.RED); // replace with actual active player
     
