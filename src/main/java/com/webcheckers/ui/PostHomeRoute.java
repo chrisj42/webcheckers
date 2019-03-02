@@ -71,7 +71,6 @@ public class PostHomeRoute implements Route {
 		
 		// make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean.
 		if(playerLobby.startGame(p.getName(), opponent)) {
-			System.out.println("starting game");
 			response.redirect(WebServer.GAME_URL);
 			Spark.halt();
 			return null;
