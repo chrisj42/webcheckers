@@ -16,13 +16,7 @@ public class Row implements Iterable<Space> {
 		
 		for(int i = 0; i < BoardView.SIZE; i++) {
 			int col = isPlayer1?i:pieces.length-i-1;
-			Piece orig = pieces[col];
-			Piece p = orig;
-			if(orig != null && !isPlayer1) {
-				Color oppColor = orig.getColor() == Color.RED ? Color.WHITE : Color.RED;
-				p = new Piece(orig.getType(), oppColor);
-			}
-			list.add(new Space(idx, col, p));
+			list.add(new Space(idx, col, pieces[col]));
 		}
 	}
 	

@@ -11,8 +11,6 @@ public class Space {
 	Space(int row, int column, Piece piece) {
 		this.row = row;
 		this.col = column;
-		// 0,0 = top left = white
-		// this.piece = isValid() && (row < 2 || row >= BoardView.SIZE-2) ? new Piece(Type.SINGLE, Color.RED) : null;
 		this.piece = piece;
 	}
 	

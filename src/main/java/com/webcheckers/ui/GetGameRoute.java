@@ -79,15 +79,17 @@ public class GetGameRoute implements Route {
         
         vm.put(TITLE_KEY, "Play");
         
+        boolean isPlayer1 = game.isPlayer1(p);
+        
         vm.put("currentUser", p);
-        vm.put("redPlayer", p);
-        vm.put("whitePlayer", opponent); // replace with actual opponent player
+        vm.put("redPlayer", isPlayer1?p:opponent);
+        vm.put("whitePlayer", isPlayer1?opponent:p); // replace with actual opponent player
         
         vm.put("activeColor", Color.RED); // replace with actual active player
         
         vm.put("viewMode", ViewMode.PLAY); // replace with actual view mode
         
-        vm.put("board", new BoardView(game.getBoard(), game.isPlayer1(p))); // pass board array from model to BoardView constructor
+        vm.put("board", new BoardView(game.getBoard(), isPlayer1)); // pass board array from model to BoardView constructor
         
         // render the View
         return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
