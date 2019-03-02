@@ -18,8 +18,6 @@ public class GetGameRoute implements Route {
     
     private static final String VIEW_NAME = "game.ftl";
     
-    private static final String TITLE_KEY = "title";
-    
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     
@@ -75,8 +73,6 @@ public class GetGameRoute implements Route {
 		Player opponent = game.getOpponent(p);
         
         // TODO (finish in sprint 2) else player is in a game; fill with params; fetch current game model to do so
-        
-        vm.put(TITLE_KEY, "Play");
         
         boolean isPlayer1 = game.isPlayer1(p);
         
