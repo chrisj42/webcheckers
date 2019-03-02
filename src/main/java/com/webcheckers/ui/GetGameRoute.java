@@ -13,6 +13,7 @@ import com.webcheckers.util.ViewMode;
 import spark.*;
 
 public class GetGameRoute implements Route {
+    private int getridofme = 0;
     private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
     
     private static final String VIEW_NAME = "game.ftl";
