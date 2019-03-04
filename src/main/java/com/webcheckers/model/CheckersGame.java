@@ -16,12 +16,12 @@ public class CheckersGame {
 		
 		board = new Piece[BoardView.SIZE][BoardView.SIZE];
 		for(int y = 0; y < board.length; y++) {
-			if(y < 2) {
+			if(y < 3) {
 				for(int x = 0; x < board[y].length; x++)
 					if((x+y) % 2 == 1)
 						board[y][x] = new Piece(Type.SINGLE, Color.WHITE);
 			}
-			if(y >= BoardView.SIZE - 2) {
+			if(y >= BoardView.SIZE - 3) {
 				for(int x = 0; x < board[y].length; x++)
 					if((x+y) % 2 == 1)
 						board[y][x] = new Piece(Type.SINGLE, Color.RED);
