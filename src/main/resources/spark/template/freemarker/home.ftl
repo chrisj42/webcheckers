@@ -2,7 +2,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-	<meta http-equiv="refresh" content="10">
+	<meta http-equiv="refresh" content="5">
 	<title>Web Checkers | Welcome!</title>
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
@@ -37,10 +37,10 @@
 					<#list lobby.iterator() as player>
 						<#if player.name != currentUser.name>
 							<li>
-								<form id="requestgame" action="/" method="post">
+								<form id="${player.name}" action="/" method="post">
 									<#-- to make the input look like plain text, but still get sent in the form post, I'm making an input element with the data to send but display:none, and then a link element to display to the user and act as a submit button like nav-bar.ftl. -->
 									<input name="opponent" value="${player.name}" style="display:none"/>
-									<a href="#" onclick="event.preventDefault(); requestgame.submit();">${player.name}</a>
+									<a href="#" onclick="event.preventDefault(); document.getElementById('${player.name}').submit();">${player.name}</a>
 								</form>
 							</li>
 						</#if>
