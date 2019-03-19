@@ -50,6 +50,12 @@ This section describes the features of the application.
 
 ### Definition of MVP
 > _Provide a simple description of the Minimum Viable Product._
+The minimal viable product should allow a user to log on to the checkers website and create a username.
+ 
+Then a user should be redirected and allowed to start a game with any available players. After the game starts, 
+
+all functionality for the checkers game and board should be finished allowing a player to eventually win.
+
 
 For our minimum viable product, we need to have the functionality for players to successfully play a checkers game without running into any errors or getting stuck anywhere.
 
@@ -158,14 +164,6 @@ with the WebCheckers application.
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
- 
-All 18 acceptance criterias for sprint 1 have been met and passed. 
-For the signin feature there where no problems when testing was 
-done. For starting the game there where problems when setting up 
-the color of pieces that appeared on the side of the board. The
-problem was that the colors appeared the same for both players, 
-meaning that both players saw themselves as the red checker pieces
-For sprint 2 we have 7 user stories that have not yet been tested. 
 
 ### Unit Testing and Code Coverage
 > _Discuss your unit testing strategy. Report on the code coverage
