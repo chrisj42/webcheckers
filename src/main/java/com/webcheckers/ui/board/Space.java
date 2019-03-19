@@ -1,4 +1,4 @@
-package com.webcheckers.ui;
+package com.webcheckers.ui.board;
 
 import com.webcheckers.model.Piece;
 

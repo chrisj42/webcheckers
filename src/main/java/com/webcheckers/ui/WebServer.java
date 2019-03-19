@@ -61,10 +61,19 @@ public class WebServer {
 	// session attributes
 	public static final String PLAYER_ATTR = "player";
 	
+	
+	/**
+	 * The ftl files loaded by different routes.
+	 */
+	public static final String HOME_VIEW = "home.ftl";
+	public static final String GAME_VIEW = "game.ftl";
+	public static final String SIGN_IN_VIEW = "signin.ftl";
+	
 	// object map keys (referenced in ftl files) common to many routes
 	public static final String MESSAGE_KEY = "message";
 	public static final String USER_KEY = "currentUser";
 	public static final String PLAYER_LOBBY_KEY = "lobby";
+	
 	
 	//
 	// Attributes
@@ -152,15 +161,17 @@ public class WebServer {
 		//// code clean; using small classes.
 		
 		// Shows the Checkers game Home page.
-		get(HOME_URL, new GetHomeRoute(playerLobby, templateEngine));
-		post(HOME_URL, new PostHomeRoute(playerLobby, templateEngine));
+		final HomeRoute home = new HomeRoute(HOME_VIEW, playerLobby, templateEngine);
+		get(HOME_URL, home);
+		post(HOME_URL, home::post);
 		
-		get(SIGN_IN_URL, new GetSignInRoute(playerLobby, templateEngine));
+		final SignInRoute signin = new SignInRoute(SIGN_IN_VIEW, playerLobby, templateEngine);
+		get(SIGN_IN_URL, signin);
+		post(SIGN_IN_URL, signin::post);
 		
-		post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));
-		post(SIGN_OUT_URL, new PostSignOutRoute(playerLobby, templateEngine));
+		post(SIGN_OUT_URL, new SignOutRoute(playerLobby)::post);
 		
-		get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
+		get(GAME_URL, new GetGameRoute(GAME_VIEW, playerLobby, templateEngine));
 		
 		//
 		LOG.config("WebServer is initialized.");

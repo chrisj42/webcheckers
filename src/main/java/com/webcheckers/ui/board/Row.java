@@ -1,9 +1,8 @@
-package com.webcheckers.ui;
+package com.webcheckers.ui.board;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.webcheckers.model.Color;
 import com.webcheckers.model.Piece;
 
 public class Row implements Iterable<Space> {
