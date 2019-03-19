@@ -25,6 +25,7 @@ This is a summary of the project.
 > _Provide a very brief statement about the project and the most
 > important user group and user goals._
 
+Team B++'s purpose with this project is to create an easy to use way for users to play a game of checkers online. Our most important user groups are our professor and our TA, who will be the main users of our game and will expect to have a completely functional, error-free experience. 
 
 ### Glossary and Acronyms
 > _Provide a table of terms and acronyms._
@@ -42,8 +43,15 @@ This section describes the features of the application.
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
 
+* The user will be able to sign-in to the player lobby and sign-out when done playing.
+* The user will be able to start and play checkers games with other players.
+* The user will be able to follow the rules of Checkers to move pieces and play the game.
+* The user will be able to enter games in alternate modes, including spectator mode and replay mode.
+
 ### Definition of MVP
 > _Provide a simple description of the Minimum Viable Product._
+
+For our minimum viable product, we need to have the functionality for players to successfully play a checkers game without running into any errors or getting stuck anywhere.
 
 ### MVP Features
 > _Provide a list of top-level Epics and/or Stories of the MVP._
