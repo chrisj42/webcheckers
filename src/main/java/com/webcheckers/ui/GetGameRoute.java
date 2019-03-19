@@ -28,7 +28,7 @@ public class GetGameRoute extends CheckersGetRoute {
 	}
 	
 	@Override
-	protected TemplateMap loadTemplate(Player player, Response response) {
+	protected TemplateMap get(Player player, Response response) {
 		LOG.finer("GetGameRoute is invoked.");
 		
 		// if player is not logged in, or not in a game, then redirect to home screen

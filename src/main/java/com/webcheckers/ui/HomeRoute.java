@@ -35,7 +35,7 @@ public class HomeRoute extends CheckersGetRoute implements CheckersPostRoute {
 	}
 	
 	@Override
-	protected TemplateMap loadTemplate(Player player, Response response) {
+	protected TemplateMap get(Player player, Response response) {
 		// LOG.finer("GetHomeRoute is invoked.");
 		TemplateMap map = new TemplateMap();
 		
@@ -73,6 +73,6 @@ public class HomeRoute extends CheckersGetRoute implements CheckersPostRoute {
 			return redirect(response, WebServer.GAME_URL);
 		
 		// failed to join game.
-		return renderTemplate(player, response, Message.error("Player is already in a game."));
+		return refreshWithMessage(player, response, Message.error("Player is already in a game."));
 	}
 }

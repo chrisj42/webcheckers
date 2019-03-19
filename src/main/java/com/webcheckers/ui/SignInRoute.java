@@ -9,7 +9,6 @@ import com.webcheckers.util.TemplateMap;
 import spark.*;
 
 import static spark.Spark.halt;
-import static spark.Spark.redirect;
 
 public class SignInRoute extends CheckersGetRoute implements CheckersPostRoute {
 	private static final Logger LOG = Logger.getLogger(SignInRoute.class.getName());
@@ -31,7 +30,7 @@ public class SignInRoute extends CheckersGetRoute implements CheckersPostRoute {
 	
 	
 	@Override
-	protected TemplateMap loadTemplate(Player player, Response response) {
+	protected TemplateMap get(Player player, Response response) {
 		LOG.finer("GetSignInRoute is invoked.");
 		
 		if(player != null) // player is already signed in
@@ -69,7 +68,7 @@ public class SignInRoute extends CheckersGetRoute implements CheckersPostRoute {
 		
 		// re-renders sign-in page with error message
 		if(error != null)
-			return renderTemplate(null, response, error);
+			return refreshWithMessage(null, response, error);
 		
 		// sign-in success; back to home screen
 		return redirect(response, WebServer.HOME_URL);

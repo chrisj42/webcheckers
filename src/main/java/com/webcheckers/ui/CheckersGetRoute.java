@@ -39,19 +39,19 @@ public abstract class CheckersGetRoute extends CheckersRoute implements Route {
 		Player player = request.session().attribute(WebServer.PLAYER_ATTR);
 		
 		// attempt to load the page template; if a redirect occurs it will return null
-		TemplateMap map = loadTemplate(player, response);
+		TemplateMap map = get(player, response);
 		
 		return render(map);
 	}
 	
-	protected abstract TemplateMap loadTemplate(Player player, Response response);
+	protected abstract TemplateMap get(Player player, Response response);
 	
 	public Object render(TemplateMap map) {
 		return map == null ? null : templateEngine.render(new ModelAndView(map, viewName));
 	}
 	
-	protected Object renderTemplate(Player player, Response response, Message message) {
-		TemplateMap map = loadTemplate(player, response);
+	protected Object refreshWithMessage(Player player, Response response, Message message) {
+		TemplateMap map = get(player, response);
 		if(map != null)
 			map.put(WebServer.MESSAGE_KEY, message);
 		
