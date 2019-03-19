@@ -86,7 +86,7 @@ define(function(require){
       helperText += "It's your turn.  Move your piece and click the Submit link.\n";
       helperText += "If you want to erase your move click the Reset link.";
     } else {
-      helperText += "It's " + opponentPlayer + " turn.  The page will refresh periodically\n";
+      helperText += "It's " + opponentPlayer + "'s turn.  The page will refresh periodically\n";
       helperText += "and you will be informed when it is your turn.";
     }
     this._view.setHelperText(helperText);
