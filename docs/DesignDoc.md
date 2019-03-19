@@ -159,13 +159,13 @@ with the WebCheckers application.
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
  
->All 18 acceptance criterias for sprint 1 have been met and passed. 
->For the signin feature there where no problems when testing was 
->done. For starting the game there where problems when setting up 
->the color of pieces that appeared on the side of the board. The
->problem was that the colors appeared the same for both players, 
->meaning that both players saw themselves as the red checker pieces
->For sprint 2 we have 7 user stories that have not yet been tested. 
+All 18 acceptance criterias for sprint 1 have been met and passed. 
+For the signin feature there where no problems when testing was 
+done. For starting the game there where problems when setting up 
+the color of pieces that appeared on the side of the board. The
+problem was that the colors appeared the same for both players, 
+meaning that both players saw themselves as the red checker pieces
+For sprint 2 we have 7 user stories that have not yet been tested. 
 
 ### Unit Testing and Code Coverage
 > _Discuss your unit testing strategy. Report on the code coverage
