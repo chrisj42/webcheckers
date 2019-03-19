@@ -66,6 +66,7 @@ promotion, web architecture, domain driven dseign, player sign in, start a game
 
 ### Roadmap of Enhancements
 > _Provide a list of top-level features in the order you plan to consider them._
+spectate game, replay game
 
 
 ## Application Domain
