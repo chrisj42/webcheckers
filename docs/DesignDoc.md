@@ -78,6 +78,10 @@ This section describes the application domain.
 > _Provide a high-level overview of the domain for this application. You
 > can discuss the more important domain entities and their relationship
 > to each other._
+The higher level domain entities are the players and the board itself. The players both have to move pieces on the board 
+in order to win the game. The board handles all necessary actions that are needed for the game to be functional. If a player 
+wishes to make a move, the board will check if that is a valid move. The board will also 
+then determine if the game was won based on certain set conditions.
 
 
 ## Architecture and Design
@@ -110,6 +114,10 @@ with the WebCheckers application.
 
 > _Provide a summary of the application's user interface.  Describe, from
 > the user's perspective, the flow of the pages in the web application._
+The user will be directed to the home page first. After the user decides on a 
+username, they will then be directed to a home page that includes online players.
+If the user decides to play with someone, they can click on the players name and start 
+a game 
 
 
 ### UI Tier
