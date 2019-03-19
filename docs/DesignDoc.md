@@ -61,6 +61,8 @@ For our minimum viable product, we need to have the functionality for players to
 
 ### MVP Features
 > _Provide a list of top-level Epics and/or Stories of the MVP._
+play turn, game ending, simple movement, single jump move, king move, multiple jump move,
+promotion, web architecture, domain driven dseign, player sign in, start a game
 
 ### Roadmap of Enhancements
 > _Provide a list of top-level features in the order you plan to consider them._
