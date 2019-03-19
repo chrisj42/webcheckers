@@ -9,12 +9,13 @@ geometry: margin=1in
 > and appear in the generated PDF in italics._
 
 ## Team Information
-* Team name: TEAMNAME
+* Team name: Team B++
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Ryan Kohn
+  * Christopher Johns
+  * Ryan Floersch
+  * Stone Warren
+  * Steven McLeod
 
 ## Executive Summary
 
@@ -23,6 +24,7 @@ This is a summary of the project.
 ### Purpose
 > _Provide a very brief statement about the project and the most
 > important user group and user goals._
+
 
 ### Glossary and Acronyms
 > _Provide a table of terms and acronyms._
