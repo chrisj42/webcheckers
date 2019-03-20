@@ -143,19 +143,23 @@ Once the game has ended, the players are redirected back to the signed in home p
 > separate section for describing significant features. Place this after
 > you describe the design of the three tiers._
 
+Our UI tier classes consist of different Get and Post Route classes, including GetGameRoute, GetHomeRoute, GetSignInRoute, PostHomeRoute, PostSignInRoute, and PostSignOutRoute. These Route classes handle directing users between the home page, the signed-in homepage, and the game page. They also give the template engine information on what the webpage should have/look like.
 
-
+We also have our WebServer class that initializes the different routes, as well as Space and Row classes that make up the gameboard interface.
 
 ### Application Tier
 > _Provide a summary of the Application tier of your architecture. This
 > section will follow the same instructions that are given for the UI
 > Tier above._
 
+The application tier contains our PlayerLobby class, which keeps track of all players and games, handles sign-ins and outs, and creates new games.
 
 ### Model Tier
 > _Provide a summary of the Application tier of your architecture. This
 > section will follow the same instructions that are given for the UI
 > Tier above._
+
+The model tier has a CheckersGame class, which keeps track of an individual game's players and board state. It also has classes for the components of the game, including a Piece class, a Player class, and Type/Color enumerations for the pieces.
 
 ### Design Improvements
 > _Discuss design improvements that you would make if the project were
@@ -166,6 +170,8 @@ Once the game has ended, the players are redirected back to the signed in home p
 > will also discuss the resutling metric measurements.  Indicate the
 > hot spots the metrics identified in your code base, and your
 > suggested design improvements to address those hot spots._
+
+At this time, we believe that all of our class structures and relationships are working well for us, and there isn't anything we would change. This may change after we discover hot spots in our code, or if we're having trouble creating unit tests.
 
 ## Testing
 > _This section will provide information about the testing performed
