@@ -159,6 +159,8 @@ The application tier contains our PlayerLobby class, which keeps track of all pl
 > section will follow the same instructions that are given for the UI
 > Tier above._
 
+![The WebCheckers Web Model Tier Classes](Checkers_Model_Classes.png)
+
 The model tier has a CheckersGame class, which keeps track of an individual game's players and board state. It also has classes for the components of the game, including a Piece class, a Player class, and Type/Color enumerations for the pieces.
 
 ### Design Improvements
