@@ -107,15 +107,18 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface-placeholder.png)
+![The WebCheckers Web Interface Statechart](Checkers_State_Diagram.png)
 
 > _Provide a summary of the application's user interface.  Describe, from
 > the user's perspective, the flow of the pages in the web application._
+
 The user will be directed to the home page first. After the user decides on a 
 username, they will then be directed to a home page that includes online players.
-If the user decides to play with someone, they can click on the players name and start 
-a game 
 
+If the user wants to start a game with someone, they can click on the players name and 
+if that player is unoccupied both players will be redirected to a game page. 
+
+Once the game has ended, the players are redirected back to the signed in home page.
 
 ### UI Tier
 > _Provide a summary of the Server-side UI tier of your architecture.
@@ -139,6 +142,8 @@ a game
 > consider placing the narrative description of that feature in a
 > separate section for describing significant features. Place this after
 > you describe the design of the three tiers._
+
+
 
 
 ### Application Tier
