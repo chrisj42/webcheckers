@@ -185,6 +185,15 @@ At this time, we believe that all of our class structures and relationships are 
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
+All 18 acceptance criterias for sprint 1 have been met and passed. 
+For the signin feature there where no problems when testing was 
+done. For starting the game there where problems when setting up 
+the color of pieces that appeared on the side of the board. The
+problem was that the colors appeared the same for both players, 
+meaning that both players saw themselves as the red checker pieces
+For sprint 2 we have 7 user stories that have not yet been tested. 
+
+
 
 ### Unit Testing and Code Coverage
 > _Discuss your unit testing strategy. Report on the code coverage
@@ -192,3 +201,10 @@ At this time, we believe that all of our class structures and relationships are 
 > coverage targets, why you selected those values, and how well your
 > code coverage met your targets. If there are any anomalies, discuss
 > those._
+So far our unit testing plan has focused on testing the if the game exists 
+and if the player has logged in successfully. We plan to test the players
+moves next to the such as jumping and moving pieces. We have not yet done 
+much code coverage yet due to problems that arrised when trying to use it. 
+
+
+
