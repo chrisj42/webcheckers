@@ -50,24 +50,24 @@ This section describes the features of the application.
 
 ### Definition of MVP
 > _Provide a simple description of the Minimum Viable Product._
-The minimal viable product should allow a user to log on to the checkers website and create a username.
- 
-Then a user should be redirected and allowed to start a game with any available players. After the game starts, 
 
-all functionality for the checkers game and board should be finished allowing a player to eventually win.
-
-
-For our minimum viable product, we need to have the functionality for players to successfully play a checkers game without running into any errors or getting stuck anywhere.
+For our minimal viable product, the first thing we need is a functional player lobby that allows players to sign in, out, and start games with unoccupied players. Secondly, we need to complete all in-game functionality such that both players are able to play a game of checkers while following the rules, moving and promoting pieces. Finally, we need to be able to handle games ending through win conditions or player resignation and direct players appropriately.
 
 ### MVP Features
 > _Provide a list of top-level Epics and/or Stories of the MVP._
-play turn, game ending, simple movement, single jump move, king move, multiple jump move,
-promotion, web architecture, domain driven dseign, player sign in, start a game
+
+* Player Sign In/Out - Players will be able to sign in and out of the player lobby with a unique username.
+* Start Game - Players will be able to start a game with other unoccupied players.
+* Play Turn - Players will be able to make legal moves during their turns, and the game will handle alternating turns as players submit their moves.
+* Game Ending - Game will recognize and handle win conditions and player resignation.
+* Piece Movement - Pieces will be movable according to checkers rules, including handling simple movement, jump moves, multiple jump moves, and king movement.
+* Promotion - Pieces will promote themselves to kings when they move to the opposite side of the board from where they started.
 
 ### Roadmap of Enhancements
 > _Provide a list of top-level features in the order you plan to consider them._
-spectate game, replay game
 
+* Spectate Game - Players will be able to join and leave ongoing games as a spectator.
+* Game Replays - Finished games will be saved and players can watch replays of them.
 
 ## Application Domain
 
