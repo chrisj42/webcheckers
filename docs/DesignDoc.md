@@ -73,7 +73,7 @@ For our minimal viable product, the first thing we need is a functional player l
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model-placeholder.png)
+![The WebCheckers Domain Model](Checkers_Domain.PNG)
 
 > _Provide a high-level overview of the domain for this application. You
 > can discuss the more important domain entities and their relationship
