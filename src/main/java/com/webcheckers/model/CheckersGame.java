@@ -1,6 +1,9 @@
 package com.webcheckers.model;
 
+import java.util.LinkedList;
+
 import com.webcheckers.ui.board.BoardView;
+import com.webcheckers.util.Message;
 
 // the server-side model of a game of checkers, including the players involved, which player started the game (i.e. which player is "player 1" i.e. the red player), and the 2D array of Piece objects.
 public class CheckersGame {
@@ -10,9 +13,13 @@ public class CheckersGame {
 	
 	private final Piece[][] board;
 	
+	private Player activePlayer;
+	private final LinkedList<Move> cachedMoves = new LinkedList<>();
+	
 	public CheckersGame(Player redPlayer, Player whitePlayer) {
 		this.redPlayer = redPlayer;
 		this.whitePlayer = whitePlayer;
+		activePlayer = redPlayer;
 		
 		board = new Piece[BoardView.SIZE][BoardView.SIZE];
 		for(int y = 0; y < board.length; y++) {
@@ -27,6 +34,18 @@ public class CheckersGame {
 						board[y][x] = new Piece(Type.SINGLE, Color.RED);
 			}
 		}
+	}
+	
+	public Message validateMove(Move move) {
+		return Message.info("Move validation not implemented.");
+	}
+	
+	public Message backupMove() {
+		return Message.error("Move backup not implemented.");
+	}
+	
+	public Message submitTurn() {
+		return Message.error("Move submission not implemented.");
 	}
 	
 	public Player getRedPlayer() {
