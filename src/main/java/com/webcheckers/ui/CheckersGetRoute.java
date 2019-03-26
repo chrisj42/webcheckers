@@ -4,15 +4,13 @@ import java.util.Objects;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.Message;
 import com.webcheckers.util.TemplateMap;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 import spark.TemplateEngine;
 
-public abstract class CheckersGetRoute extends CheckersRoute implements Route {
+public abstract class CheckersGetRoute extends CheckersRoute {
 	
 	private final TemplateEngine templateEngine;
 	private final String viewName;
@@ -24,7 +22,7 @@ public abstract class CheckersGetRoute extends CheckersRoute implements Route {
 	 * @param playerLobby    the application-tier player manager
 	 * @param templateEngine the HTML template rendering engine
 	 */
-	CheckersGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
+	protected CheckersGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
 		super(playerLobby);
 		// validation
 		Objects.requireNonNull(viewName, "viewName must not be null");
@@ -48,13 +46,5 @@ public abstract class CheckersGetRoute extends CheckersRoute implements Route {
 	
 	public Object render(TemplateMap map) {
 		return map == null ? null : templateEngine.render(new ModelAndView(map, viewName));
-	}
-	
-	protected Object refreshWithMessage(Player player, Response response, Message message) {
-		TemplateMap map = get(player, response);
-		if(map != null)
-			map.put(WebServer.MESSAGE_KEY, message);
-		
-		return render(map);
 	}
 }

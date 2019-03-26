@@ -1,46 +1,33 @@
-package com.webcheckers.ui;
+package com.webcheckers.ui.home;
 
 import java.util.logging.Logger;
 
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.CheckersPostWebRoute;
+import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.Message;
-import com.webcheckers.util.TemplateMap;
-import spark.*;
+import spark.Request;
+import spark.Response;
 
-import static spark.Spark.halt;
-
-public class SignInRoute extends CheckersGetRoute implements CheckersPostRoute {
-	private static final Logger LOG = Logger.getLogger(SignInRoute.class.getName());
+public class SignInPostRoute extends CheckersPostWebRoute {
+	private static final Logger LOG = Logger.getLogger(SignInPostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
 	private static final String USERNAME_PARAM = "userName";
 	
 	
 	/**
-	 * Create the Spark Route (UI controller) to handle HTTP requests.
+	 * Create the Spark Route (UI controller) to handle @code{POST /signin} HTTP requests,
+	 * which are used to sign in to the server.
 	 *
-	 * @param viewName       name of the ftl view that this route renders
-	 * @param playerLobby    the application-tier player manager
-	 * @param templateEngine the HTML template rendering engine
+	 * @param getRoute the GET route to render upon erroneous input
 	 */
-	SignInRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
-		super(viewName, playerLobby, templateEngine);
-	}
-	
-	
-	@Override
-	protected TemplateMap get(Player player, Response response) {
-		LOG.finer("GetSignInRoute is invoked.");
-		
-		if(player != null) // player is already signed in
-			return redirect(response, WebServer.HOME_URL);
-		
-		return new TemplateMap(); // nothing needs to be specified
+	public SignInPostRoute(SignInGetRoute getRoute) {
+		super(getRoute);
 	}
 	
 	@Override
-	public Object post(Request request, Response response) {
+	public Object handle(Request request, Response response) {
 		LOG.finer("PostSignInRoute is invoked.");
 		
 		String username = request.queryParams(USERNAME_PARAM);

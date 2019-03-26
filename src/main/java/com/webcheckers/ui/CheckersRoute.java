@@ -3,11 +3,13 @@ package com.webcheckers.ui;
 import java.util.Objects;
 
 import com.webcheckers.appl.PlayerLobby;
+import spark.Request;
 import spark.Response;
+import spark.Route;
 import spark.Spark;
 
 // superclass of Routes that return a webpage.
-public abstract class CheckersRoute {
+public abstract class CheckersRoute implements Route {
 	
 	private final PlayerLobby playerLobby;
 	
@@ -16,7 +18,7 @@ public abstract class CheckersRoute {
 	 *
 	 * @param playerLobby     the application-tier player manager
 	 */
-	CheckersRoute(PlayerLobby playerLobby) {
+	protected CheckersRoute(PlayerLobby playerLobby) {
 		// validation
 		Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 		//
@@ -26,6 +28,9 @@ public abstract class CheckersRoute {
 	protected PlayerLobby getPlayerLobby() {
 		return playerLobby;
 	}
+	
+	@Override
+	public abstract Object handle(Request request, Response response);
 	
 	public static <T> T redirect(Response response, String location) {
 		response.redirect(location);

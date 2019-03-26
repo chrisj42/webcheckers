@@ -12,6 +12,7 @@ public class CheckersGame {
 	private final Player whitePlayer;
 	
 	private final Piece[][] board;
+	private final Piece[][] activeBoard;
 	
 	private Player activePlayer;
 	private final LinkedList<Move> cachedMoves = new LinkedList<>();
@@ -22,6 +23,7 @@ public class CheckersGame {
 		activePlayer = redPlayer;
 		
 		board = new Piece[BoardView.SIZE][BoardView.SIZE];
+		activeBoard = new Piece[BoardView.SIZE][BoardView.SIZE];
 		for(int y = 0; y < board.length; y++) {
 			if(y < 3) {
 				for(int x = 0; x < board[y].length; x++)
@@ -33,11 +35,36 @@ public class CheckersGame {
 					if((x+y) % 2 == 1)
 						board[y][x] = new Piece(Type.SINGLE, Color.RED);
 			}
+			System.arraycopy(board[y], 0, activeBoard[y], 0, board.length);
 		}
 	}
 	
+	public Piece getPiece(Position pos) {
+		return board[pos.getRow()][pos.getCell()];
+	}
+	
 	public Message validateMove(Move move) {
-		return Message.info("Move validation not implemented.");
+		if(getPiece(move.getEnd()) != null)
+			return Message.error("space is occupied");
+		
+		int disty = move.getStart().getRow() - move.getEnd().getRow();
+		int distx = move.getStart().getCell() - move.getEnd().getCell();
+		
+		// Piece piece = getPiece(move.getStart());
+		
+		// the white player must move down, the red player must move up
+		int dir = move.getPlayer() == whitePlayer ? 1 : -1;
+		
+		if(Math.abs(distx) != 1 || disty != dir)
+			return Message.error("move is invalid");
+		
+		/*for(Move prev: cachedMoves) {
+			if(prev.getStart().equals(move.getEnd()))
+				return Message.error("place is taken")
+		}*/
+		
+		cachedMoves.add(move);
+		return Message.info("Move validated.");
 	}
 	
 	public Message backupMove() {
@@ -67,7 +94,7 @@ public class CheckersGame {
 	
 	public boolean isPlayer1(Player player) { return player == redPlayer; }
 	
-	public Piece[][] getBoard() {
-		return board;
+	public Piece[][] getBoard(Player player) {
+		return player == activePlayer ? board : board;
 	}
 }
