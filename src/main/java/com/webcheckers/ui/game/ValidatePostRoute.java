@@ -42,7 +42,7 @@ public class ValidatePostRoute extends CheckersPostJsonRoute {
 		// parse move
 		Move move = getGson().fromJson(request.queryParams(MOVE_PARAM), Move.class);
 		// validate move and get message to return
-		Message message = game.validateMove(move);
+		Message message = game.validateMove(move, player);
 		// serialize message and return it
 		return getGson().toJson(message);
 	}

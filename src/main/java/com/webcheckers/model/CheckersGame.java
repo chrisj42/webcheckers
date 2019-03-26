@@ -43,7 +43,7 @@ public class CheckersGame {
 		return board[pos.getRow()][pos.getCell()];
 	}
 	
-	public Message validateMove(Move move) {
+	public Message validateMove(Move move, Player player) {
 		if(getPiece(move.getEnd()) != null)
 			return Message.error("space is occupied");
 		
@@ -53,7 +53,7 @@ public class CheckersGame {
 		// Piece piece = getPiece(move.getStart());
 		
 		// the white player must move down, the red player must move up
-		int dir = move.getPlayer() == whitePlayer ? 1 : -1;
+		int dir = player == whitePlayer ? 1 : -1;
 		
 		if(Math.abs(distx) != 1 || disty != dir)
 			return Message.error("move is invalid");
