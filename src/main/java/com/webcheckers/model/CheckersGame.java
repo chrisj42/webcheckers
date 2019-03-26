@@ -53,6 +53,8 @@ public class CheckersGame {
 	 * The player whose turn it currently is will be stored here, and toggled each turn.
 	 */
 	private Player activePlayer;
+
+	private boolean isGameOver;
 	
 	/**
 	 * CheckersGame constructor. Creates the board objects and initializes them
@@ -65,6 +67,7 @@ public class CheckersGame {
 		this.redPlayer = redPlayer;
 		this.whitePlayer = whitePlayer;
 		activePlayer = redPlayer;
+		isGameOver = true;
 		
 		board = new Piece[BOARD_SIZE][BOARD_SIZE];
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
@@ -82,7 +85,34 @@ public class CheckersGame {
 		}
 		copyBoard(board, activeBoard);
 	}
-	
+
+
+	/*
+	* boolean for determining if the game is over or not
+	* @return boolean for whether or not the game is over
+	*
+	* */
+	private boolean getisGameOver(){
+		return isGameOver;
+	}
+
+
+	/*
+	* setter for isGameOver variable to change the value to be either
+	* true or false
+	* @param bool	greater than 0 will change the value to true while
+	* 0 will be true
+	*
+	* */
+	private void setisGameOver(int bool){
+		if (bool == 0){
+			isGameOver = false;
+			return;
+		}
+		isGameOver = true;
+	}
+
+
 	/**
 	 * A simple utility method to set a position of a board to a piece.
 	 * 
@@ -91,6 +121,9 @@ public class CheckersGame {
 	 * @param piece the piece to put
 	 * @return the piece that was replaced   
 	 */
+
+
+
 	private Piece setCell(Position pos, Piece[][] board, Piece piece) {
 		Piece prev = getCell(pos, board);
 		board[pos.getRow()][pos.getCell()] = piece;
