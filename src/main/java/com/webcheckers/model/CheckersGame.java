@@ -169,12 +169,25 @@ public class CheckersGame {
 	}
 	
 	/**
-	 * A skeleton method showing the endpoint for backing up a move.
+	 * Undoes the previously validated move, if one exists.
 	 * 
-	 * @return an error message stating this is not yet implemented (so it compiles)
+	 * @param player the player making the request
+	 * @return a status message reporting whether the request was successful
 	 */
-	public Message backupMove() {
-		return Message.error("Move backup not implemented.");
+	public Message backupMove(Player player) {
+		// ensure this is the right player
+		if(player != activePlayer)
+			return Message.error("It's not your turn!");
+		
+		// check if there are any moves to undo
+		Move move = cachedMoves.pollLast();
+		if(move == null)
+			return Message.error("You have no moves to undo.");
+		
+		Piece temp = setCell(move.getEnd(), activeBoard, null);
+		setCell(move.getStart(), activeBoard, temp);
+		
+		return Message.info("Move undone.");
 	}
 	
 	/**
