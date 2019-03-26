@@ -15,16 +15,14 @@ public abstract class CheckersGetRoute extends CheckersRoute {
 	
 	private final TemplateEngine templateEngine;
 	private final String viewName;
-	protected final Gson gson;
 
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{GET} HTTP requests.
-	 *
-	 * @param viewName       name of the ftl view that this route renders
+	 *  @param viewName       name of the ftl view that this route renders
 	 * @param playerLobby    the application-tier player manager
 	 * @param templateEngine the HTML template rendering engine
 	 */
-	protected CheckersGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine, Gson gson) {
+	protected CheckersGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
 		super(playerLobby);
 		// validation
 		Objects.requireNonNull(viewName, "viewName must not be null");
@@ -32,7 +30,6 @@ public abstract class CheckersGetRoute extends CheckersRoute {
 		//
 		this.viewName = viewName;
 		this.templateEngine = templateEngine;
-		this.gson = gson;
 	}
 	
 	@Override

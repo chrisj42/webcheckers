@@ -2,12 +2,12 @@ package com.webcheckers.ui.game;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.CheckersGetRoute;
 import com.webcheckers.ui.WebServer;
@@ -19,16 +19,21 @@ import spark.TemplateEngine;
 
 public class GameGetRoute extends CheckersGetRoute {
 	private static final Logger LOG = Logger.getLogger(GameGetRoute.class.getName());
-
+	
+	private final Gson gson;
+	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{GET /game} HTTP requests.
 	 *
 	 * @param viewName       name of the ftl view that this route renders
 	 * @param playerLobby    the application-tier player manager
 	 * @param templateEngine the HTML template rendering engine
+	 * @param gson           The Google JSON parser object used to render Ajax responses.   
 	 */
 	public GameGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine, Gson gson) {
-		super(viewName, playerLobby, templateEngine, gson);
+		super(viewName, playerLobby, templateEngine);
+		Objects.requireNonNull(gson, "Gson cannot be null");
+		this.gson = gson;
 	}
 	
 	@Override
@@ -43,7 +48,7 @@ public class GameGetRoute extends CheckersGetRoute {
 		CheckersGame game = getPlayerLobby().getCurrentGame(player);
 		
 		TemplateMap map = new TemplateMap();
-
+		
 		map.put("currentUser", player);
 		map.put("redPlayer", game.getRedPlayer());
 		map.put("whitePlayer", game.getWhitePlayer());
@@ -54,7 +59,7 @@ public class GameGetRoute extends CheckersGetRoute {
 		
 		// pass board array from model to BoardView constructor
 		map.put("board", new BoardView(game.flushBoard(player), player == game.getRedPlayer()));
-
+		
 		final Map<String, Object> modeOptions = new HashMap<>(2);
 		modeOptions.put("isGameOver", game.isGameOver());
 		modeOptions.put("gameOverMessage", game.getGameOverMessage() /* get end of game message */);
