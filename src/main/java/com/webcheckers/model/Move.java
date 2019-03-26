@@ -22,6 +22,11 @@ public class Move {
 		return end;
 	}
 	
+	public boolean isJump() {
+		// could use row or column; technically they should always be the same magnitude
+		return Math.abs(getRowDelta()) > 1;
+	}
+	
 	public int getRowDelta() {
 		return end.getRow() - start.getRow();
 	}

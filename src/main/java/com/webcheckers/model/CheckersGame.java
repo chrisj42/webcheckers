@@ -143,9 +143,17 @@ public class CheckersGame {
 			// shouldn't happen but we'll put it in just in case.
 			return Message.error("It is not your turn!");
 		
-		// ensure same checker
-		if(cachedMoves.size() > 0 && !cachedMoves.peekLast().getEnd().equals(move.getStart()))
-			return Message.error("Only one checker can be moved per turn.");
+		// do checks relating to previously validated moves
+		Move prevMove = cachedMoves.peekLast();
+		if(prevMove != null) {
+			// ensure same checker
+			if(!prevMove.getEnd().equals(move.getStart()))
+				return Message.error("Only one checker can be moved per turn.");
+			
+			// only allow extra move if previous move was a jump, and this is a jump also
+			if(!prevMove.isJump() || !move.isJump())
+				return Message.error("Only jumps can be chained.");
+		}
 		
 		// checks for existing piece
 		if(getCell(move.getEnd(), activeBoard) != null)
