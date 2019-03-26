@@ -109,6 +109,24 @@ public class CheckersGame {
 	}
 	
 	/**
+	 * Checks if a piece belongs to a player.
+	 * 
+	 * @param piece  the piece
+	 * @param player the player
+	 * @return true if the piece color matches the player color, false otherwise
+	 */
+	private boolean matchesPlayer(Piece piece, Player player) {
+		// piece must be red to match red player
+		if(player == redPlayer && piece.getColor() == Color.RED)
+			return true;
+		// piece must be white to match white player
+		if(player == whitePlayer && piece.getColor() == Color.WHITE)
+			return true;
+		
+		return false;
+	}
+	
+	/**
 	 * Copies the pieces from one board to another board.
 	 * Used to submit a move, in which case the activeBoard is copied to the main board;
 	 * also used to reset a move in progress, in which case the main board is copied to the activeBoard.
@@ -143,6 +161,9 @@ public class CheckersGame {
 			// shouldn't happen but we'll put it in just in case.
 			return Message.error("It is not your turn!");
 		
+		if(!move.isValid())
+			return Message.error("Move is not valid.");
+		
 		// do checks relating to previously validated moves
 		Move prevMove = cachedMoves.peekLast();
 		if(prevMove != null) {
@@ -159,19 +180,25 @@ public class CheckersGame {
 		if(getCell(move.getEnd(), activeBoard) != null)
 			return Message.error("space is occupied");
 		
-		// checks for single-space diagonal movement in the correct direction
-		int rowDelta = move.getRowDelta();
-		int colDelta = move.getColumnDelta();
-		
-		// the white player must move down, the red player must move up
-		int dir = player == whitePlayer ? 1 : -1;
-		if(Math.abs(colDelta) != 1 || rowDelta != dir)
-			return Message.error("move is invalid");
+		if(move.isJump()) {
+			Piece jumped = getCell(move.getJumpPos(), activeBoard);
+			if(jumped == null || matchesPlayer(jumped, player))
+				return Message.error("Jumps must remove an opponent checker.");
+		}
+		else {
+			// checks for single-space diagonal movement in the correct direction
+			// the white player must move down, the red player must move up
+			int dir = player == whitePlayer ? 1 : -1;
+			if(move.getRowDelta() != dir)
+				return Message.error("Normal checkers can only move forward.");
+		}
 		
 		// move validated
 		cachedMoves.add(move);
 		Piece temp = setCell(move.getStart(), activeBoard, null);
 		setCell(move.getEnd(), activeBoard, temp);
+		if(move.isJump())
+			setCell(move.getJumpPos(), activeBoard, null);
 		
 		return Message.info("Move validated.");
 	}
@@ -194,6 +221,8 @@ public class CheckersGame {
 		
 		Piece temp = setCell(move.getEnd(), activeBoard, null);
 		setCell(move.getStart(), activeBoard, temp);
+		if(move.isJump())
+			setCell(move.getJumpPos(), activeBoard, getCell(move.getJumpPos(), board));
 		
 		return Message.info("Move undone.");
 	}

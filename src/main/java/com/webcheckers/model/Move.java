@@ -22,9 +22,20 @@ public class Move {
 		return end;
 	}
 	
+	public boolean isValid() {
+		return Math.abs(getRowDelta()) == Math.abs(getColumnDelta())
+			&& Math.abs(getRowDelta()) > 0 && Math.abs(getRowDelta()) <= 2;
+	}
+	
 	public boolean isJump() {
 		// could use row or column; technically they should always be the same magnitude
-		return Math.abs(getRowDelta()) > 1;
+		return isValid() && Math.abs(getRowDelta()) == 2;
+	}
+	
+	// if this is a jump move then this returns the position that was jumped.
+	public Position getJumpPos() {
+		if(!isJump()) return null;
+		return new Position(start.getRow() + getRowDelta()/2, start.getCell() + getColumnDelta()/2);
 	}
 	
 	public int getRowDelta() {
