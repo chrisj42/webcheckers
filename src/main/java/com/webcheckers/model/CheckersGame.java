@@ -121,7 +121,7 @@ public class CheckersGame {
 	 */
 	private void copyBoard(Piece[][] source, Piece[][] dest) {
 		for(int r = 0; r < BOARD_SIZE; r++)
-			System.arraycopy(source, 0, dest, 0, BOARD_SIZE);
+			System.arraycopy(source[r], 0, dest[r], 0, BOARD_SIZE);
 	}
 	
 	/**
@@ -129,6 +129,9 @@ public class CheckersGame {
 	 * It returns an error message if:
 	 * 	- the given player is not the active player
 	 * 	- the end position is occupied by an existing piece
+	 * 	- there is a previous move in the move cache and its end position
+	 * 		doesn't match this move's start position (i.e. the player is attempting
+	 * 		to move a different checker).
 	 * 	- the move is not diagonally forward left or right one space
 	 * 
 	 * @param move the move object, holding the start and end positions
@@ -139,6 +142,10 @@ public class CheckersGame {
 		if(activePlayer != player)
 			// shouldn't happen but we'll put it in just in case.
 			return Message.error("It is not your turn!");
+		
+		// ensure same checker
+		if(cachedMoves.size() > 0 && !cachedMoves.peek().getEnd().equals(move.getStart()))
+			return Message.error("Only one checker can be moved per turn.");
 		
 		// checks for existing piece
 		if(getCell(move.getEnd(), activeBoard) != null)
