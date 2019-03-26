@@ -51,4 +51,14 @@ public class PlayerLobby {
 		playerGames.put(opponent, game);
 		return true;
 	}
+
+	public boolean endGame(Player player){
+		if(player == null)
+			return false;
+
+		if( playerGames.remove(player) == null)
+			return false;
+
+		return true;
+	}
 }

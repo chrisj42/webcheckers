@@ -115,7 +115,7 @@ public class CheckersGame {
 		
 		gameOverMessage = player.getName()+" has resigned.";
 		isGameOver = true;
-		return Message.info("You have resigned.");
+		return Message.info(gameOverMessage);
 	}
 	
 	/**
@@ -309,7 +309,9 @@ public class CheckersGame {
 	public Player getWhitePlayer() {
 		return whitePlayer;
 	}
-	
+
+	public boolean isMyTurn(Player player) { return player.equals(this.activePlayer); }
+
 	/**
 	 * Returns whether it is the given player's turn.
 	 * 
@@ -338,14 +340,14 @@ public class CheckersGame {
 	 * @param player the player to find the opponent of
 	 * @return the opponent of the given player, or null if this player is not part of this game
 	 */
-	/*public Player getOpponent(Player player) {
+	public Player getOpponent(Player player) {
 		if(player == redPlayer)
 			return whitePlayer;
 		else if(player == whitePlayer)
 			return redPlayer;
 		else
 			return null;
-	}*/
+	}
 	
 	/**
 	 * Returns the main board; if the provided player is the active player,
