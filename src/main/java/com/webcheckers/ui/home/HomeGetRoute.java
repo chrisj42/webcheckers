@@ -3,6 +3,7 @@ package com.webcheckers.ui.home;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.CheckersGetRoute;
 import com.webcheckers.ui.WebServer;
@@ -39,8 +40,13 @@ public class HomeGetRoute extends CheckersGetRoute {
 		
 		if(player != null) {
 			// check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
-			if(getPlayerLobby().hasGame(player))
-				return redirect(response, WebServer.GAME_URL);
+			if(getPlayerLobby().hasGame(player)) {
+				CheckersGame game = getPlayerLobby().getCurrentGame(player);
+				if(game.isGameOver())
+					getPlayerLobby().endGame(player);
+				else
+					return redirect(response, WebServer.GAME_URL);
+			}
 			
 			// add user object
 			map.put(WebServer.USER_KEY, player);
