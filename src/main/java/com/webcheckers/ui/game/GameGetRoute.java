@@ -49,7 +49,8 @@ public class GameGetRoute extends CheckersGetRoute {
 		
 		map.put("viewMode", ViewMode.PLAY); // replace with actual view mode
 		
-		map.put("board", new BoardView(game.getBoard(player), game.isPlayer1(player))); // pass board array from model to BoardView constructor
+		// pass board array from model to BoardView constructor
+		map.put("board", new BoardView(game.flushBoard(player), player == game.getRedPlayer()));
 		
 		return map;
 	}

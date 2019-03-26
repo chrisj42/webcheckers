@@ -22,6 +22,14 @@ public class Move {
 		return end;
 	}
 	
+	public int getRowDelta() {
+		return end.getRow() - start.getRow();
+	}
+	
+	public int getColumnDelta() {
+		return end.getCell() - start.getCell();
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if(this == o) return true;
