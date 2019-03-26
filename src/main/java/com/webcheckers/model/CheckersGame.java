@@ -144,7 +144,7 @@ public class CheckersGame {
 			return Message.error("It is not your turn!");
 		
 		// ensure same checker
-		if(cachedMoves.size() > 0 && !cachedMoves.peek().getEnd().equals(move.getStart()))
+		if(cachedMoves.size() > 0 && !cachedMoves.peekLast().getEnd().equals(move.getStart()))
 			return Message.error("Only one checker can be moved per turn.");
 		
 		// checks for existing piece
