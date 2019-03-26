@@ -92,7 +92,7 @@ public class CheckersGame {
 	* @return boolean for whether or not the game is over
 	*
 	* */
-	private boolean getisGameOver(){
+	public boolean getisGameOver(){
 		return isGameOver;
 	}
 
@@ -104,8 +104,8 @@ public class CheckersGame {
 	* 0 will be true
 	*
 	* */
-	private void setisGameOver(int bool){
-		if (bool == 0){
+	private void setisGameOver(boolean bool){
+		if (!bool){
 			isGameOver = false;
 			return;
 		}
