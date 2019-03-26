@@ -53,8 +53,10 @@ public class CheckersGame {
 	 * The player whose turn it currently is will be stored here, and toggled each turn.
 	 */
 	private Player activePlayer;
-
+	
 	private boolean isGameOver;
+	
+	private String gameOverMessage = null;
 	
 	/**
 	 * CheckersGame constructor. Creates the board objects and initializes them
@@ -67,7 +69,7 @@ public class CheckersGame {
 		this.redPlayer = redPlayer;
 		this.whitePlayer = whitePlayer;
 		activePlayer = redPlayer;
-		isGameOver = true;
+		isGameOver = false;
 		
 		board = new Piece[BOARD_SIZE][BOARD_SIZE];
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
@@ -92,11 +94,14 @@ public class CheckersGame {
 	* @return boolean for whether or not the game is over
 	*
 	* */
-	public boolean getisGameOver(){
+	public boolean isGameOver(){
 		return isGameOver;
 	}
-
-
+	
+	public String getGameOverMessage() {
+		return gameOverMessage;
+	}
+	
 	/*
 	* setter for isGameOver variable to change the value to be either
 	* true or false
@@ -104,15 +109,24 @@ public class CheckersGame {
 	* 0 will be true
 	*
 	* */
-	private void setisGameOver(boolean bool){
-		if (!bool){
-			isGameOver = false;
-			return;
-		}
+	public Message resignGame(Player player) {
+		if(player == activePlayer == cachedMoves.size() > 1)
+			return Message.error("you must undo all moves before resigning.");
+		
+		gameOverMessage = player.getName()+" has resigned.";
 		isGameOver = true;
+		return Message.info("You have resigned.");
 	}
-
-
+	
+	/**
+	 * Checks if the player has run out of pieces or cannot move.
+	 * If so, gameOver is set to true and the game over message is
+	 * set to say the other player has won.
+	 */
+	private void checkGameOver(Player player) {
+		
+	}
+	
 	/**
 	 * A simple utility method to set a position of a board to a piece.
 	 * 
@@ -121,9 +135,6 @@ public class CheckersGame {
 	 * @param piece the piece to put
 	 * @return the piece that was replaced   
 	 */
-
-
-
 	private Piece setCell(Position pos, Piece[][] board, Piece piece) {
 		Piece prev = getCell(pos, board);
 		board[pos.getRow()][pos.getCell()] = piece;
