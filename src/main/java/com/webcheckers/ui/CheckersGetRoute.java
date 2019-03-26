@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import java.util.Objects;
 
+import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.TemplateMap;
@@ -14,7 +15,8 @@ public abstract class CheckersGetRoute extends CheckersRoute {
 	
 	private final TemplateEngine templateEngine;
 	private final String viewName;
-	
+	protected final Gson gson;
+
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{GET} HTTP requests.
 	 *
@@ -22,7 +24,7 @@ public abstract class CheckersGetRoute extends CheckersRoute {
 	 * @param playerLobby    the application-tier player manager
 	 * @param templateEngine the HTML template rendering engine
 	 */
-	protected CheckersGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
+	protected CheckersGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine, Gson gson) {
 		super(playerLobby);
 		// validation
 		Objects.requireNonNull(viewName, "viewName must not be null");
@@ -30,6 +32,7 @@ public abstract class CheckersGetRoute extends CheckersRoute {
 		//
 		this.viewName = viewName;
 		this.templateEngine = templateEngine;
+		this.gson = gson;
 	}
 	
 	@Override

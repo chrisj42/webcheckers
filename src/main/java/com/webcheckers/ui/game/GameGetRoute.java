@@ -1,7 +1,10 @@
 package com.webcheckers.ui.game;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Color;
@@ -16,7 +19,7 @@ import spark.TemplateEngine;
 
 public class GameGetRoute extends CheckersGetRoute {
 	private static final Logger LOG = Logger.getLogger(GameGetRoute.class.getName());
-	
+
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{GET /game} HTTP requests.
 	 *
@@ -24,8 +27,8 @@ public class GameGetRoute extends CheckersGetRoute {
 	 * @param playerLobby    the application-tier player manager
 	 * @param templateEngine the HTML template rendering engine
 	 */
-	public GameGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
-		super(viewName, playerLobby, templateEngine);
+	public GameGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine, Gson gson) {
+		super(viewName, playerLobby, templateEngine, gson);
 	}
 	
 	@Override
@@ -40,6 +43,7 @@ public class GameGetRoute extends CheckersGetRoute {
 		CheckersGame game = getPlayerLobby().getCurrentGame(player);
 		
 		TemplateMap map = new TemplateMap();
+
 		map.put("currentUser", player);
 		map.put("redPlayer", game.getRedPlayer());
 		map.put("whitePlayer", game.getWhitePlayer());
@@ -50,7 +54,12 @@ public class GameGetRoute extends CheckersGetRoute {
 		
 		// pass board array from model to BoardView constructor
 		map.put("board", new BoardView(game.flushBoard(player), player == game.getRedPlayer()));
-		
+
+		final Map<String, Object> modeOptions = new HashMap<>(2);
+		modeOptions.put("isGameOver", game.isGameOver());
+		modeOptions.put("gameOverMessage", game.getGameOverMessage() /* get end of game message */);
+		map.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+
 		return map;
 	}
 }

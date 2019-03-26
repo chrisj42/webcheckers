@@ -187,7 +187,7 @@ public class WebServer {
 		
 		post(SIGN_OUT_URL, new SignOutPostRoute(playerLobby));
 		
-		get(GAME_URL, new GameGetRoute(GAME_VIEW, playerLobby, templateEngine));
+		get(GAME_URL, new GameGetRoute(GAME_VIEW, playerLobby, templateEngine, gson));
 		
 		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
 		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));
