@@ -168,7 +168,10 @@ public class CheckersGame {
 	 * set to say the other player has won.
 	 */
 	private void checkGameOver(Player player) {
-		
+		if(!canMakeMove(player)) {
+			gameOverMessage = (player == redPlayer ? whitePlayer : redPlayer).getName()+" has captured all the pieces.";
+			isGameOver = true;
+		}
 	}
 	
 	/**
@@ -211,8 +214,13 @@ public class CheckersGame {
 		
 		// checks for single-space diagonal movement in the correct direction
 		// the white player must move down, the red player must move up
-		int dir = player == whitePlayer ? 1 : -1;
-		if(move.getRowDelta() != dir)
+		boolean dirValid;
+		int rowDelta = move.getRowDelta();
+		if(player == whitePlayer)
+			dirValid = rowDelta > 0;
+		else
+			dirValid = rowDelta < 0;
+		if(!dirValid)
 			return Message.error("Normal checkers can only move forward.");
 		
 		if(move.isJump()) {
@@ -222,7 +230,7 @@ public class CheckersGame {
 		}
 		
 		// don't allow simple moves if a jump move is possible.
-		if(!move.isJump() && canMakeJump(activePlayer))
+		if(!move.isJump() && canMakeJump(player))
 			return Message.error("A jump is possible.");
 		
 		// move validated
