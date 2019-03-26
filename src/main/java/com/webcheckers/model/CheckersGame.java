@@ -228,12 +228,24 @@ public class CheckersGame {
 	}
 	
 	/**
-	 * A skeleton method showing the endpoint for submitting a turn.
+	 * Submits the cache of validated moves and switches to the opponent's turn.
 	 *
-	 * @return an error message stating this is not yet implemented (so it compiles)
+	 * @param player the player making the request
+	 * @return a status message reporting whether the request was successful
 	 */
-	public Message submitTurn() {
-		return Message.error("Move submission not implemented.");
+	public Message submitTurn(Player player) {
+		// ensure this is the right player
+		if(player != activePlayer)
+			return Message.error("It's not your turn!");
+		
+		if(cachedMoves.size() == 0)
+			return Message.error("There are no moves to submit.");
+		
+		copyBoard(activeBoard, board);
+		cachedMoves.clear();
+		activePlayer = activePlayer == redPlayer ? whitePlayer : redPlayer;
+		
+		return Message.info("Turn submitted.");
 	}
 	
 	/**
@@ -252,6 +264,25 @@ public class CheckersGame {
 	 */
 	public Player getWhitePlayer() {
 		return whitePlayer;
+	}
+	
+	/**
+	 * Returns whether it is the given player's turn.
+	 * 
+	 * @param player the player
+	 * @return if it is currently the given player's turn
+	 */
+	public boolean isPlayerTurn(Player player) {
+		return activePlayer == player;
+	}
+	
+	/**
+	 * Determines the color associated with the active player.
+	 * 
+	 * @return the color of the active player
+	 */
+	public Color getActiveColor() {
+		return activePlayer == redPlayer ? Color.RED : Color.WHITE;
 	}
 	
 	/*

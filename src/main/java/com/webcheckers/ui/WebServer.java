@@ -6,7 +6,9 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.game.BackupPostRoute;
+import com.webcheckers.ui.game.CheckTurnPostRoute;
 import com.webcheckers.ui.game.GameGetRoute;
+import com.webcheckers.ui.game.SubmitPostRoute;
 import com.webcheckers.ui.game.ValidatePostRoute;
 import com.webcheckers.ui.home.HomeGetRoute;
 import com.webcheckers.ui.home.HomePostRoute;
@@ -69,6 +71,7 @@ public class WebServer {
 	public static final String VALIDATE_URL = "/validateMove";
 	public static final String BACKUP_URL = "/backupMove";
 	public static final String SUBMIT_URL = "/submitTurn";
+	public static final String CHECK_TURN_URL = "/checkTurn";
 	public static final String RESIGN_URL = "/resignGame";
 	
 	// session attributes
@@ -188,6 +191,8 @@ public class WebServer {
 		
 		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
 		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));
+		post(SUBMIT_URL, new SubmitPostRoute(playerLobby, gson));
+		post(CHECK_TURN_URL, new CheckTurnPostRoute(playerLobby, gson));
 		
 		//
 		LOG.config("WebServer is initialized.");

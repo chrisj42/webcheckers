@@ -38,14 +38,13 @@ public class GameGetRoute extends CheckersGetRoute {
 		
 		// get current game
 		CheckersGame game = getPlayerLobby().getCurrentGame(player);
-		// Player opponent = game.getOpponent(player);
 		
 		TemplateMap map = new TemplateMap();
 		map.put("currentUser", player);
 		map.put("redPlayer", game.getRedPlayer());
 		map.put("whitePlayer", game.getWhitePlayer());
 		
-		map.put("activeColor", Color.RED); // replace with actual active player
+		map.put("activeColor", game.getActiveColor());
 		
 		map.put("viewMode", ViewMode.PLAY); // replace with actual view mode
 		
