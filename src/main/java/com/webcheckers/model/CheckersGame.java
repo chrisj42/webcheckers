@@ -87,45 +87,6 @@ public class CheckersGame {
 		}
 		copyBoard(board, activeBoard);
 	}
-
-
-	/*
-	* boolean for determining if the game is over or not
-	* @return boolean for whether or not the game is over
-	*
-	* */
-	public boolean isGameOver(){
-		return isGameOver;
-	}
-	
-	public String getGameOverMessage() {
-		return gameOverMessage;
-	}
-	
-	/*
-	* setter for isGameOver variable to change the value to be either
-	* true or false
-	* @param bool	greater than 0 will change the value to true while
-	* 0 will be true
-	*
-	* */
-	public Message resignGame(Player player) {
-		if(player == activePlayer == cachedMoves.size() > 1)
-			return Message.error("you must undo all moves before resigning.");
-		
-		gameOverMessage = player.getName()+" has resigned.";
-		isGameOver = true;
-		return Message.info(gameOverMessage);
-	}
-	
-	/**
-	 * Checks if the player has run out of pieces or cannot move.
-	 * If so, gameOver is set to true and the game over message is
-	 * set to say the other player has won.
-	 */
-	private void checkGameOver(Player player) {
-		
-	}
 	
 	/**
 	 * A simple utility method to set a position of a board to a piece.
@@ -187,6 +148,30 @@ public class CheckersGame {
 	}
 	
 	/**
+	 * Determines if the given player can make a jump move.
+	 * 
+	 * @param player the player making the move.
+	 * @return if the player can 
+	 */
+	private boolean canMakeJump(Player player) {
+		return false;
+	}
+	
+	private boolean canMakeMove(Player player) {
+		if(canMakeJump(player)) return true;
+		return true;
+	}
+	
+	/**
+	 * Checks if the player has run out of pieces or cannot move.
+	 * If so, gameOver is set to true and the game over message is
+	 * set to say the other player has won.
+	 */
+	private void checkGameOver(Player player) {
+		
+	}
+	
+	/**
 	 * Validates a proposed move before storing it in the active move cache.
 	 * It returns an error message if:
 	 * 	- the given player is not the active player
@@ -224,18 +209,21 @@ public class CheckersGame {
 		if(getCell(move.getEnd(), activeBoard) != null)
 			return Message.error("space is occupied");
 		
+		// checks for single-space diagonal movement in the correct direction
+		// the white player must move down, the red player must move up
+		int dir = player == whitePlayer ? 1 : -1;
+		if(move.getRowDelta() != dir)
+			return Message.error("Normal checkers can only move forward.");
+		
 		if(move.isJump()) {
 			Piece jumped = getCell(move.getJumpPos(), activeBoard);
 			if(jumped == null || matchesPlayer(jumped, player))
 				return Message.error("Jumps must remove an opponent checker.");
 		}
-		else {
-			// checks for single-space diagonal movement in the correct direction
-			// the white player must move down, the red player must move up
-			int dir = player == whitePlayer ? 1 : -1;
-			if(move.getRowDelta() != dir)
-				return Message.error("Normal checkers can only move forward.");
-		}
+		
+		// don't allow simple moves if a jump move is possible.
+		if(!move.isJump() && canMakeJump(activePlayer))
+			return Message.error("A jump is possible.");
 		
 		// move validated
 		cachedMoves.add(move);
@@ -273,7 +261,7 @@ public class CheckersGame {
 	
 	/**
 	 * Submits the cache of validated moves and switches to the opponent's turn.
-	 *
+	 * 
 	 * @param player the player making the request
 	 * @return a status message reporting whether the request was successful
 	 */
@@ -289,7 +277,34 @@ public class CheckersGame {
 		cachedMoves.clear();
 		activePlayer = activePlayer == redPlayer ? whitePlayer : redPlayer;
 		
+		checkGameOver(activePlayer);
+		
 		return Message.info("Turn submitted.");
+	}
+	
+	/**
+	 * 
+	 */
+	public Message resignGame(Player player) {
+		if(player == activePlayer == cachedMoves.size() > 1)
+			return Message.error("you must undo all moves before resigning.");
+		
+		gameOverMessage = player.getName()+" has resigned.";
+		isGameOver = true;
+		return Message.info("You have resigned.");
+	}
+	
+	/**
+	 * boolean for determining if the game is over or not
+	 * @return boolean for whether or not the game is over
+	 *
+	 */
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+	
+	public String getGameOverMessage() {
+		return gameOverMessage;
 	}
 	
 	/**
@@ -309,17 +324,17 @@ public class CheckersGame {
 	public Player getWhitePlayer() {
 		return whitePlayer;
 	}
-
-	public boolean isMyTurn(Player player) { return player.equals(this.activePlayer); }
-
+	
 	/**
 	 * Returns whether it is the given player's turn.
+	 * If the game is over, then it always returns true
+	 * so that the opponent will refresh the page.
 	 * 
 	 * @param player the player
 	 * @return if it is currently the given player's turn
 	 */
 	public boolean isPlayerTurn(Player player) {
-		return activePlayer == player;
+		return isGameOver || activePlayer == player;
 	}
 	
 	/**
@@ -340,14 +355,14 @@ public class CheckersGame {
 	 * @param player the player to find the opponent of
 	 * @return the opponent of the given player, or null if this player is not part of this game
 	 */
-	public Player getOpponent(Player player) {
+	/*public Player getOpponent(Player player) {
 		if(player == redPlayer)
 			return whitePlayer;
 		else if(player == whitePlayer)
 			return redPlayer;
 		else
 			return null;
-	}
+	}*/
 	
 	/**
 	 * Returns the main board; if the provided player is the active player,
