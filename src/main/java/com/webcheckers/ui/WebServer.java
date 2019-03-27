@@ -8,6 +8,7 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.game.BackupPostRoute;
 import com.webcheckers.ui.game.CheckTurnPostRoute;
 import com.webcheckers.ui.game.GameGetRoute;
+import com.webcheckers.ui.game.PostResignGameRoute;
 import com.webcheckers.ui.game.SubmitPostRoute;
 import com.webcheckers.ui.game.ValidatePostRoute;
 import com.webcheckers.ui.home.HomeGetRoute;
