@@ -297,8 +297,10 @@ public class CheckersGame {
 		if(player == activePlayer && cachedMoves.size() > 1)
 			return Message.error("you must undo all moves before resigning.");
 		
-		gameOverMessage = player.getName()+" has resigned.";
-		isGameOver = true;
+		if(!isGameOver) {
+			gameOverMessage = player.getName() + " has resigned.";
+			isGameOver = true;
+		}
 		return Message.info("You have resigned.");
 	}
 	
