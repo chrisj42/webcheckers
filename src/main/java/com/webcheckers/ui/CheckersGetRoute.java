@@ -2,7 +2,6 @@ package com.webcheckers.ui;
 
 import java.util.Objects;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.TemplateMap;

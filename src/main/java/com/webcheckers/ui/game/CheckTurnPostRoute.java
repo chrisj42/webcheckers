@@ -4,14 +4,11 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.CheckersPostJsonRoute;
-import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
-import spark.Session;
 
-public class CheckTurnPostRoute extends CheckersPostJsonRoute {
+public class CheckTurnPostRoute extends CheckersPostGameRoute {
 	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{POST /checkTurn} HTTP requests.
@@ -23,23 +20,10 @@ public class CheckTurnPostRoute extends CheckersPostJsonRoute {
 		super(playerLobby, gson);
 	}
 	
-	
 	@Override
-	public Object handle(Request request, Response response) {
-		Session session = request.session();
-		
-		Player player = session.attribute(WebServer.PLAYER_ATTR);
-		if(player == null) // not logged in
-			return redirect(response, WebServer.HOME_URL);
-		
-		CheckersGame game = getPlayerLobby().getCurrentGame(player);
-		if(game == null) // no current game
-			return redirect(response, WebServer.HOME_URL);
-		
+	public Message handle(Player player, CheckersGame game, Request request, Response response) {
 		// check if it is this player's turn
 		boolean isTurn = game.isPlayerTurn(player);
-		Message message = Message.info(String.valueOf(isTurn));
-		// serialize message and return it
-		return getGson().toJson(message, Message.class);
+		return Message.info(String.valueOf(isTurn));
 	}
 }

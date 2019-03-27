@@ -2,7 +2,6 @@ package com.webcheckers.ui.home;
 
 import java.util.logging.Logger;
 
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.CheckersPostWebRoute;
 import com.webcheckers.ui.WebServer;

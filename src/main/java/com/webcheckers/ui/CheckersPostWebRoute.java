@@ -1,7 +1,5 @@
 package com.webcheckers.ui;
 
-import java.util.Objects;
-
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.TemplateMap;
