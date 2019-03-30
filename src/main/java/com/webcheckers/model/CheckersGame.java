@@ -231,8 +231,26 @@ public class CheckersGame {
 	 * set to say the other player has won.
 	 */
 	private void checkGameOver(Player player) {
-		if(!canMakeMove(player)) {
+		boolean hasPieces = false;
+		for(int r = 0; r < activeBoard.length; r++) {
+			for(int c = 0; c < activeBoard[r].length; c++) {
+				if(activeBoard[r][c] != null && matchesPlayer(activeBoard[r][c], player)) {
+					hasPieces = true;
+					break;
+				}
+			}
+			if(hasPieces) break;
+		}
+		
+		if(!hasPieces) {
 			gameOverMessage = (player == redPlayer ? whitePlayer : redPlayer).getName()+" has captured all the pieces.";
+			isGameOver = true;
+			return;
+		}
+		
+		// see if the player has run out of valid moves
+		if(!canMakeMove(player)) {
+			gameOverMessage = player.getName()+" has run out of valid moves.";
 			isGameOver = true;
 		}
 	}
