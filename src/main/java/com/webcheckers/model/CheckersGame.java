@@ -154,11 +154,74 @@ public class CheckersGame {
 	 * @return if the player can 
 	 */
 	private boolean canMakeJump(Player player) {
-		return false;
+		return canMakeMove(player, false);
 	}
 	
 	private boolean canMakeMove(Player player) {
-		if(canMakeJump(player)) return true;
+		return canMakeMove(player, true);
+	}
+	
+	private boolean canMakeMove(Player player, boolean checkSingle) {
+		// check if single moves are possible
+		for(int r = 0; r < activeBoard.length; r++) {
+			for(int c = 0; c < activeBoard[r].length; c++) {
+				Piece piece = activeBoard[r][c];
+				if(piece == null) continue;
+				if(matchesPlayer(piece, player) && canMakeMove(piece, r, c, checkSingle, false))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean canMakeMove(Piece piece, int row, int col, boolean checkSingle, boolean kingValidation) {
+		// determine primary direction
+		int dir = piece.getColor() == Color.RED ? -1 : 1;
+		if(kingValidation) dir *= -1;
+		
+		// check king
+		if(piece.getType() == Type.KING && !kingValidation)
+			return canMakeMove(piece, row, col, checkSingle, true);
+		
+		// ensure movement dir is valid
+		if(row+dir < 0 || row+dir >= BOARD_SIZE)
+			return false;
+		
+		// check forward moves
+		if(checkSingle) {
+			// check non-jump
+			if(col > 0 && activeBoard[row+dir][col-1] == null)
+				return true;
+			if(col < BOARD_SIZE-1 && activeBoard[row+dir][col+1] == null)
+				return true;
+		}
+		
+		// check jumps
+		if(checkJump(piece, row, col, dir, -1))
+			return true;
+		if(checkJump(piece, row, col, dir, 1))
+			return true;
+		
+		return false;
+	}
+	
+	private boolean checkJump(Piece piece, int row, int col, int rdir, int cdir) {
+		// ensure move is on board
+		if(col+cdir*2 < 0 || col+cdir*2 >= BOARD_SIZE)
+			return false;
+		if(row+rdir*2 < 0 || row+rdir*2 >= BOARD_SIZE)
+			return false;
+		
+		// ensure end spot is open
+		if(activeBoard[row+rdir*2][col+cdir*2] != null)
+			return false;
+		
+		// ensure jumped color is different
+		Piece jumped = activeBoard[row+rdir][col+cdir];
+		if(jumped == null || jumped.getColor() == piece.getColor())
+			return false;
+		
 		return true;
 	}
 	
@@ -233,8 +296,8 @@ public class CheckersGame {
 				return Message.error("Jumps must remove an opponent checker.");
 		}
 		
-		// don't allow simple moves if a jump move is possible.
-		if(!move.isJump() && canMakeJump(player))
+		// don't allow simple moves if a jump move is possible, unless this isn't the first move
+		if(prevMove == null && !move.isJump() && canMakeJump(player))
 			return Message.error("A jump is possible.");
 		
 		// move validated
