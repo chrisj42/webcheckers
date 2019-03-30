@@ -353,11 +353,10 @@ public class CheckersGame {
 		Piece cell = getCell(pos, activeBoard);
 		int row = pos.getRow();
 		
-		if(canMakeMove(cell, row, pos.getCell(), false, false))
+		if(move.isJump() && canMakeMove(cell, row, pos.getCell(), false, false))
 			return Message.error("Multi-jump moves must be completed.");
-		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7)){
+		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7))
 			cell.promote();
-		}
 		
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();
