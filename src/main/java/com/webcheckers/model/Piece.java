@@ -20,5 +20,5 @@ public class Piece {
 		return color;
 	}
 
-	public void promotion() { this.type = KING; }
+	void promote() { this.type = KING; }
 }
