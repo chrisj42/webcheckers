@@ -216,13 +216,20 @@ public class CheckersGame {
 		// the white player must move down, the red player must move up
 		boolean dirValid;
 		int rowDelta = move.getRowDelta();
+		Piece cell = getCell(move.getStart(), activeBoard);
 		if(player == whitePlayer)
-			dirValid = rowDelta > 0;
+			if(cell.getType() == Type.KING)
+				dirValid = true;
+			else
+				dirValid = rowDelta > 0; // check white
 		else
-			dirValid = rowDelta < 0;
+			if(cell.getType() == Type.KING)
+				dirValid = true;
+			else
+				dirValid = rowDelta < 0; // check my boi red
 		if(!dirValid)
 			return Message.error("Normal checkers can only move forward.");
-		
+
 		if(move.isJump()) {
 			Piece jumped = getCell(move.getJumpPos(), activeBoard);
 			if(jumped == null || matchesPlayer(jumped, player))
@@ -280,7 +287,17 @@ public class CheckersGame {
 		
 		if(cachedMoves.size() == 0)
 			return Message.error("There are no moves to submit.");
-		
+
+		Move move = cachedMoves.getLast();
+		Position pos = move.getEnd();
+		Piece cell = getCell(pos, activeBoard);
+		int row = pos.getRow();
+		int col = pos.getCell();
+		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7)){
+			cell.promotion();
+			activeBoard[row][col] = cell;
+		}
+
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();
 		activePlayer = activePlayer == redPlayer ? whitePlayer : redPlayer;
