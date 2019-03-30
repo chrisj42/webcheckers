@@ -296,8 +296,8 @@ public class CheckersGame {
 				return Message.error("Jumps must remove an opponent checker.");
 		}
 		
-		// don't allow simple moves if a jump move is possible, unless this isn't the first move
-		if(prevMove == null && !move.isJump() && canMakeJump(player))
+		// don't allow simple moves if a jump move is possible
+		if(!move.isJump() && canMakeJump(player))
 			return Message.error("A jump is possible.");
 		
 		// move validated
@@ -352,6 +352,9 @@ public class CheckersGame {
 		Position pos = move.getEnd();
 		Piece cell = getCell(pos, activeBoard);
 		int row = pos.getRow();
+		
+		if(canMakeMove(cell, row, pos.getCell(), false, false))
+			return Message.error("Multi-jump moves must be completed.");
 		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7)){
 			cell.promote();
 		}
