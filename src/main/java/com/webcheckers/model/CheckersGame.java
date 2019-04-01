@@ -154,11 +154,74 @@ public class CheckersGame {
 	 * @return if the player can 
 	 */
 	private boolean canMakeJump(Player player) {
-		return false;
+		return canMakeMove(player, false);
 	}
 	
 	private boolean canMakeMove(Player player) {
-		if(canMakeJump(player)) return true;
+		return canMakeMove(player, true);
+	}
+	
+	private boolean canMakeMove(Player player, boolean checkSingle) {
+		// check if single moves are possible
+		for(int r = 0; r < activeBoard.length; r++) {
+			for(int c = 0; c < activeBoard[r].length; c++) {
+				Piece piece = activeBoard[r][c];
+				if(piece == null) continue;
+				if(matchesPlayer(piece, player) && canMakeMove(piece, r, c, checkSingle, false))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean canMakeMove(Piece piece, int row, int col, boolean checkSingle, boolean kingValidation) {
+		// determine primary direction
+		int dir = piece.getColor() == Color.RED ? -1 : 1;
+		if(kingValidation) dir *= -1;
+		
+		// check king
+		if(piece.getType() == Type.KING && !kingValidation)
+			return canMakeMove(piece, row, col, checkSingle, true);
+		
+		// ensure movement dir is valid
+		if(row+dir < 0 || row+dir >= BOARD_SIZE)
+			return false;
+		
+		// check forward moves
+		if(checkSingle) {
+			// check non-jump
+			if(col > 0 && activeBoard[row+dir][col-1] == null)
+				return true;
+			if(col < BOARD_SIZE-1 && activeBoard[row+dir][col+1] == null)
+				return true;
+		}
+		
+		// check jumps
+		if(checkJump(piece, row, col, dir, -1))
+			return true;
+		if(checkJump(piece, row, col, dir, 1))
+			return true;
+		
+		return false;
+	}
+	
+	private boolean checkJump(Piece piece, int row, int col, int rdir, int cdir) {
+		// ensure move is on board
+		if(col+cdir*2 < 0 || col+cdir*2 >= BOARD_SIZE)
+			return false;
+		if(row+rdir*2 < 0 || row+rdir*2 >= BOARD_SIZE)
+			return false;
+		
+		// ensure end spot is open
+		if(activeBoard[row+rdir*2][col+cdir*2] != null)
+			return false;
+		
+		// ensure jumped color is different
+		Piece jumped = activeBoard[row+rdir][col+cdir];
+		if(jumped == null || jumped.getColor() == piece.getColor())
+			return false;
+		
 		return true;
 	}
 	
@@ -168,8 +231,26 @@ public class CheckersGame {
 	 * set to say the other player has won.
 	 */
 	private void checkGameOver(Player player) {
-		if(!canMakeMove(player)) {
+		boolean hasPieces = false;
+		for(int r = 0; r < activeBoard.length; r++) {
+			for(int c = 0; c < activeBoard[r].length; c++) {
+				if(activeBoard[r][c] != null && matchesPlayer(activeBoard[r][c], player)) {
+					hasPieces = true;
+					break;
+				}
+			}
+			if(hasPieces) break;
+		}
+		
+		if(!hasPieces) {
 			gameOverMessage = (player == redPlayer ? whitePlayer : redPlayer).getName()+" has captured all the pieces.";
+			isGameOver = true;
+			return;
+		}
+		
+		// see if the player has run out of valid moves
+		if(!canMakeMove(player)) {
+			gameOverMessage = player.getName()+" has run out of valid moves.";
 			isGameOver = true;
 		}
 	}
@@ -193,6 +274,7 @@ public class CheckersGame {
 			// shouldn't happen but we'll put it in just in case.
 			return Message.error("It is not your turn!");
 		
+		// eliminate all possible moves that are never valid
 		if(!move.isValid())
 			return Message.error("Move is not valid.");
 		
@@ -213,15 +295,18 @@ public class CheckersGame {
 			return Message.error("space is occupied");
 		
 		// checks for single-space diagonal movement in the correct direction
-		// the white player must move down, the red player must move up
-		boolean dirValid;
-		int rowDelta = move.getRowDelta();
-		if(player == whitePlayer)
-			dirValid = rowDelta > 0;
-		else
-			dirValid = rowDelta < 0;
-		if(!dirValid)
-			return Message.error("Normal checkers can only move forward.");
+		Piece cell = getCell(move.getStart(), activeBoard);
+		if(cell.getType() != Type.KING) {
+			boolean dirValid;
+			int rowDelta = move.getRowDelta();
+			// the white player must move down, the red player must move up
+			if(player == whitePlayer)
+				dirValid = rowDelta > 0; // check white
+			else
+				dirValid = rowDelta < 0; // check my boi red
+			if(!dirValid)
+				return Message.error("Normal checkers can only move forward.");
+		}
 		
 		if(move.isJump()) {
 			Piece jumped = getCell(move.getJumpPos(), activeBoard);
@@ -229,7 +314,7 @@ public class CheckersGame {
 				return Message.error("Jumps must remove an opponent checker.");
 		}
 		
-		// don't allow simple moves if a jump move is possible.
+		// don't allow simple moves if a jump move is possible
 		if(!move.isJump() && canMakeJump(player))
 			return Message.error("A jump is possible.");
 		
@@ -280,6 +365,16 @@ public class CheckersGame {
 		
 		if(cachedMoves.size() == 0)
 			return Message.error("There are no moves to submit.");
+		
+		Move move = cachedMoves.getLast();
+		Position pos = move.getEnd();
+		Piece cell = getCell(pos, activeBoard);
+		int row = pos.getRow();
+		
+		if(move.isJump() && canMakeMove(cell, row, pos.getCell(), false, false))
+			return Message.error("Multi-jump moves must be completed.");
+		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7))
+			cell.promote();
 		
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();

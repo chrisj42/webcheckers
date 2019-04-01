@@ -22,7 +22,7 @@ public class SubmitPostRoute extends CheckersPostGameRoute {
 	
 	@Override
 	public Message handle(Player player, CheckersGame game, Request request, Response response) {
-		// attempt to backup move and return message
+		// attempt to submit turn and return message
 		return game.submitTurn(player);
 	}
 }
