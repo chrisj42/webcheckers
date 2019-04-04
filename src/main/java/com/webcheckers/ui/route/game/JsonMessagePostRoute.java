@@ -1,12 +1,15 @@
-package com.webcheckers.ui.route;
+package com.webcheckers.ui.route.game;
 
 import java.util.Objects;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.CheckersRoute;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ViewMode;
 
 import spark.Request;
 import spark.Response;
@@ -14,7 +17,7 @@ import spark.Session;
 
 import com.google.gson.Gson;
 
-public abstract class JsonMessagePostRoute extends CheckersRoute {
+abstract class JsonMessagePostRoute extends CheckersRoute {
 	
 	private final Gson gson;
 	
@@ -45,11 +48,11 @@ public abstract class JsonMessagePostRoute extends CheckersRoute {
 		if(player == null) // not logged in
 			return redirect(response, WebServer.HOME_URL);
 		
-		CheckersGame game = getPlayerLobby().getCurrentGame(player);
-		if(game == null) // no current game
+		AbstractGame game = getPlayerLobby().getCurrentGame(player);
+		if(game == null || game.getViewMode(player) != ViewMode.PLAY) // no current game
 			return redirect(response, WebServer.HOME_URL);
 		
-		Message msg = handle(player, game, request, response);
+		Message msg = handle(player, (CheckersGame)game, request, response);
 		return gson.toJson(msg, Message.class);
 	}
 }

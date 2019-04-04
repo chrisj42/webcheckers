@@ -4,7 +4,6 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.JsonMessagePostRoute;
 import com.webcheckers.util.Message;
 
 import spark.Request;

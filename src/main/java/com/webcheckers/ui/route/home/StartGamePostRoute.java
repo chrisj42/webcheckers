@@ -45,7 +45,7 @@ public class StartGamePostRoute extends WebPagePostRoute {
 		String opponent = request.queryParams(OPPONENT_PARAM);
 		
 		// make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean.
-		if(getPlayerLobby().startGame(player.getName(), opponent))
+		if(getPlayerLobby().tryStartGame(player.getName(), opponent))
 			return redirect(response, WebServer.GAME_URL);
 		
 		// failed to join game.

@@ -5,16 +5,10 @@ import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.route.GameGetRoute;
-import com.webcheckers.ui.route.game.BackupPostRoute;
-import com.webcheckers.ui.route.game.CheckTurnPostRoute;
-import com.webcheckers.ui.route.game.ResignGamePostRoute;
-import com.webcheckers.ui.route.game.SubmitPostRoute;
-import com.webcheckers.ui.route.game.ValidatePostRoute;
-import com.webcheckers.ui.route.home.HomeGetRoute;
-import com.webcheckers.ui.route.home.SignInGetRoute;
-import com.webcheckers.ui.route.home.SignInPostRoute;
-import com.webcheckers.ui.route.home.SignOutPostRoute;
-import com.webcheckers.ui.route.home.StartGamePostRoute;
+import com.webcheckers.ui.route.GameLiveGetRoute;
+import com.webcheckers.ui.route.game.*;
+import com.webcheckers.ui.route.home.*;
+import com.webcheckers.util.ViewMode;
 
 import spark.TemplateEngine;
 import static spark.Spark.get;
@@ -179,17 +173,17 @@ public class WebServer {
 		//// code clean; using small classes.
 		
 		// Shows the Checkers game Home page.
-		final HomeGetRoute home = new HomeGetRoute(HOME_VIEW, playerLobby, templateEngine);
+		final HomeGetRoute home = new HomeGetRoute(playerLobby, templateEngine);
 		get(HOME_URL, home);
 		post(HOME_URL, new StartGamePostRoute(home));
 		
-		final SignInGetRoute signin = new SignInGetRoute(SIGN_IN_VIEW, playerLobby, templateEngine);
+		final SignInGetRoute signin = new SignInGetRoute(playerLobby, templateEngine);
 		get(SIGN_IN_URL, signin);
 		post(SIGN_IN_URL, new SignInPostRoute(signin));
 		
 		post(SIGN_OUT_URL, new SignOutPostRoute(playerLobby));
 		
-		get(GAME_URL, new GameGetRoute(GAME_VIEW, playerLobby, templateEngine, gson));
+		get(GAME_URL, new GameLiveGetRoute(ViewMode.PLAY, playerLobby, templateEngine, gson));
 		
 		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
 		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));

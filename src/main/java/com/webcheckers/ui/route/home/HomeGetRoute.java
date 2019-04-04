@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.route.CheckersGetRoute;
 import com.webcheckers.util.Message;
@@ -14,9 +15,7 @@ import spark.Response;
 import spark.TemplateEngine;
 
 /**
- * The UI Controller for the Home page, containing both GET and POST behavior.
- *
- * @author Christopher Johns
+ * The UI Controller for the Home page, containing GET behavior.
  */
 public class HomeGetRoute extends CheckersGetRoute {
 	private static final Logger LOG = Logger.getLogger(HomeGetRoute.class.getName());
@@ -26,26 +25,26 @@ public class HomeGetRoute extends CheckersGetRoute {
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{GET /} HTTP requests.
 	 *
-	 * @param viewName       name of the ftl view that this route renders
 	 * @param playerLobby    the application-tier player manager
 	 * @param templateEngine the HTML template rendering engine
 	 */
-	public HomeGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
-		super(viewName, playerLobby, templateEngine);
+	public HomeGetRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
+		super(WebServer.HOME_VIEW, playerLobby, templateEngine);
 	}
 	
 	@Override
 	protected TemplateMap get(Player player, Response response) {
-		// LOG.finer("GetHomeRoute is invoked.");
+		LOG.finer("HomeGetRoute is invoked.");
+		
 		TemplateMap map = new TemplateMap();
 		
 		if(player != null) {
 			// check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
 			if(getPlayerLobby().hasGame(player)) {
-				CheckersGame game = getPlayerLobby().getCurrentGame(player);
+				AbstractGame game = getPlayerLobby().getCurrentGame(player);
 				if(game.isGameOver())
 					getPlayerLobby().endGame(player);
-				else
+				else // TODO in replay and spectator modes, we should check here what kind of game the player is in, and redirect accordingly, instead of always going to the play game url.
 					return redirect(response, WebServer.GAME_URL);
 			}
 			
