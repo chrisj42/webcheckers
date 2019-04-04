@@ -3,24 +3,25 @@ package com.webcheckers.ui;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.ui.route.GameGetRoute;
 import com.webcheckers.ui.route.game.BackupPostRoute;
 import com.webcheckers.ui.route.game.CheckTurnPostRoute;
-import com.webcheckers.ui.route.game.GameGetRoute;
 import com.webcheckers.ui.route.game.ResignGamePostRoute;
 import com.webcheckers.ui.route.game.SubmitPostRoute;
 import com.webcheckers.ui.route.game.ValidatePostRoute;
 import com.webcheckers.ui.route.home.HomeGetRoute;
-import com.webcheckers.ui.route.home.StartGamePostRoute;
 import com.webcheckers.ui.route.home.SignInGetRoute;
 import com.webcheckers.ui.route.home.SignInPostRoute;
 import com.webcheckers.ui.route.home.SignOutPostRoute;
-import spark.TemplateEngine;
+import com.webcheckers.ui.route.home.StartGamePostRoute;
 
+import spark.TemplateEngine;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
+
+import com.google.gson.Gson;
 
 
 /**

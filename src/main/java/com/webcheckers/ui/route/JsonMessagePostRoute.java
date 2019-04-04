@@ -2,17 +2,19 @@ package com.webcheckers.ui.route;
 
 import java.util.Objects;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.Message;
+
 import spark.Request;
 import spark.Response;
 import spark.Session;
 
-public abstract class MessagePostRoute extends CheckersRoute {
+import com.google.gson.Gson;
+
+public abstract class JsonMessagePostRoute extends CheckersRoute {
 	
 	private final Gson gson;
 	
@@ -23,7 +25,7 @@ public abstract class MessagePostRoute extends CheckersRoute {
 	 * @param playerLobby the application-tier player manager
 	 * @param gson The Google JSON parser object used to render Ajax responses.   
 	 */
-	protected MessagePostRoute(PlayerLobby playerLobby, Gson gson) {
+	protected JsonMessagePostRoute(PlayerLobby playerLobby, Gson gson) {
 		super(playerLobby);
 		Objects.requireNonNull(gson, "gson cannot be null");
 		this.gson = gson;

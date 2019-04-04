@@ -5,11 +5,13 @@ import java.util.Objects;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.WebServer;
+
 import spark.TemplateEngine;
 import spark.template.freemarker.FreeMarkerEngine;
+
+import com.google.gson.Gson;
 
 
 /**

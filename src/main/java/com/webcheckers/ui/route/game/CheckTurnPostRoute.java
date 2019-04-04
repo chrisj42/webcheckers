@@ -1,15 +1,17 @@
 package com.webcheckers.ui.route.game;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.MessagePostRoute;
+import com.webcheckers.ui.route.JsonMessagePostRoute;
 import com.webcheckers.util.Message;
+
 import spark.Request;
 import spark.Response;
 
-public class CheckTurnPostRoute extends MessagePostRoute {
+import com.google.gson.Gson;
+
+public class CheckTurnPostRoute extends JsonMessagePostRoute {
 	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{POST /checkTurn} HTTP requests.

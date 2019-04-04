@@ -1,16 +1,18 @@
 package com.webcheckers.ui.route.game;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.MessagePostRoute;
+import com.webcheckers.ui.route.JsonMessagePostRoute;
 import com.webcheckers.util.Message;
+
 import spark.Request;
 import spark.Response;
 
-public class ValidatePostRoute extends MessagePostRoute {
+import com.google.gson.Gson;
+
+public class ValidatePostRoute extends JsonMessagePostRoute {
 	
 	static final String MOVE_PARAM = "actionData";
 	

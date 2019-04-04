@@ -3,6 +3,7 @@ package com.webcheckers.ui.route;
 import java.util.Objects;
 
 import com.webcheckers.appl.PlayerLobby;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -32,7 +33,7 @@ public abstract class CheckersRoute implements Route {
 	@Override
 	public abstract Object handle(Request request, Response response);
 	
-	public static <T> T redirect(Response response, String location) {
+	protected static <T> T redirect(Response response, String location) {
 		response.redirect(location);
 		Spark.halt();
 		return null;

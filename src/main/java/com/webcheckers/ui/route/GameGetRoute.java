@@ -1,21 +1,22 @@
-package com.webcheckers.ui.route.game;
+package com.webcheckers.ui.route;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.CheckersGetRoute;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.board.BoardView;
 import com.webcheckers.util.TemplateMap;
 import com.webcheckers.util.ViewMode;
+
 import spark.Response;
 import spark.TemplateEngine;
+
+import com.google.gson.Gson;
 
 public class GameGetRoute extends CheckersGetRoute {
 	private static final Logger LOG = Logger.getLogger(GameGetRoute.class.getName());

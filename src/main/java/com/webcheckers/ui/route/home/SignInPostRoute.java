@@ -3,13 +3,14 @@ package com.webcheckers.ui.route.home;
 import java.util.logging.Logger;
 
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.WebPostRoute;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.WebPagePostRoute;
 import com.webcheckers.util.Message;
+
 import spark.Request;
 import spark.Response;
 
-public class SignInPostRoute extends WebPostRoute {
+public class SignInPostRoute extends WebPagePostRoute {
 	private static final Logger LOG = Logger.getLogger(SignInPostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
