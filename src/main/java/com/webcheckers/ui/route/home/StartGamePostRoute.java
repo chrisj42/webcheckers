@@ -1,9 +1,9 @@
-package com.webcheckers.ui.home;
+package com.webcheckers.ui.route.home;
 
 import java.util.logging.Logger;
 
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.CheckersPostWebRoute;
+import com.webcheckers.ui.route.WebPostRoute;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.Message;
 import spark.Request;
@@ -14,8 +14,8 @@ import spark.Response;
  *
  * @author Christopher Johns
  */
-public class HomePostRoute extends CheckersPostWebRoute {
-	private static final Logger LOG = Logger.getLogger(HomePostRoute.class.getName());
+public class StartGamePostRoute extends WebPostRoute {
+	private static final Logger LOG = Logger.getLogger(StartGamePostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
 	private static final String OPPONENT_PARAM = "opponent";
@@ -26,7 +26,7 @@ public class HomePostRoute extends CheckersPostWebRoute {
 	 * 
 	 * @param homeGetRoute the GET route to render upon erroneous input
 	 */
-	public HomePostRoute(HomeGetRoute homeGetRoute) {
+	public StartGamePostRoute(HomeGetRoute homeGetRoute) {
 		super(homeGetRoute);
 	}
 	

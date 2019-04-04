@@ -1,4 +1,4 @@
-package com.webcheckers.ui.game;
+package com.webcheckers.ui.route.game;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.CheckersGetRoute;
+import com.webcheckers.ui.route.CheckersGetRoute;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.board.BoardView;
 import com.webcheckers.util.TemplateMap;

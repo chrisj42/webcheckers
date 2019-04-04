@@ -5,17 +5,17 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.ui.game.BackupPostRoute;
-import com.webcheckers.ui.game.CheckTurnPostRoute;
-import com.webcheckers.ui.game.GameGetRoute;
-import com.webcheckers.ui.game.PostResignGameRoute;
-import com.webcheckers.ui.game.SubmitPostRoute;
-import com.webcheckers.ui.game.ValidatePostRoute;
-import com.webcheckers.ui.home.HomeGetRoute;
-import com.webcheckers.ui.home.HomePostRoute;
-import com.webcheckers.ui.home.SignInGetRoute;
-import com.webcheckers.ui.home.SignInPostRoute;
-import com.webcheckers.ui.home.SignOutPostRoute;
+import com.webcheckers.ui.route.game.BackupPostRoute;
+import com.webcheckers.ui.route.game.CheckTurnPostRoute;
+import com.webcheckers.ui.route.game.GameGetRoute;
+import com.webcheckers.ui.route.game.ResignGamePostRoute;
+import com.webcheckers.ui.route.game.SubmitPostRoute;
+import com.webcheckers.ui.route.game.ValidatePostRoute;
+import com.webcheckers.ui.route.home.HomeGetRoute;
+import com.webcheckers.ui.route.home.StartGamePostRoute;
+import com.webcheckers.ui.route.home.SignInGetRoute;
+import com.webcheckers.ui.route.home.SignInPostRoute;
+import com.webcheckers.ui.route.home.SignOutPostRoute;
 import spark.TemplateEngine;
 
 import static spark.Spark.get;
@@ -180,7 +180,7 @@ public class WebServer {
 		// Shows the Checkers game Home page.
 		final HomeGetRoute home = new HomeGetRoute(HOME_VIEW, playerLobby, templateEngine);
 		get(HOME_URL, home);
-		post(HOME_URL, new HomePostRoute(home));
+		post(HOME_URL, new StartGamePostRoute(home));
 		
 		final SignInGetRoute signin = new SignInGetRoute(SIGN_IN_VIEW, playerLobby, templateEngine);
 		get(SIGN_IN_URL, signin);
@@ -194,7 +194,7 @@ public class WebServer {
 		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));
 		post(SUBMIT_URL, new SubmitPostRoute(playerLobby, gson));
 		post(CHECK_TURN_URL, new CheckTurnPostRoute(playerLobby, gson));
-		post(RESIGN_URL, new PostResignGameRoute(playerLobby, gson));
+		post(RESIGN_URL, new ResignGamePostRoute(playerLobby, gson));
 		
 		//
 		LOG.config("WebServer is initialized.");

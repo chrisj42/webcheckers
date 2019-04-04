@@ -1,11 +1,12 @@
-package com.webcheckers.ui;
+package com.webcheckers.ui.route;
 
 import com.webcheckers.model.Player;
+import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.TemplateMap;
 import spark.Response;
 
-public abstract class CheckersPostWebRoute extends CheckersRoute {
+public abstract class WebPostRoute extends CheckersRoute {
 	
 	private final CheckersGetRoute getRoute;
 	
@@ -15,7 +16,7 @@ public abstract class CheckersPostWebRoute extends CheckersRoute {
 	 *
 	 * @param getRoute the GET route to render upon erroneous input
 	 */
-	protected CheckersPostWebRoute(CheckersGetRoute getRoute) {
+	protected WebPostRoute(CheckersGetRoute getRoute) {
 		super(getRoute.getPlayerLobby());
 		this.getRoute = getRoute;
 	}

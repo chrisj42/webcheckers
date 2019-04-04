@@ -1,8 +1,8 @@
-package com.webcheckers.ui.home;
+package com.webcheckers.ui.route.home;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.CheckersRoute;
+import com.webcheckers.ui.route.CheckersRoute;
 import com.webcheckers.ui.WebServer;
 import spark.Request;
 import spark.Response;

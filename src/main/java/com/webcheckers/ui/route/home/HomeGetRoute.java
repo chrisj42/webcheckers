@@ -1,11 +1,11 @@
-package com.webcheckers.ui.home;
+package com.webcheckers.ui.route.home;
 
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.CheckersGetRoute;
+import com.webcheckers.ui.route.CheckersGetRoute;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.TemplateMap;
