@@ -1,14 +1,26 @@
 package com.webcheckers.ui;
 
-import static spark.Spark.*;
-
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
-
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.ui.route.game.BackupPostRoute;
+import com.webcheckers.ui.route.game.CheckTurnPostRoute;
+import com.webcheckers.ui.route.game.GameGetRoute;
+import com.webcheckers.ui.route.game.ResignGamePostRoute;
+import com.webcheckers.ui.route.game.SubmitPostRoute;
+import com.webcheckers.ui.route.game.ValidatePostRoute;
+import com.webcheckers.ui.route.home.HomeGetRoute;
+import com.webcheckers.ui.route.home.StartGamePostRoute;
+import com.webcheckers.ui.route.home.SignInGetRoute;
+import com.webcheckers.ui.route.home.SignInPostRoute;
+import com.webcheckers.ui.route.home.SignOutPostRoute;
 import spark.TemplateEngine;
+
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.staticFileLocation;
 
 
 /**
@@ -57,14 +69,28 @@ public class WebServer {
 	public static final String SIGN_IN_URL = "/signin";
 	public static final String SIGN_OUT_URL = "/signout";
 	public static final String GAME_URL = "/game";
+	public static final String VALIDATE_URL = "/validateMove";
+	public static final String BACKUP_URL = "/backupMove";
+	public static final String SUBMIT_URL = "/submitTurn";
+	public static final String CHECK_TURN_URL = "/checkTurn";
+	public static final String RESIGN_URL = "/resignGame";
 	
 	// session attributes
 	public static final String PLAYER_ATTR = "player";
+	
+	
+	/**
+	 * The ftl files loaded by different routes.
+	 */
+	public static final String HOME_VIEW = "home.ftl";
+	public static final String GAME_VIEW = "game.ftl";
+	public static final String SIGN_IN_VIEW = "signin.ftl";
 	
 	// object map keys (referenced in ftl files) common to many routes
 	public static final String MESSAGE_KEY = "message";
 	public static final String USER_KEY = "currentUser";
 	public static final String PLAYER_LOBBY_KEY = "lobby";
+	
 	
 	//
 	// Attributes
@@ -152,15 +178,23 @@ public class WebServer {
 		//// code clean; using small classes.
 		
 		// Shows the Checkers game Home page.
-		get(HOME_URL, new GetHomeRoute(playerLobby, templateEngine));
-		post(HOME_URL, new PostHomeRoute(playerLobby, templateEngine));
+		final HomeGetRoute home = new HomeGetRoute(HOME_VIEW, playerLobby, templateEngine);
+		get(HOME_URL, home);
+		post(HOME_URL, new StartGamePostRoute(home));
 		
-		get(SIGN_IN_URL, new GetSignInRoute(playerLobby, templateEngine));
+		final SignInGetRoute signin = new SignInGetRoute(SIGN_IN_VIEW, playerLobby, templateEngine);
+		get(SIGN_IN_URL, signin);
+		post(SIGN_IN_URL, new SignInPostRoute(signin));
 		
-		post(SIGN_IN_URL, new PostSignInRoute(playerLobby, templateEngine));
-		post(SIGN_OUT_URL, new PostSignOutRoute(playerLobby, templateEngine));
+		post(SIGN_OUT_URL, new SignOutPostRoute(playerLobby));
 		
-		get(GAME_URL, new GetGameRoute(playerLobby, templateEngine));
+		get(GAME_URL, new GameGetRoute(GAME_VIEW, playerLobby, templateEngine, gson));
+		
+		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
+		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));
+		post(SUBMIT_URL, new SubmitPostRoute(playerLobby, gson));
+		post(CHECK_TURN_URL, new CheckTurnPostRoute(playerLobby, gson));
+		post(RESIGN_URL, new ResignGamePostRoute(playerLobby, gson));
 		
 		//
 		LOG.config("WebServer is initialized.");

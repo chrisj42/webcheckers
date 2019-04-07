@@ -51,7 +51,7 @@ define(function(require){
     };
 
     this.getOpponentPlayer = function getOpponentPlayer() {
-      return this.isRedsTurn() ? gameData.whitePlayer : gameData.redPlayer;
+      return this.isPlayerRed() ? gameData.whitePlayer : gameData.redPlayer;
     };
 
     this.isRedsTurn = function isRedsTurn() {

@@ -87,7 +87,7 @@ define(function(require){
           + "Use the Backup button to remove the most recent move. \n"
           + "Use the Submit button when you are ready to commit your complete turn.";
     } else {
-      helperText += "It's " + opponentPlayer + " turn.  The page will refresh periodically\n";
+      helperText += "It's " + opponentPlayer + "'s turn.  The page will refresh periodically\n";
       helperText += "and you will be informed when it is your turn.";
     }
     this._view.setHelperText(helperText);

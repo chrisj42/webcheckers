@@ -51,4 +51,8 @@ public class PlayerLobby {
 		playerGames.put(opponent, game);
 		return true;
 	}
+	
+	public void endGame(Player player) {
+		playerGames.remove(player.getName());
+	}
 }
