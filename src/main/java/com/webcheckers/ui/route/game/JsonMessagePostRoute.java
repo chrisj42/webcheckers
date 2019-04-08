@@ -1,18 +1,23 @@
-package com.webcheckers.ui.route;
+package com.webcheckers.ui.route.game;
 
 import java.util.Objects;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.CheckersRoute;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ViewMode;
+
 import spark.Request;
 import spark.Response;
 import spark.Session;
 
-public abstract class MessagePostRoute extends CheckersRoute {
+import com.google.gson.Gson;
+
+abstract class JsonMessagePostRoute extends CheckersRoute {
 	
 	private final Gson gson;
 	
@@ -23,7 +28,7 @@ public abstract class MessagePostRoute extends CheckersRoute {
 	 * @param playerLobby the application-tier player manager
 	 * @param gson The Google JSON parser object used to render Ajax responses.   
 	 */
-	protected MessagePostRoute(PlayerLobby playerLobby, Gson gson) {
+	protected JsonMessagePostRoute(PlayerLobby playerLobby, Gson gson) {
 		super(playerLobby);
 		Objects.requireNonNull(gson, "gson cannot be null");
 		this.gson = gson;
@@ -43,11 +48,11 @@ public abstract class MessagePostRoute extends CheckersRoute {
 		if(player == null) // not logged in
 			return redirect(response, WebServer.HOME_URL);
 		
-		CheckersGame game = getPlayerLobby().getCurrentGame(player);
-		if(game == null) // no current game
+		AbstractGame game = getPlayerLobby().getCurrentGame(player);
+		if(game == null || game.getViewMode(player) != ViewMode.PLAY) // no current game
 			return redirect(response, WebServer.HOME_URL);
 		
-		Message msg = handle(player, game, request, response);
+		Message msg = handle(player, (CheckersGame)game, request, response);
 		return gson.toJson(msg, Message.class);
 	}
 }

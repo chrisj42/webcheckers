@@ -2,8 +2,9 @@ package com.webcheckers.ui.route.home;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.CheckersRoute;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.CheckersRoute;
+
 import spark.Request;
 import spark.Response;
 import spark.Session;

@@ -1,6 +1,6 @@
 package com.webcheckers.model;
 
-import static com.webcheckers.model.Type.*;
+import static com.webcheckers.model.Type.KING;
 
 public class Piece {
 	

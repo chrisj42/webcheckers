@@ -3,9 +3,10 @@ package com.webcheckers.ui.route.home;
 import java.util.logging.Logger;
 
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.WebPostRoute;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.WebPagePostRoute;
 import com.webcheckers.util.Message;
+
 import spark.Request;
 import spark.Response;
 
@@ -14,7 +15,7 @@ import spark.Response;
  *
  * @author Christopher Johns
  */
-public class StartGamePostRoute extends WebPostRoute {
+public class StartGamePostRoute extends WebPagePostRoute {
 	private static final Logger LOG = Logger.getLogger(StartGamePostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
@@ -44,7 +45,7 @@ public class StartGamePostRoute extends WebPostRoute {
 		String opponent = request.queryParams(OPPONENT_PARAM);
 		
 		// make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean.
-		if(getPlayerLobby().startGame(player.getName(), opponent))
+		if(getPlayerLobby().tryStartGame(player.getName(), opponent))
 			return redirect(response, WebServer.GAME_URL);
 		
 		// failed to join game.

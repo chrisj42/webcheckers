@@ -5,15 +5,12 @@ import java.util.Iterator;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.AbstractGame;
 
 public class PlayerLobby {
 	
 	private HashMap<String, Player> players = new HashMap<>();
-	private HashMap<String, CheckersGame> playerGames = new HashMap<>();
-	
-	public PlayerLobby() {
-		
-	}
+	private HashMap<String, AbstractGame> playerGames = new HashMap<>();
 	
 	public Player tryLoginPlayer(String username) {
 		if(players.containsKey(username))
@@ -31,11 +28,11 @@ public class PlayerLobby {
 	
 	public Iterator<Player> iterator() { return players.values().iterator(); }
 	
-	public boolean hasGame(Player p) { return playerGames.containsKey(p.getName()); }
+	public boolean hasGame(Player p) { return p != null && playerGames.containsKey(p.getName()); }
 	
-	public CheckersGame getCurrentGame(Player p) { return playerGames.get(p.getName()); }
+	public AbstractGame getCurrentGame(Player p) { return p == null ? null : playerGames.get(p.getName()); }
 	
-	public boolean startGame(String player, String opponent) {
+	public boolean tryStartGame(String player, String opponent) {
 		Player p = players.get(player);
 		Player o = players.get(opponent);
 		if(p == null || o == null)
@@ -53,6 +50,7 @@ public class PlayerLobby {
 	}
 	
 	public void endGame(Player player) {
-		playerGames.remove(player.getName());
+		if(player != null)
+			playerGames.remove(player.getName());
 	}
 }

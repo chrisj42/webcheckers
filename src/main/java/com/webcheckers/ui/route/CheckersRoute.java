@@ -3,12 +3,13 @@ package com.webcheckers.ui.route;
 import java.util.Objects;
 
 import com.webcheckers.appl.PlayerLobby;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Spark;
 
-// superclass of Routes that return a webpage.
+// superclass of all Routes implemented in com.webcheckers.ui.
 public abstract class CheckersRoute implements Route {
 	
 	private final PlayerLobby playerLobby;
@@ -32,7 +33,7 @@ public abstract class CheckersRoute implements Route {
 	@Override
 	public abstract Object handle(Request request, Response response);
 	
-	public static <T> T redirect(Response response, String location) {
+	protected static <T> T redirect(Response response, String location) {
 		response.redirect(location);
 		Spark.halt();
 		return null;
