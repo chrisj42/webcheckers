@@ -70,6 +70,9 @@ public class WebServer {
 	public static final String CHECK_TURN_URL = "/checkTurn";
 	public static final String RESIGN_URL = "/resignGame";
 	
+	public static final String SPECTATE_GAME_URL = "/spectator/game";
+	public static final String SPECTATE_END_URL = "/spectator/stopWatching";
+	
 	// session attributes
 	public static final String PLAYER_ATTR = "player";
 	
@@ -177,19 +180,26 @@ public class WebServer {
 		get(HOME_URL, home);
 		post(HOME_URL, new StartGamePostRoute(home));
 		
+		// manages the sign in page and sign out.
 		final SignInGetRoute signin = new SignInGetRoute(playerLobby, templateEngine);
 		get(SIGN_IN_URL, signin);
 		post(SIGN_IN_URL, new SignInPostRoute(signin));
 		
 		post(SIGN_OUT_URL, new SignOutPostRoute(playerLobby));
 		
+		// the main game view
 		get(GAME_URL, new GameLiveGetRoute(ViewMode.PLAY, playerLobby, templateEngine, gson));
 		
+		// game management and interaction
 		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
 		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));
 		post(SUBMIT_URL, new SubmitPostRoute(playerLobby, gson));
 		post(CHECK_TURN_URL, new CheckTurnPostRoute(playerLobby, gson));
 		post(RESIGN_URL, new ResignGamePostRoute(playerLobby, gson));
+		
+		// spectator mode
+		get(SPECTATE_GAME_URL, new GameLiveGetRoute(ViewMode.SPECTATOR, playerLobby, templateEngine, gson));
+		
 		
 		//
 		LOG.config("WebServer is initialized.");

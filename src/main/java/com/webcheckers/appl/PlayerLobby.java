@@ -40,9 +40,19 @@ public class PlayerLobby {
 		
 		if(hasGame(p))
 			return true; // will redirect to game
-		if(hasGame(o))
-			return false; // already game in progress with another player, since we aren't already in the game
 		
+		AbstractGame existing = getCurrentGame(o);
+		if(existing != null) {
+			if(existing.getOpponent(o) == null)
+				return false; // opponent is a spectator
+			else {
+				// spectate the game
+				playerGames.put(player, existing);
+				return true;
+			}
+		}
+		
+		// opponent is not in a game, create new one
 		CheckersGame game = new CheckersGame(p, o);
 		playerGames.put(player, game);
 		playerGames.put(opponent, game);
