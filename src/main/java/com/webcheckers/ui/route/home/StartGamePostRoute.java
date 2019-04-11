@@ -1,11 +1,15 @@
 package com.webcheckers.ui.route.home;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
-import com.webcheckers.ui.route.WebPagePostRoute;
+import com.webcheckers.ui.route.ValidationPostRoute;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ViewMode;
 
 import spark.Request;
 import spark.Response;
@@ -15,7 +19,7 @@ import spark.Response;
  *
  * @author Christopher Johns
  */
-public class StartGamePostRoute extends WebPagePostRoute {
+public class StartGamePostRoute extends ValidationPostRoute {
 	private static final Logger LOG = Logger.getLogger(StartGamePostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
@@ -33,7 +37,7 @@ public class StartGamePostRoute extends WebPagePostRoute {
 	
 	@Override
 	public Object handle(Request request, Response response) {
-		LOG.finer("PostHomeRoute is invoked.");
+		LOG.finer("StartGamePostRoute is invoked.");
 		
 		// check if the user is signed in
 		Player player = request.session().attribute(WebServer.PLAYER_ATTR);
@@ -44,11 +48,20 @@ public class StartGamePostRoute extends WebPagePostRoute {
 		// get name of player that we want to start a game with
 		String opponent = request.queryParams(OPPONENT_PARAM);
 		
-		// make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean.
-		if(getPlayerLobby().tryStartGame(player.getName(), opponent))
-			return redirect(response, WebServer.GAME_URL);
+		// attempt to start a game with the given player; a String is returned that represents a possible error.
+		String error = getPlayerLobby().tryStartGame(player.getName(), opponent);
+		
+		if(Objects.equals(error, PlayerLobby.NO_ERROR)) {
+			// success
+			AbstractGame game = getPlayerLobby().getCurrentGame(player);
+			if(game == null) // shouldn't happen
+				return redirect(response, WebServer.HOME_URL);
+			
+			ViewMode viewMode = game.getViewMode(player);
+			return redirect(response, WebServer.getGamePath(viewMode));
+		}
 		
 		// failed to join game.
-		return refreshWithMessage(player, response, Message.error("Player is already in a game."));
+		return refreshWithMessage(player, response, Message.error(error));
 	}
 }

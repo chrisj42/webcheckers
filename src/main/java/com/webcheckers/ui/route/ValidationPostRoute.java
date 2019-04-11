@@ -13,17 +13,19 @@ import spark.Response;
  * 
  * Note that the browser resubmits the data when the new page is refreshed.
  */
-public abstract class WebPagePostRoute extends CheckersRoute {
+public abstract class ValidationPostRoute extends CheckersWebRoute {
 	
 	private final CheckersGetRoute getRoute;
 	
 	/**
-	 * Create the Spark Route (UI controller) to handle HTTP requests
-	 * that can render a web page, 
+	 * Create the Spark Route (UI controller) to handle @code{POST} HTTP requests
+	 * that check their input and must be able to refresh the page with an error
+	 * message if the input is not valid. In order to "refresh" the page, a GET
+	 * route must be provided as the page to render, and add the error message to.
 	 *
 	 * @param getRoute the GET route to render upon erroneous input
 	 */
-	protected WebPagePostRoute(CheckersGetRoute getRoute) {
+	protected ValidationPostRoute(CheckersGetRoute getRoute) {
 		super(getRoute.getPlayerLobby());
 		this.getRoute = getRoute;
 	}

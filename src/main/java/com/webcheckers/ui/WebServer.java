@@ -4,14 +4,18 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.ui.route.GameGetRoute;
-import com.webcheckers.ui.route.GameLiveGetRoute;
 import com.webcheckers.ui.route.game.*;
+import com.webcheckers.ui.route.game.PlayGameGetRoute;
+import com.webcheckers.ui.route.spectate.SpectateCheckTurnPostRoute;
+import com.webcheckers.ui.route.spectate.SpectateEndGetRoute;
+import com.webcheckers.ui.route.spectate.SpectateGameGetRoute;
 import com.webcheckers.ui.route.home.*;
 import com.webcheckers.util.ViewMode;
 
 import spark.TemplateEngine;
+import static spark.Spark.before;
 import static spark.Spark.get;
+import static spark.Spark.path;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
@@ -70,11 +74,14 @@ public class WebServer {
 	public static final String CHECK_TURN_URL = "/checkTurn";
 	public static final String RESIGN_URL = "/resignGame";
 	
-	public static final String SPECTATE_GAME_URL = "/spectator/game";
-	public static final String SPECTATE_END_URL = "/spectator/stopWatching";
+	public static final String SPECTATE_URL_PREFIX = "/spectator";
+	public static final String SPECTATE_END_URL = "/stopWatching";
+	public static final String SPECTATE_CHECK_TURN_URL = "/checkTurn";
 	
 	// session attributes
 	public static final String PLAYER_ATTR = "player";
+	// allows spectator check turn to determine if a new turn has been played and a refresh is needed.
+	public static final String SUBMIT_TIME_ATTR = "lastSubmit";
 	
 	
 	/**
@@ -188,7 +195,7 @@ public class WebServer {
 		post(SIGN_OUT_URL, new SignOutPostRoute(playerLobby));
 		
 		// the main game view
-		get(GAME_URL, new GameLiveGetRoute(ViewMode.PLAY, playerLobby, templateEngine, gson));
+		get(GAME_URL, new PlayGameGetRoute(playerLobby, templateEngine, gson));
 		
 		// game management and interaction
 		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
@@ -198,11 +205,28 @@ public class WebServer {
 		post(RESIGN_URL, new ResignGamePostRoute(playerLobby, gson));
 		
 		// spectator mode
-		get(SPECTATE_GAME_URL, new GameLiveGetRoute(ViewMode.SPECTATOR, playerLobby, templateEngine, gson));
+		path(SPECTATE_URL_PREFIX, () -> {
+			get(GAME_URL, new SpectateGameGetRoute(playerLobby, templateEngine, gson));
+			get(SPECTATE_END_URL, new SpectateEndGetRoute(playerLobby));
+			post(SPECTATE_CHECK_TURN_URL, new SpectateCheckTurnPostRoute(playerLobby, gson));
+		});
 		
+		/*before("/*", (request, response) -> {
+			System.out.println(request.requestMethod()+" request to '"+request.url()+"', path info='"+request.pathInfo()+"', path context='"+request.contextPath()+"', servlet path='"+request.servletPath()+"'; params: "+request.params());
+		});*/
 		
 		//
 		LOG.config("WebServer is initialized.");
 	}
 	
+	public static String getGamePath(ViewMode viewMode) {
+		String prefix = "";
+		
+		if(viewMode == ViewMode.SPECTATOR)
+			prefix = SPECTATE_URL_PREFIX;
+		// else if(viewMode == ViewMode.REPLAY)
+		// 	prefix = REPLAY_URL_PREFIX;
+		
+		return prefix + GAME_URL;
+	}
 }

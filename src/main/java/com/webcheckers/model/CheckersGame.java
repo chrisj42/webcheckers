@@ -29,7 +29,12 @@ public class CheckersGame extends AbstractGame {
 	 */
 	private final LinkedList<Move> cachedMoves = new LinkedList<>();
 	
-	private boolean isGameOver;
+	/**
+	 * Holds data on when the last turn submission was.
+	 */
+	private long lastSubmitTime = -1;
+	
+	private boolean isGameOver = false;
 	
 	private String gameOverMessage = null;
 	
@@ -42,7 +47,6 @@ public class CheckersGame extends AbstractGame {
 	 */
 	public CheckersGame(Player redPlayer, Player whitePlayer) {
 		super(redPlayer, whitePlayer);
-		isGameOver = false;
 		
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 		copyBoard(board, activeBoard);
@@ -280,6 +284,8 @@ public class CheckersGame extends AbstractGame {
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();
 		activePlayer = getOpponent(activePlayer);
+		// store timestamp of turn submission
+		lastSubmitTime = System.currentTimeMillis();
 		
 		checkGameOver(activePlayer);
 		
@@ -296,6 +302,8 @@ public class CheckersGame extends AbstractGame {
 		if(!isGameOver) {
 			gameOverMessage = player.getName() + " has resigned.";
 			isGameOver = true;
+			// this counts as an update, or "submission"
+			lastSubmitTime = System.currentTimeMillis();
 		}
 		return Message.info("You have resigned.");
 	}
@@ -330,6 +338,10 @@ public class CheckersGame extends AbstractGame {
 	@Override
 	public ViewMode getViewMode(Player player) {
 		return player == whitePlayer || player == redPlayer ? ViewMode.PLAY : ViewMode.SPECTATOR;
+	}
+	
+	public long getLastSubmitTime() {
+		return lastSubmitTime;
 	}
 	
 	/**

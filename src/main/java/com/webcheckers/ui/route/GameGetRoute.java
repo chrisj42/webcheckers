@@ -1,12 +1,10 @@
 package com.webcheckers.ui.route;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
@@ -45,11 +43,14 @@ public abstract class GameGetRoute extends CheckersGetRoute {
 	@Override
 	protected TemplateMap get(Player player, Response response) {
 		LOG.finer("GameGetRoute is invoked.");
+		// System.out.println("game get in mode "+viewMode+" by player "+(player == null ? null : player.getName()));
 		
 		// get current game
 		AbstractGame game = getPlayerLobby().getCurrentGame(player);
 		
 		// if player is not logged in, not in a game, or in a game of the wrong type, then redirect to home screen
+		// if(game != null)
+		// 	System.out.println("game view mode for player "+player.getName()+": "+game.getViewMode(player)+"; route view mode = "+viewMode);
 		if(game == null || game.getViewMode(player) != viewMode)
 			return redirect(response, WebServer.HOME_URL);
 		
@@ -67,7 +68,7 @@ public abstract class GameGetRoute extends CheckersGetRoute {
 		map.put("board", new BoardView(game.flushBoard(player), game.isPlayer1(player)));
 		
 		map.put("modeOptionsAsJSON", gson.toJson(getModeOptions(game)));
-
+		
 		return map;
 	}
 	

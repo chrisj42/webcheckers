@@ -4,13 +4,14 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ViewMode;
 
 import spark.Request;
 import spark.Response;
 
 import com.google.gson.Gson;
 
-public class BackupPostRoute extends JsonMessagePostRoute {
+public class BackupPostRoute extends GameUpdatePostRoute {
 	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{POST /backupMove} HTTP requests.
@@ -19,7 +20,7 @@ public class BackupPostRoute extends JsonMessagePostRoute {
 	 * @param gson        The Google JSON parser object used to render Ajax responses.
 	 */
 	public BackupPostRoute(PlayerLobby playerLobby, Gson gson) {
-		super(playerLobby, gson);
+		super(playerLobby, gson, ViewMode.PLAY);
 	}
 	
 	@Override

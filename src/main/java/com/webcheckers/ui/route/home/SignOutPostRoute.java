@@ -4,12 +4,13 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.route.CheckersRoute;
+import com.webcheckers.ui.route.CheckersWebRoute;
 
 import spark.Request;
 import spark.Response;
 import spark.Session;
 
-public class SignOutPostRoute extends CheckersRoute {
+public class SignOutPostRoute extends CheckersWebRoute {
 	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{POST /signout} HTTP requests,

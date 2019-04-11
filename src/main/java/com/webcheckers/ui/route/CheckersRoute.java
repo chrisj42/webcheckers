@@ -33,10 +33,4 @@ public abstract class CheckersRoute implements Route {
 	@Override
 	public abstract Object handle(Request request, Response response);
 	
-	protected static <T> T redirect(Response response, String location) {
-		response.redirect(location);
-		Spark.halt();
-		return null;
-	}
-	
 }

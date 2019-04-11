@@ -9,6 +9,8 @@ import com.webcheckers.model.game.AbstractGame;
 
 public class PlayerLobby {
 	
+	public static final String NO_ERROR = null;
+	
 	private HashMap<String, Player> players = new HashMap<>();
 	private HashMap<String, AbstractGame> playerGames = new HashMap<>();
 	
@@ -32,23 +34,33 @@ public class PlayerLobby {
 	
 	public AbstractGame getCurrentGame(Player p) { return p == null ? null : playerGames.get(p.getName()); }
 	
-	public boolean tryStartGame(String player, String opponent) {
+	// returns non-null only on error; the string in this case holds the error message.
+	public String tryStartGame(String player, String opponent) {
 		Player p = players.get(player);
 		Player o = players.get(opponent);
 		if(p == null || o == null)
-			return false;
+			return "Player/Opponent not found.";
 		
 		if(hasGame(p))
-			return true; // will redirect to game
+			return NO_ERROR; // will redirect to game
 		
 		AbstractGame existing = getCurrentGame(o);
 		if(existing != null) {
-			if(existing.getOpponent(o) == null)
-				return false; // opponent is a spectator
+			Player opp = existing.getOpponent(o);
+			// check if opponent is a spectator, i.e. not part of the game
+			if(opp == null)
+				return "Opponent is spectating a game.";
+			// check if the game is finished; no point in joining that, should wait for opponent to go to home
+			// incidentally, this also takes care of replay mode, since all replayable games are finished.
+			else if(existing.isGameOver())
+				return "Opponent is reviewing a finished game.";
 			else {
-				// spectate the game
+				// player is part of an unfinished game; spectate the game.
+				// technically this just links the player to the game, so if the player is actually part
+				// of the game then they'll join in play mode. But a player shouldn't be able to make
+				// start game requests when they're part of a game, so it shouldn't matter.
 				playerGames.put(player, existing);
-				return true;
+				return NO_ERROR;
 			}
 		}
 		
@@ -56,7 +68,7 @@ public class PlayerLobby {
 		CheckersGame game = new CheckersGame(p, o);
 		playerGames.put(player, game);
 		playerGames.put(opponent, game);
-		return true;
+		return NO_ERROR;
 	}
 	
 	public void endGame(Player player) {

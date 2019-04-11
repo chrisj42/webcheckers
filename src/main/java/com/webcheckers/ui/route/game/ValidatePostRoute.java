@@ -5,13 +5,14 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ViewMode;
 
 import spark.Request;
 import spark.Response;
 
 import com.google.gson.Gson;
 
-public class ValidatePostRoute extends JsonMessagePostRoute {
+public class ValidatePostRoute extends GameUpdatePostRoute {
 	
 	static final String MOVE_PARAM = "actionData";
 	
@@ -22,7 +23,7 @@ public class ValidatePostRoute extends JsonMessagePostRoute {
 	 * @param gson        The Google JSON parser object used to render Ajax responses.
 	 */
 	public ValidatePostRoute(PlayerLobby playerLobby, Gson gson) {
-		super(playerLobby, gson);
+		super(playerLobby, gson, ViewMode.PLAY);
 	}
 	
 	@Override

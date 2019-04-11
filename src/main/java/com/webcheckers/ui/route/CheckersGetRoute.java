@@ -12,7 +12,7 @@ import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
 
-public abstract class CheckersGetRoute extends CheckersRoute {
+public abstract class CheckersGetRoute extends CheckersWebRoute {
 	
 	private final TemplateEngine templateEngine;
 	private final String viewName;
