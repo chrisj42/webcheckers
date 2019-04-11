@@ -2,10 +2,13 @@ package com.webcheckers.appl;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.game.AbstractGame;
+import com.webcheckers.util.PlayerInfo;
+import com.webcheckers.util.ViewMode;
 
 public class PlayerLobby {
 	
@@ -28,7 +31,29 @@ public class PlayerLobby {
 	
 	public int getPlayerCount() { return players.size(); }
 	
-	public Iterator<Player> iterator() { return players.values().iterator(); }
+	public Iterator<PlayerInfo> iterator() {
+		LinkedList<PlayerInfo> info = new LinkedList<>();
+		for(Player p: players.values()) {
+			AbstractGame game = getCurrentGame(p);
+			String status;
+			if(game == null)
+				status = "Available";
+			else {
+				ViewMode viewMode = game.getViewMode(p);
+				if(viewMode == ViewMode.PLAY)
+					status = "Playing against "+game.getOpponent(p);
+				else if(viewMode == ViewMode.SPECTATOR)
+					status = "Spectating "+game.getRedPlayer()+" vs "+game.getWhitePlayer();
+				// else if(viewMode == ViewMode.REPLAY)
+				// 	status = "Replaying "+game.getRedPlayer()+" vs "+game.getWhitePlayer();
+				else
+					status = "";
+			}
+			info.add(new PlayerInfo(p.getName(), status));
+		}
+		
+		return info.iterator();
+	}
 	
 	public boolean hasGame(Player p) { return p != null && playerGames.containsKey(p.getName()); }
 	

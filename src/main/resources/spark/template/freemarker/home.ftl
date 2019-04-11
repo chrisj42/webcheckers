@@ -40,7 +40,7 @@
 								<form id="${player.name}" action="/" method="post">
 									<#-- to make the input look like plain text, but still get sent in the form post, I'm making an input element with the data to send but display:none, and then a link element to display to the user and act as a submit button like nav-bar.ftl. -->
 									<input name="opponent" value="${player.name}" style="display:none"/>
-									<a href="#" onclick="event.preventDefault(); document.getElementById('${player.name}').submit();">${player.name}</a>
+									<a href="#" onclick="event.preventDefault(); document.getElementById('${player.name}').submit();">${player.name} (${player.status})</a>
 								</form>
 							</li>
 						</#if>
