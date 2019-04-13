@@ -39,17 +39,21 @@ public abstract class AbstractGame {
 		activePlayer = redPlayer;
 		
 		board = new Piece[BOARD_SIZE][BOARD_SIZE];
-		for(int row = 0; row < board.length; row++) {
-			if(row < 3) {
-				for(int col = 0; col < board[row].length; col++)
-					if((col+row) % 2 == 1) // maths to find black tiles
-						board[row][col] = new Piece(Type.SINGLE, Color.WHITE);
-			}
-			if(row >= BOARD_SIZE - 3) {
-				for(int col = 0; col < board[row].length; col++)
-					if((col+row) % 2 == 1) // maths to find black tiles
-						board[row][col] = new Piece(Type.SINGLE, Color.RED);
-			}
+		SetDefaultBoard();
+	}
+
+	protected AbstractGame(Player redPlayer, Player whitePlayer, TestMode mode) {
+		this.redPlayer = redPlayer;
+		this.whitePlayer = whitePlayer;
+
+		activePlayer = redPlayer;
+
+		board = new Piece[BOARD_SIZE][BOARD_SIZE];
+		if(mode == TestMode.ENDGAME) {
+			SetEndgameTestBoard();
+		}
+		else if(mode == TestMode.MULTJUMP) {
+			SetMultJumpTestBoard();
 		}
 	}
 	
@@ -168,6 +172,37 @@ public abstract class AbstractGame {
 			return redPlayer;
 		else
 			return null;
+	}
+
+	/**
+	 * Adds pieces to board for a normal Checkers game
+	 */
+	protected void SetDefaultBoard() {
+		for(int row = 0; row < board.length; row++) {
+			if(row < 3) {
+				for(int col = 0; col < board[row].length; col++)
+					if((col+row) % 2 == 1) // maths to find black tiles
+						board[row][col] = new Piece(Type.SINGLE, Color.WHITE);
+			}
+			if(row >= BOARD_SIZE - 3) {
+				for(int col = 0; col < board[row].length; col++)
+					if((col+row) % 2 == 1) // maths to find black tiles
+						board[row][col] = new Piece(Type.SINGLE, Color.RED);
+			}
+		}
+	}
+
+	protected void SetMultJumpTestBoard() {
+		board[5][4] = new Piece(Type.KING, Color.RED);
+		board[7][2] = new Piece(Type.KING, Color.RED);
+		board[2][3] = new Piece(Type.KING, Color.WHITE);
+		board[2][5] = new Piece(Type.KING, Color.WHITE);
+		board[4][5] = new Piece(Type.KING, Color.WHITE);
+	}
+
+	protected void SetEndgameTestBoard() {
+		board[3][4] = new Piece(Type.KING, Color.WHITE);
+		board[4][3] = new Piece(Type.KING, Color.RED);
 	}
 	
 	public abstract ViewMode getViewMode(Player player);

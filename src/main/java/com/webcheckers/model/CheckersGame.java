@@ -47,6 +47,14 @@ public class CheckersGame extends AbstractGame {
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 		copyBoard(board, activeBoard);
 	}
+
+	public CheckersGame(Player redPlayer, Player whitePlayer, TestMode mode) {
+		super(redPlayer, whitePlayer, mode);
+		isGameOver = false;
+
+		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
+		copyBoard(board, activeBoard);
+	}
 	
 	/**
 	 * Determines if the given player can make a jump move.

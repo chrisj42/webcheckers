@@ -5,12 +5,19 @@ import java.util.Iterator;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.TestMode;
 import com.webcheckers.model.game.AbstractGame;
 
 public class PlayerLobby {
 	
 	private HashMap<String, Player> players = new HashMap<>();
 	private HashMap<String, AbstractGame> playerGames = new HashMap<>();
+	private boolean testMode; // allow test games to be created with specific usernames
+
+	public PlayerLobby(boolean testing)
+	{
+		testMode = testing;
+	}
 	
 	public Player tryLoginPlayer(String username) {
 		if(players.containsKey(username))
@@ -42,8 +49,24 @@ public class PlayerLobby {
 			return true; // will redirect to game
 		if(hasGame(o))
 			return false; // already game in progress with another player, since we aren't already in the game
-		
-		CheckersGame game = new CheckersGame(p, o);
+
+		CheckersGame game;
+
+		// create games with custom board states if testmode has been enabled and a specific username entered
+		if(testMode) {
+			if(p.getName().toUpperCase().equals("MULTJUMPTESTER") || o.getName().toUpperCase().equals("MULTJUMPTESTER")) {
+				game = new CheckersGame(p, o, TestMode.MULTJUMP);
+			}
+			else if(p.getName().toUpperCase().equals("ENDGAMETESTER") || o.getName().toUpperCase().equals("ENDGAMETESTER")) {
+				game = new CheckersGame(p, o, TestMode.ENDGAME);
+			}
+			else {
+				game = new CheckersGame(p, o);
+			}
+		}
+		else {
+			game = new CheckersGame(p, o);
+		}
 		playerGames.put(player, game);
 		playerGames.put(opponent, game);
 		return true;

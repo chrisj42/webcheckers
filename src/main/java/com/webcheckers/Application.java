@@ -57,9 +57,14 @@ public final class Application {
 		// This should be used by your Ajax Routes to generate JSON for the HTTP
 		// response to Ajax requests.
 		final Gson gson = new Gson();
-		
+
+		// get testmode parameter from command line and initialize playerlobby accordingly
+		boolean testMode = false;
+		if(args.length > 0 && args[0].toUpperCase().equals("TESTMODE")) {
+			testMode = true;
+		}
 		// Global Application state
-		PlayerLobby serverManager = new PlayerLobby();
+		PlayerLobby serverManager = new PlayerLobby(testMode);
 		
 		// inject the game center and freemarker engine into web server
 		final WebServer webServer = new WebServer(serverManager, templateEngine, gson);
