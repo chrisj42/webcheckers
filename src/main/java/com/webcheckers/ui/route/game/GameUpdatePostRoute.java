@@ -1,19 +1,15 @@
 package com.webcheckers.ui.route.game;
 
-import java.util.Objects;
-
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.game.AbstractGame;
-import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.route.AjaxMessagePostRoute;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.ViewMode;
 
 import spark.Request;
 import spark.Response;
-import spark.Session;
 
 import com.google.gson.Gson;
 

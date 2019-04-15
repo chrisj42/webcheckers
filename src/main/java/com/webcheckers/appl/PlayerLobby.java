@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.util.PlayerInfo;

@@ -1,7 +1,8 @@
-package com.webcheckers.model;
+package com.webcheckers.model.game;
 
 import java.util.LinkedList;
 
+import com.webcheckers.model.*;
 import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.ViewMode;
@@ -279,7 +280,7 @@ public class CheckersGame extends AbstractGame {
 		if(move.isJump() && canMakeMove(cell, row, pos.getCell(), false, false))
 			return Message.error("Multi-jump moves must be completed.");
 		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7))
-			cell.promote();
+			setCell(pos, activeBoard, new Piece(Type.KING, cell.getColor()));
 		
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();

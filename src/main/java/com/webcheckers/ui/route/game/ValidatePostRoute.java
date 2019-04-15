@@ -1,7 +1,7 @@
 package com.webcheckers.ui.route.game;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;

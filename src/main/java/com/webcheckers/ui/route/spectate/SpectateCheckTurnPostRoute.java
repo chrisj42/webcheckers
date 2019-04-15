@@ -1,8 +1,7 @@
 package com.webcheckers.ui.route.spectate;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Color;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.route.game.GameUpdatePostRoute;
