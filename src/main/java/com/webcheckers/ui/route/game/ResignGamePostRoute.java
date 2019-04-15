@@ -26,10 +26,6 @@ public class ResignGamePostRoute extends GameUpdatePostRoute {
 	
 	@Override
 	public Message handle(Player player, CheckersGame game, Request request, Response response) {
-		Message message = game.resignGame(player);
-		if(message.isSuccessful())
-			getPlayerLobby().endGame(player);
-		
-		return message;
+		return game.resignGame(player);
 	}
 }
