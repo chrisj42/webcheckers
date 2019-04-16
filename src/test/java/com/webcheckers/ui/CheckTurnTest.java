@@ -1,4 +1,4 @@
-package com.webcheckers.ui;
+/**package com.webcheckers.ui;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
  *
  *
  */
-@Tag("Model-tier")
+/**@Tag("Model-tier")
 public class CheckTurnTest {
 
   private static String PLAYER1 = "P1";
@@ -43,4 +43,4 @@ public class CheckTurnTest {
   }
 
 
-}
+}*/
