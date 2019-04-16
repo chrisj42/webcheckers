@@ -1,6 +1,7 @@
 package com.webcheckers.model.game;
 
 import com.webcheckers.model.*;
+import com.webcheckers.util.TestMode;
 import com.webcheckers.util.ViewMode;
 
 public abstract class AbstractGame {
@@ -32,23 +33,26 @@ public abstract class AbstractGame {
 	 */
 	protected final Piece[][] board;
 	
-	protected AbstractGame(Player redPlayer, Player whitePlayer) {
+	protected AbstractGame(Player redPlayer, Player whitePlayer, boolean setupBoard) {
 		this.redPlayer = redPlayer;
 		this.whitePlayer = whitePlayer;
 		
 		activePlayer = redPlayer;
 		
 		board = new Piece[BOARD_SIZE][BOARD_SIZE];
-		for(int row = 0; row < board.length; row++) {
-			if(row < 3) {
-				for(int col = 0; col < board[row].length; col++)
-					if((col+row) % 2 == 1) // maths to find black tiles
-						board[row][col] = new Piece(Type.SINGLE, Color.WHITE);
-			}
-			if(row >= BOARD_SIZE - 3) {
-				for(int col = 0; col < board[row].length; col++)
-					if((col+row) % 2 == 1) // maths to find black tiles
-						board[row][col] = new Piece(Type.SINGLE, Color.RED);
+		
+		if(setupBoard) {
+			for(int row = 0; row < board.length; row++) {
+				if(row < 3) {
+					for(int col = 0; col < board[row].length; col++)
+						if((col+row) % 2 == 1) // maths to find black tiles
+							board[row][col] = new Piece(Type.SINGLE, Color.WHITE);
+				}
+				if(row >= BOARD_SIZE - 3) {
+					for(int col = 0; col < board[row].length; col++)
+						if((col+row) % 2 == 1) // maths to find black tiles
+							board[row][col] = new Piece(Type.SINGLE, Color.RED);
+				}
 			}
 		}
 	}

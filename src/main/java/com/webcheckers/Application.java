@@ -61,9 +61,14 @@ public final class Application {
 		
 		// Holder of game replays
 		final ReplayArchive replayArchive = new ReplayArchive();
-		
+
+		// get testmode parameter from command line and initialize playerlobby accordingly
+		boolean testMode = false;
+		if(args.length > 0 && args[0].toUpperCase().equals("TESTMODE")) {
+			testMode = true;
+		}
 		// Global Application state
-		final PlayerLobby playerLobby = new PlayerLobby(replayArchive);
+		PlayerLobby playerLobby = new PlayerLobby(replayArchive, testMode);
 		
 		// inject the game center and freemarker engine into web server
 		final WebServer webServer = new WebServer(playerLobby, replayArchive, templateEngine, gson);

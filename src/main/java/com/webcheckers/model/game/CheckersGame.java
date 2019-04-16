@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.webcheckers.model.*;
-import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.TestMode;
 import com.webcheckers.util.ViewMode;
 
 // the server-side model of a game of checkers, including the players involved, which player started the game (i.e. which player is "player 1" i.e. the red player), and the 2D array of Piece objects.
@@ -48,9 +48,13 @@ public class CheckersGame extends AbstractGame {
 	 * 
 	 * @param redPlayer   the player controlling the red checkers (player one)
 	 * @param whitePlayer the player controlling the white checkers (player two)
+	 * @param mode        testing mode; TestMode.NORMAL for normal play.   
 	 */
-	public CheckersGame(Player redPlayer, Player whitePlayer) {
-		super(redPlayer, whitePlayer);
+	public CheckersGame(Player redPlayer, Player whitePlayer, TestMode mode) {
+		super(redPlayer, whitePlayer, mode == null);
+		
+		if(mode != null)
+			mode.fillBoard(board);
 		
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 		copyBoard(board, activeBoard);

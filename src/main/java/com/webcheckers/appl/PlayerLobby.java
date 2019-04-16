@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.TestMode;
 import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.model.game.GameReplay;
 import com.webcheckers.util.PlayerInfo;
@@ -21,9 +22,12 @@ public class PlayerLobby {
 	
 	private final ReplayArchive archive;
 	
-	public PlayerLobby(ReplayArchive archive) {
+	private boolean testMode; // allow test games to be created with specific usernames
+	
+	public PlayerLobby(ReplayArchive archive, boolean testing) {
 		Objects.requireNonNull(archive, "ReplayArchive cannot be null");
 		this.archive = archive;
+		this.testMode = testing;
 	}
 	
 	public Player tryLoginPlayer(String username) {
@@ -98,7 +102,17 @@ public class PlayerLobby {
 		}
 		
 		// opponent is not in a game, create new one
-		CheckersGame game = new CheckersGame(player, o);
+		
+		// create games with custom board states if testmode has been enabled and a specific username entered
+		TestMode mode = null;
+		if(testMode) {
+			switch(player.getName().toUpperCase()) {
+				case "MULTJUMPTESTER": mode = TestMode.MULTJUMP; break;
+				case "ENDGAMETESTER": mode = TestMode.ENDGAME; break;
+			}
+		}
+		
+		CheckersGame game = new CheckersGame(player, o, mode);
 		playerGames.put(player.getName(), game);
 		playerGames.put(opponent, game);
 		return NO_ERROR;
