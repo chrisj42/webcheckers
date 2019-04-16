@@ -48,7 +48,7 @@ public class CheckersGame extends AbstractGame {
 	 * 
 	 * @param redPlayer   the player controlling the red checkers (player one)
 	 * @param whitePlayer the player controlling the white checkers (player two)
-	 * @param mode        testing mode; TestMode.NORMAL for normal play.   
+	 * @param mode        testing mode; TestMode.NORMAL for normal play.
 	 */
 	public CheckersGame(Player redPlayer, Player whitePlayer, TestMode mode) {
 		super(redPlayer, whitePlayer, mode == null);

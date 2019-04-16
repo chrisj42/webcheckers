@@ -64,7 +64,7 @@ public final class Application {
 
 		// get testmode parameter from command line and initialize playerlobby accordingly
 		boolean testMode = false;
-		if(args.length > 0 && args[0].toUpperCase().equals("TESTMODE")) {
+		if(args.length > 0 && args[0].equalsIgnoreCase("TESTMODE")) {
 			testMode = true;
 		}
 		// Global Application state
