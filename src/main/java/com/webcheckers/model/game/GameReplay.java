@@ -14,7 +14,7 @@ public class GameReplay extends AbstractGame {
 	private final String gameOverMessage;
 	
 	public GameReplay(GameReplayData replayData) {
-		super(replayData.getRedPlayer(), replayData.getWhitePlayer());
+		super(replayData.getRedPlayer(), replayData.getWhitePlayer(), true);
 		
 		this.moves = replayData.getMoveReplays();
 		curMove = 0;
