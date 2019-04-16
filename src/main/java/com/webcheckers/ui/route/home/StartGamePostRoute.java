@@ -23,7 +23,9 @@ public class StartGamePostRoute extends ValidationPostRoute {
 	private static final Logger LOG = Logger.getLogger(StartGamePostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
+	private static final String MODE = "viewMode"; // replay or play (spectate is enforced if play fails)
 	private static final String OPPONENT_PARAM = "opponent";
+	private static final String REPLAY_ID_PARAM = "replay";
 	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{POST /} HTTP requests,
@@ -45,12 +47,25 @@ public class StartGamePostRoute extends ValidationPostRoute {
 		if(player == null) // cannot start game if player isn't signed in
 			return redirect(response, WebServer.HOME_URL);
 		
-		// get name of player that we want to start a game with
-		String opponent = request.queryParams(OPPONENT_PARAM);
+		ViewMode mode = ViewMode.valueOf(request.queryParams(MODE));
 		
-		// attempt to start a game with the given player; a String is returned that represents a possible error.
-		String error = getPlayerLobby().tryStartGame(player.getName(), opponent);
+		String error;
+		if(mode == ViewMode.PLAY) {
+			// get name of player that we want to start a game with
+			String opponent = request.queryParams(OPPONENT_PARAM);
+			
+			// attempt to start a game with the given player; a String is returned that represents a possible error.
+			error = getPlayerLobby().tryStartGame(player, opponent);
+		}
+		else if(mode == ViewMode.REPLAY) {
+			int id = Integer.parseInt(request.queryParams(REPLAY_ID_PARAM));
+			
+			error = getPlayerLobby().tryStartReplay(player, id);
+		}
+		else
+			return refreshWithMessage(player, response, Message.error("Game mode is not known."));
 		
+		// if no error...
 		if(Objects.equals(error, PlayerLobby.NO_ERROR)) {
 			// success
 			AbstractGame game = getPlayerLobby().getCurrentGame(player);
@@ -61,7 +76,7 @@ public class StartGamePostRoute extends ValidationPostRoute {
 			return redirect(response, WebServer.getGamePath(viewMode));
 		}
 		
-		// failed to join game.
+		// failed to join/start game.
 		return refreshWithMessage(player, response, Message.error(error));
 	}
 }

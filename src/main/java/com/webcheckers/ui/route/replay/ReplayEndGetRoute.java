@@ -1,4 +1,4 @@
-package com.webcheckers.ui.route.spectate;
+package com.webcheckers.ui.route.replay;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
@@ -9,21 +9,21 @@ import com.webcheckers.util.ViewMode;
 import spark.Request;
 import spark.Response;
 
-public class SpectateEndGetRoute extends CheckersWebRoute {
+public class ReplayEndGetRoute extends CheckersWebRoute {
 	
 	/**
-	 * Create the Spark Route (UI controller) to handle @code{GET /spectator/stopWatching} HTTP requests.
+	 * Create the Spark Route (UI controller) to handle @code{GET /replay/stopWatching} HTTP requests.
 	 *
 	 * @param playerLobby the application-tier player manager
 	 */
-	public SpectateEndGetRoute(PlayerLobby playerLobby) {
+	public ReplayEndGetRoute(PlayerLobby playerLobby) {
 		super(playerLobby);
 	}
 	
 	@Override
 	public Object handle(Request request, Response response) {
 		Player p = request.session().attribute(WebServer.PLAYER_ATTR);
-		getPlayerLobby().endGame(p, ViewMode.SPECTATOR);
+		getPlayerLobby().endGame(p, ViewMode.REPLAY);
 		return redirect(response, WebServer.HOME_URL);
 	}
 }

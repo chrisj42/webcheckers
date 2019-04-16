@@ -1,5 +1,6 @@
 package com.webcheckers.model.game;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.webcheckers.model.*;
@@ -39,6 +40,8 @@ public class CheckersGame extends AbstractGame {
 	
 	private String gameOverMessage = null;
 	
+	private final LinkedList<TurnReplay> playedMoves;
+	
 	/**
 	 * CheckersGame constructor. Creates the board objects and initializes them
 	 * with the starting layout for a checkers game.
@@ -51,6 +54,7 @@ public class CheckersGame extends AbstractGame {
 		
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
 		copyBoard(board, activeBoard);
+		playedMoves = new LinkedList<>();
 	}
 	
 	/**
@@ -137,10 +141,13 @@ public class CheckersGame extends AbstractGame {
 	 * set to say the other player has won.
 	 */
 	private void checkGameOver(Player player) {
+		if(isGameOver)
+			return; // already game over
+		
 		boolean hasPieces = false;
-		for(int r = 0; r < activeBoard.length; r++) {
-			for(int c = 0; c < activeBoard[r].length; c++) {
-				if(activeBoard[r][c] != null && matchesPlayer(activeBoard[r][c], player)) {
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[r].length; c++) {
+				if(board[r][c] != null && matchesPlayer(board[r][c], player)) {
 					hasPieces = true;
 					break;
 				}
@@ -149,13 +156,12 @@ public class CheckersGame extends AbstractGame {
 		}
 		
 		if(!hasPieces) {
+			// the player has run out of pieces
 			gameOverMessage = (player == redPlayer ? whitePlayer : redPlayer).getName()+" has captured all the pieces.";
 			isGameOver = true;
-			return;
 		}
-		
-		// see if the player has run out of valid moves
-		if(!canMakeMove(player)) {
+		else if(!canMakeMove(player)) {
+			// the player has run out of valid moves
 			gameOverMessage = player.getName()+" has run out of valid moves.";
 			isGameOver = true;
 		}
@@ -279,8 +285,25 @@ public class CheckersGame extends AbstractGame {
 		
 		if(move.isJump() && canMakeMove(cell, row, pos.getCell(), false, false))
 			return Message.error("Multi-jump moves must be completed.");
-		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7))
-			setCell(pos, activeBoard, new Piece(Type.KING, cell.getColor()));
+		
+		// at this point, the submission is valid
+		
+		Piece promoted = null;
+		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7)) {
+			promoted = new Piece(Type.KING, cell.getColor());
+			setCell(pos, activeBoard, promoted);
+		}
+		
+		// create the turn replay
+		ArrayList<MoveReplay> moves = new ArrayList<>(cachedMoves.size());
+		for(Move cmove: cachedMoves) {
+			Position start = cmove.getStart();
+			Position end = cmove.getEnd();
+			Piece result = cmove == move ? promoted : cell;
+			Piece jumped = cmove.isJump() ? getCell(cmove.getJumpPos(), board) : null;
+			moves.add(new MoveReplay(start, end, cell, result, jumped));
+		}
+		playedMoves.add(new TurnReplay(activePlayer, moves));
 		
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();
@@ -298,7 +321,7 @@ public class CheckersGame extends AbstractGame {
 	 */
 	public Message resignGame(Player player) {
 		if(player == activePlayer && cachedMoves.size() > 1)
-			return Message.error("you must undo all moves before resigning.");
+			return Message.error("You must undo all moves before resigning.");
 		
 		if(!isGameOver) {
 			gameOverMessage = player.getName() + " has resigned.";
@@ -322,6 +345,12 @@ public class CheckersGame extends AbstractGame {
 	@Override
 	public String getGameOverMessage() {
 		return gameOverMessage;
+	}
+	
+	public GameReplayData generateReplayData() {
+		// if(!isGameOver)
+		// 	return null;
+		return new GameReplayData(redPlayer, whitePlayer, gameOverMessage, playedMoves);
 	}
 	
 	/**

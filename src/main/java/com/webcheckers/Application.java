@@ -6,6 +6,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.ui.WebServer;
 
 import spark.TemplateEngine;
@@ -58,14 +59,17 @@ public final class Application {
 		// response to Ajax requests.
 		final Gson gson = new Gson();
 		
+		// Holder of game replays
+		final ReplayArchive replayArchive = new ReplayArchive();
+		
 		// Global Application state
-		PlayerLobby serverManager = new PlayerLobby();
+		final PlayerLobby playerLobby = new PlayerLobby(replayArchive);
 		
 		// inject the game center and freemarker engine into web server
-		final WebServer webServer = new WebServer(serverManager, templateEngine, gson);
+		final WebServer webServer = new WebServer(playerLobby, replayArchive, templateEngine, gson);
 		
 		// inject web server into application
-		final Application app = new Application(serverManager, webServer);
+		final Application app = new Application(playerLobby, webServer);
 		
 		// start the application up
 		app.initialize();

@@ -61,7 +61,7 @@ public abstract class AbstractGame {
 	 * @param piece the piece to put
 	 * @return the piece that was replaced   
 	 */
-	protected static Piece setCell(Position pos, Piece[][] board, Piece piece) {
+	public static Piece setCell(Position pos, Piece[][] board, Piece piece) {
 		Piece prev = getCell(pos, board);
 		board[pos.getRow()][pos.getCell()] = piece;
 		return prev;
@@ -74,7 +74,7 @@ public abstract class AbstractGame {
 	 * @param board the board to fetch from
 	 * @return the piece at the position on the board
 	 */
-	protected static Piece getCell(Position pos, Piece[][] board) {
+	public static Piece getCell(Position pos, Piece[][] board) {
 		return board[pos.getRow()][pos.getCell()];
 	}
 	
