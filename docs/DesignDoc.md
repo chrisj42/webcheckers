@@ -71,17 +71,8 @@ For our minimal viable product, the first thing we need is a functional player l
 This section describes the application domain.
 
 ![The WebCheckers Domain Model](Checkers_Domain.PNG)
-<<<<<<< HEAD
-
-> _Provide a high-level overview of the domain for this application. You
-> can discuss the more important domain entities and their relationship
-> to each other._
-
-Users sign in to the application and create a user account. From there, they start games with other users and become players in those games. Each game has an 8x8 board made up of light and dark squares and pieces for each player. Players take turns moving the pieces, and the game ends when the win/loss conditions are met. Users can also spectate or watch replays of games rather than play in them.
-=======
 
 Users sign in to the application and create a user account. From there, they start games with other users and become players in those games. Each game has an 8x8 board made up of light and dark squares and twelve non-king pieces for each player. Players take turns moving the pieces, and moves are made up of single, jump, and multiple jump moves. If a piece moves to the opposite end of the board from its starting position, it is promoted and becomes a king. The game ends when the win conditions are met. Users can also spectate or watch replays of games rather than play in them.
->>>>>>> fed632e01c818f6d122c7a3f4fc86ab3c6741cb3
 
 ## Architecture and Design
 
@@ -109,24 +100,10 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](Checkers_State_Diagram.png)
-<<<<<<< HEAD
-
-> _Provide a summary of the application's user interface.  Describe, from
-> the user's perspective, the flow of the pages in the web application._
+![The WebCheckers Web Interface Statechart](updated_state_diagram.png)
 
 The user will be directed to the home page first. After the user decides on a 
 username, they will then be directed to a home page that includes online players.
-
-If the user wants to start a game with someone, they can click on the players name and 
-if that player is unoccupied both players will be redirected to a game page. 
-
-Once the game has ended, the players are redirected back to the signed in home page.
-=======
-
-The user will be directed to the home page first. After the user decides on a 
-username, they will then be directed to a home page that includes online players.
->>>>>>> fed632e01c818f6d122c7a3f4fc86ab3c6741cb3
 
 If the user wants to start a game with someone, they can click on the players name and 
 if that player is unoccupied both players will be redirected to a game page. 
@@ -137,11 +114,6 @@ Once the game has ended, the players will be shown the ending game screen and ca
 
 Our UI tier classes consist of different Get and Post Route classes, including GetGameRoute, GetHomeRoute, GetSignInRoute, PostHomeRoute, PostSignInRoute, and PostSignOutRoute. These Route classes handle directing users between the home page, the signed-in homepage, and the game page. They also give the template engine information on what the webpage should have/look like.
 
-<<<<<<< HEAD
-Our UI tier classes consist of different Get and Post Route classes, including GetGameRoute, GetHomeRoute, GetSignInRoute, PostHomeRoute, PostSignInRoute, and PostSignOutRoute. These Route classes handle directing users between the home page, the signed-in homepage, and the game page. They also give the template engine information on what the webpage should have/look like.
-
-=======
->>>>>>> fed632e01c818f6d122c7a3f4fc86ab3c6741cb3
 We also have our WebServer class that initializes the different routes, as well as Space and Row classes that make up the gameboard interface.
 
 ### Application Tier
@@ -150,11 +122,7 @@ The application tier contains our PlayerLobby class, which keeps track of all pl
 
 ### Model Tier
 
-![The WebCheckers Web Model Tier Classes](Checkers_Model_Classes_UML.png)
-
-The model tier has a CheckersGame class, which contains methods and information for playing a game of checkers. It also has classes for the components of the game, including a Move class, a Piece class, a Player class, and Type/Color enumerations for the pieces.
-
-![The WebCheckers Web Model Tier Classes](Checkers_Model_Classes.png)
+![The WebCheckers Web Model Tier Classes](model_class_diagram.png)
 
 The model tier has a CheckersGame class, which keeps track of an individual game's players and board state. It also has classes for the components of the game, including a Piece class, a Player class, and Type/Color enumerations for the pieces.
 
@@ -167,12 +135,7 @@ At this time, we believe that all of our class structures and relationships are 
 ## Testing
 
 ### Acceptance Testing
-<<<<<<< HEAD
-> _Report on the number of user stories that have passed all their
-> acceptance criteria tests, the number that have some acceptance
-> criteria tests failing, and the number of user stories that
-> have not had any testing yet. Highlight the issues found during
-> acceptance testing and if there are any concerns._
+
 All 18 acceptance criterias for sprint 1 have been met and passed. 
 For the signin feature there where no problems when testing was 
 done. For starting the game there where problems when setting up 
@@ -181,26 +144,6 @@ problem was that the colors appeared the same for both players,
 meaning that both players saw themselves as the red checker pieces
 For sprint 2 we have 7 user stories that have not yet been tested. 
 
-
-
-### Unit Testing and Code Coverage
-> _Discuss your unit testing strategy. Report on the code coverage
-> achieved from unit testing of the code base. Discuss the team's
-> coverage targets, why you selected those values, and how well your
-> code coverage met your targets. If there are any anomalies, discuss
-> those._
-So far our unit testing plan has focused on testing the if the game exists 
-and if the player has logged in successfully. We plan to test the players
-moves next to the such as jumping and moving pieces. We have not yet done 
-much code coverage yet due to problems that arrised when trying to use it. 
-
-
-
-=======
-
-All acceptance criterias for sprint 1 and 2 have been met and passed. This includes functionality for signing in, starting a game, and playing a game by the rules.
-
 ### Unit Testing and Code Coverage
 
 Unit tests have been written for our CheckersGame class as well as our UI route component classes.
->>>>>>> fed632e01c818f6d122c7a3f4fc86ab3c6741cb3
