@@ -1,7 +1,5 @@
 package com.webcheckers.model;
 
-import static com.webcheckers.model.Type.*;
-
 public class Piece {
 	
 	private Type type;
@@ -19,6 +17,4 @@ public class Piece {
 	public Color getColor() {
 		return color;
 	}
-
-	void promote() { this.type = KING; }
 }

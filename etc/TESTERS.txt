@@ -1,7 +1,8 @@
 STARTING THE APPLICATION
 
 1. Open Command Prompt and navigate to the project location (The place where you unzipped the file).
-2. Enter the command `mvn compile exec:java` and hit enter.
+2. Enter the command `mvn compile exec:java` and hit enter. If you want to create custom board states, add additional parameters -Dexec.mainClass="com.webcheckers.Application" -Dexec.args="testmode".
 3. After the program starts up open your choice of web browser, other than Internet Explorer
 4. Enter `localhost:4567` into the URL and you have arrived at the sign-in page.
 5. To play a game with another player, either open up a different web browser OR use the private tab of the web browser and follow step 4.
+6. If you want to use a custom board state and testmode parameter was given, sign in with one of the following usernames: multjumptester, endgametester.

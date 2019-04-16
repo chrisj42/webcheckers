@@ -39,14 +39,34 @@
 							<li>
 								<form id="${player.name}" action="/" method="post">
 									<#-- to make the input look like plain text, but still get sent in the form post, I'm making an input element with the data to send but display:none, and then a link element to display to the user and act as a submit button like nav-bar.ftl. -->
+									<input name="viewMode" value="PLAY" style="display:none"/>
 									<input name="opponent" value="${player.name}" style="display:none"/>
-									<a href="#" onclick="event.preventDefault(); document.getElementById('${player.name}').submit();">${player.name}</a>
+									<a href="#" onclick="event.preventDefault(); document.getElementById('${player.name}').submit();">${player.name} (${player.status})</a>
 								</form>
 							</li>
 						</#if>
 					</#list>
 				</#if>
 			</ul>
+			
+			<h2>Finished Games Available to Replay</h2>
+			<#if archive.gameCount == 0>
+				<ul>
+					<li>No games have been completed yet.</li>
+				</ul>
+			<#else>
+				<ol>
+					<#list archive.iterator() as replay>
+						<li>
+							<form id="${replay.id}" action="/" method="post">
+								<input name="viewMode" value="REPLAY" style="display:none"/>
+								<input name="replay" value="${replay.id}" style="display:none"/>
+								<a href="#" onclick="event.preventDefault(); document.getElementById('${replay.id}').submit();">${replay.title}</a>
+							</form>
+						</li>
+					</#list>
+				</ol>
+			</#if>
 		<#else>
 			<#-- Here, display how many players are currently signed in. -->
 			<li>Number of players logged in: ${lobby.playerCount}</li>

@@ -5,11 +5,14 @@ import java.util.Objects;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.ui.WebServer;
+
 import spark.TemplateEngine;
 import spark.template.freemarker.FreeMarkerEngine;
+
+import com.google.gson.Gson;
 
 
 /**
@@ -56,14 +59,22 @@ public final class Application {
 		// response to Ajax requests.
 		final Gson gson = new Gson();
 		
+		// Holder of game replays
+		final ReplayArchive replayArchive = new ReplayArchive();
+
+		// get testmode parameter from command line and initialize playerlobby accordingly
+		boolean testMode = false;
+		if(args.length > 0 && args[0].equalsIgnoreCase("TESTMODE")) {
+			testMode = true;
+		}
 		// Global Application state
-		PlayerLobby serverManager = new PlayerLobby();
+		PlayerLobby playerLobby = new PlayerLobby(replayArchive, testMode);
 		
 		// inject the game center and freemarker engine into web server
-		final WebServer webServer = new WebServer(serverManager, templateEngine, gson);
+		final WebServer webServer = new WebServer(playerLobby, replayArchive, templateEngine, gson);
 		
 		// inject web server into application
-		final Application app = new Application(serverManager, webServer);
+		final Application app = new Application(playerLobby, webServer);
 		
 		// start the application up
 		app.initialize();

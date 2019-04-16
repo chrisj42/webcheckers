@@ -1,51 +1,62 @@
 package com.webcheckers.ui.route.home;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
+import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.CheckersGetRoute;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.CheckersGetRoute;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.TemplateMap;
+import com.webcheckers.util.ViewMode;
+
 import spark.Response;
 import spark.TemplateEngine;
 
 /**
- * The UI Controller for the Home page, containing both GET and POST behavior.
- *
- * @author Christopher Johns
+ * The UI Controller for the Home page, containing GET behavior.
  */
 public class HomeGetRoute extends CheckersGetRoute {
 	private static final Logger LOG = Logger.getLogger(HomeGetRoute.class.getName());
 	
 	private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 	
+	private final ReplayArchive replayArchive;
+	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{GET /} HTTP requests.
 	 *
-	 * @param viewName       name of the ftl view that this route renders
 	 * @param playerLobby    the application-tier player manager
+	 * @param replayArchive  the application-tier container for finished, replayable games   
 	 * @param templateEngine the HTML template rendering engine
 	 */
-	public HomeGetRoute(String viewName, PlayerLobby playerLobby, TemplateEngine templateEngine) {
-		super(viewName, playerLobby, templateEngine);
+	public HomeGetRoute(PlayerLobby playerLobby, ReplayArchive replayArchive, TemplateEngine templateEngine) {
+		super(WebServer.HOME_VIEW, playerLobby, templateEngine);
+		Objects.requireNonNull(replayArchive, "replayArchive must not be null");
+		this.replayArchive = replayArchive;
 	}
 	
 	@Override
 	protected TemplateMap get(Player player, Response response) {
-		// LOG.finer("GetHomeRoute is invoked.");
+		LOG.finer("HomeGetRoute is invoked.");
+		
 		TemplateMap map = new TemplateMap();
 		
 		if(player != null) {
 			// check if player is already in a game (ask PlayerLobby); if so, redirect to /game and return, else continue
-			if(getPlayerLobby().hasGame(player)) {
-				CheckersGame game = getPlayerLobby().getCurrentGame(player);
-				if(game.isGameOver())
-					getPlayerLobby().endGame(player);
-				else
-					return redirect(response, WebServer.GAME_URL);
+			AbstractGame game = getPlayerLobby().getCurrentGame(player);
+			
+			if(game != null && game.isGameOver()) {
+				getPlayerLobby().endGame(player, ViewMode.PLAY);
+				game = getPlayerLobby().getCurrentGame(player); // refresh
+			}
+			
+			if(game != null) {
+				ViewMode viewMode = game.getViewMode(player);
+				return redirect(response, WebServer.getGamePath(viewMode));
 			}
 			
 			// add user object
@@ -55,6 +66,7 @@ public class HomeGetRoute extends CheckersGetRoute {
 		// display a user message in the Home page
 		map.put(WebServer.MESSAGE_KEY, WELCOME_MSG);
 		map.put(WebServer.PLAYER_LOBBY_KEY, getPlayerLobby());
+		map.put(WebServer.REPLAY_ARCHIVE_KEY, replayArchive);
 		
 		return map;
 	}

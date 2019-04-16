@@ -17,7 +17,7 @@
 		
 		<form action="/signin" method="post">
 			<label for="name">Enter your username:</label>
-			<input id="name" name="userName"/>
+			<input id="name" name="userName" autofocus/>
 			<br/><br/>
 			<button type="submit">Login</button>
 		</form>

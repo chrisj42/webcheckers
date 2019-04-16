@@ -6,12 +6,13 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.TemplateMap;
+
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
 
-public abstract class CheckersGetRoute extends CheckersRoute {
+public abstract class CheckersGetRoute extends CheckersWebRoute {
 	
 	private final TemplateEngine templateEngine;
 	private final String viewName;

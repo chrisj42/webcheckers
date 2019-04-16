@@ -1,11 +1,16 @@
 package com.webcheckers.ui.route.home;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.route.WebPostRoute;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.ui.WebServer;
+import com.webcheckers.ui.route.ValidationPostRoute;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ViewMode;
+
 import spark.Request;
 import spark.Response;
 
@@ -14,11 +19,13 @@ import spark.Response;
  *
  * @author Christopher Johns
  */
-public class StartGamePostRoute extends WebPostRoute {
+public class StartGamePostRoute extends ValidationPostRoute {
 	private static final Logger LOG = Logger.getLogger(StartGamePostRoute.class.getName());
 	
 	// query parameters (matches name attribute of input elements inside a form element in ftl files)
+	private static final String MODE = "viewMode"; // replay or play (spectate is enforced if play fails)
 	private static final String OPPONENT_PARAM = "opponent";
+	private static final String REPLAY_ID_PARAM = "replay";
 	
 	/**
 	 * Create the Spark Route (UI controller) to handle @code{POST /} HTTP requests,
@@ -32,7 +39,7 @@ public class StartGamePostRoute extends WebPostRoute {
 	
 	@Override
 	public Object handle(Request request, Response response) {
-		LOG.finer("PostHomeRoute is invoked.");
+		LOG.finer("StartGamePostRoute is invoked.");
 		
 		// check if the user is signed in
 		Player player = request.session().attribute(WebServer.PLAYER_ATTR);
@@ -40,14 +47,36 @@ public class StartGamePostRoute extends WebPostRoute {
 		if(player == null) // cannot start game if player isn't signed in
 			return redirect(response, WebServer.HOME_URL);
 		
-		// get name of player that we want to start a game with
-		String opponent = request.queryParams(OPPONENT_PARAM);
+		ViewMode mode = ViewMode.valueOf(request.queryParams(MODE));
 		
-		// make PlayerLobby calls to determine if the given opponent can play with the current player. Do management stuff and make return a boolean.
-		if(getPlayerLobby().startGame(player.getName(), opponent))
-			return redirect(response, WebServer.GAME_URL);
+		String error;
+		if(mode == ViewMode.PLAY) {
+			// get name of player that we want to start a game with
+			String opponent = request.queryParams(OPPONENT_PARAM);
+			
+			// attempt to start a game with the given player; a String is returned that represents a possible error.
+			error = getPlayerLobby().tryStartGame(player, opponent);
+		}
+		else if(mode == ViewMode.REPLAY) {
+			int id = Integer.parseInt(request.queryParams(REPLAY_ID_PARAM));
+			
+			error = getPlayerLobby().tryStartReplay(player, id);
+		}
+		else
+			return refreshWithMessage(player, response, Message.error("Game mode is not known."));
 		
-		// failed to join game.
-		return refreshWithMessage(player, response, Message.error("Player is already in a game."));
+		// if no error...
+		if(Objects.equals(error, PlayerLobby.NO_ERROR)) {
+			// success
+			AbstractGame game = getPlayerLobby().getCurrentGame(player);
+			if(game == null) // shouldn't happen
+				return redirect(response, WebServer.HOME_URL);
+			
+			ViewMode viewMode = game.getViewMode(player);
+			return redirect(response, WebServer.getGamePath(viewMode));
+		}
+		
+		// failed to join/start game.
+		return refreshWithMessage(player, response, Message.error(error));
 	}
 }

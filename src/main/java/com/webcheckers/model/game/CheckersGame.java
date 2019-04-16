@@ -1,33 +1,15 @@
-package com.webcheckers.model;
+package com.webcheckers.model.game;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.webcheckers.model.*;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.TestMode;
+import com.webcheckers.util.ViewMode;
 
 // the server-side model of a game of checkers, including the players involved, which player started the game (i.e. which player is "player 1" i.e. the red player), and the 2D array of Piece objects.
-public class CheckersGame {
-	
-	/**
-	 * The length of one side of a checkers board, in number of squares.
-	 */
-	public static final int BOARD_SIZE = 8;
-	
-	
-	/**
-	 * The red player (player one).
-	 */
-	private final Player redPlayer;
-	
-	/**
-	 * The white player (player two).
-	 */
-	private final Player whitePlayer;
-	
-	/**
-	 * The main game board, which is modified whenever a turn is submitted.
-	 * The non-active player sees this board.
-	 */
-	private final Piece[][] board;
+public class CheckersGame extends AbstractGame {
 	
 	/**
 	 * The "active board;" this board acts as a temporary playing field for
@@ -50,13 +32,15 @@ public class CheckersGame {
 	private final LinkedList<Move> cachedMoves = new LinkedList<>();
 	
 	/**
-	 * The player whose turn it currently is will be stored here, and toggled each turn.
+	 * Holds data on when the last turn submission was.
 	 */
-	private Player activePlayer;
+	private long lastSubmitTime = -1;
 	
-	private boolean isGameOver;
+	private boolean isGameOver = false;
 	
 	private String gameOverMessage = null;
+	
+	private final LinkedList<TurnReplay> playedMoves;
 	
 	/**
 	 * CheckersGame constructor. Creates the board objects and initializes them
@@ -64,87 +48,17 @@ public class CheckersGame {
 	 * 
 	 * @param redPlayer   the player controlling the red checkers (player one)
 	 * @param whitePlayer the player controlling the white checkers (player two)
+	 * @param mode        testing mode; TestMode.NORMAL for normal play.
 	 */
-	public CheckersGame(Player redPlayer, Player whitePlayer) {
-		this.redPlayer = redPlayer;
-		this.whitePlayer = whitePlayer;
-		activePlayer = redPlayer;
-		isGameOver = false;
+	public CheckersGame(Player redPlayer, Player whitePlayer, TestMode mode) {
+		super(redPlayer, whitePlayer, mode == null);
 		
-		board = new Piece[BOARD_SIZE][BOARD_SIZE];
+		if(mode != null)
+			mode.fillBoard(board);
+		
 		activeBoard = new Piece[BOARD_SIZE][BOARD_SIZE];
-		for(int row = 0; row < board.length; row++) {
-			if(row < 3) {
-				for(int col = 0; col < board[row].length; col++)
-					if((col+row) % 2 == 1) // maths to find black tiles
-						board[row][col] = new Piece(Type.SINGLE, Color.WHITE);
-			}
-			if(row >= BOARD_SIZE - 3) {
-				for(int col = 0; col < board[row].length; col++)
-					if((col+row) % 2 == 1) // maths to find black tiles
-						board[row][col] = new Piece(Type.SINGLE, Color.RED);
-			}
-		}
 		copyBoard(board, activeBoard);
-	}
-	
-	/**
-	 * A simple utility method to set a position of a board to a piece.
-	 * 
-	 * @param pos   the position to set
-	 * @param board the board to modify
-	 * @param piece the piece to put
-	 * @return the piece that was replaced   
-	 */
-	private Piece setCell(Position pos, Piece[][] board, Piece piece) {
-		Piece prev = getCell(pos, board);
-		board[pos.getRow()][pos.getCell()] = piece;
-		return prev;
-	}
-	
-	/**
-	 * A simple utility method to fetch the Piece at a position on a board.
-	 * 
-	 * @param pos   the position to fetch at
-	 * @param board the board to fetch from
-	 * @return the piece at the position on the board
-	 */
-	private Piece getCell(Position pos, Piece[][] board) {
-		return board[pos.getRow()][pos.getCell()];
-	}
-	
-	/**
-	 * Checks if a piece belongs to a player.
-	 * 
-	 * @param piece  the piece
-	 * @param player the player
-	 * @return true if the piece color matches the player color, false otherwise
-	 */
-	private boolean matchesPlayer(Piece piece, Player player) {
-		// piece must be red to match red player
-		if(player == redPlayer && piece.getColor() == Color.RED)
-			return true;
-		// piece must be white to match white player
-		if(player == whitePlayer && piece.getColor() == Color.WHITE)
-			return true;
-		
-		return false;
-	}
-	
-	/**
-	 * Copies the pieces from one board to another board.
-	 * Used to submit a move, in which case the activeBoard is copied to the main board;
-	 * also used to reset a move in progress, in which case the main board is copied to the activeBoard.
-	 * 
-	 * Because this method is private, it assumes that the boards will both
-	 * be @code{BOARD_SIZE} x @code{BOARD_SIZE} in dimensions.
-	 * 
-	 * @param source board to copy from
-	 * @param dest   board to copy to
-	 */
-	private void copyBoard(Piece[][] source, Piece[][] dest) {
-		for(int r = 0; r < BOARD_SIZE; r++)
-			System.arraycopy(source[r], 0, dest[r], 0, BOARD_SIZE);
+		playedMoves = new LinkedList<>();
 	}
 	
 	/**
@@ -231,10 +145,13 @@ public class CheckersGame {
 	 * set to say the other player has won.
 	 */
 	private void checkGameOver(Player player) {
+		if(isGameOver)
+			return; // already game over
+		
 		boolean hasPieces = false;
-		for(int r = 0; r < activeBoard.length; r++) {
-			for(int c = 0; c < activeBoard[r].length; c++) {
-				if(activeBoard[r][c] != null && matchesPlayer(activeBoard[r][c], player)) {
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[r].length; c++) {
+				if(board[r][c] != null && matchesPlayer(board[r][c], player)) {
 					hasPieces = true;
 					break;
 				}
@@ -243,13 +160,12 @@ public class CheckersGame {
 		}
 		
 		if(!hasPieces) {
+			// the player has run out of pieces
 			gameOverMessage = (player == redPlayer ? whitePlayer : redPlayer).getName()+" has captured all the pieces.";
 			isGameOver = true;
-			return;
 		}
-		
-		// see if the player has run out of valid moves
-		if(!canMakeMove(player)) {
+		else if(!canMakeMove(player)) {
+			// the player has run out of valid moves
 			gameOverMessage = player.getName()+" has run out of valid moves.";
 			isGameOver = true;
 		}
@@ -373,12 +289,31 @@ public class CheckersGame {
 		
 		if(move.isJump() && canMakeMove(cell, row, pos.getCell(), false, false))
 			return Message.error("Multi-jump moves must be completed.");
-		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7))
-			cell.promote();
+		
+		// at this point, the submission is valid
+		
+		Piece promoted = null;
+		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7)) {
+			promoted = new Piece(Type.KING, cell.getColor());
+			setCell(pos, activeBoard, promoted);
+		}
+		
+		// create the turn replay
+		ArrayList<MoveReplay> moves = new ArrayList<>(cachedMoves.size());
+		for(Move cmove: cachedMoves) {
+			Position start = cmove.getStart();
+			Position end = cmove.getEnd();
+			Piece result = cmove == move ? promoted : cell;
+			Piece jumped = cmove.isJump() ? getCell(cmove.getJumpPos(), board) : null;
+			moves.add(new MoveReplay(start, end, cell, result, jumped));
+		}
+		playedMoves.add(new TurnReplay(activePlayer, moves));
 		
 		copyBoard(activeBoard, board);
 		cachedMoves.clear();
-		activePlayer = activePlayer == redPlayer ? whitePlayer : redPlayer;
+		activePlayer = getOpponent(activePlayer);
+		// store timestamp of turn submission
+		lastSubmitTime = System.currentTimeMillis();
 		
 		checkGameOver(activePlayer);
 		
@@ -390,11 +325,13 @@ public class CheckersGame {
 	 */
 	public Message resignGame(Player player) {
 		if(player == activePlayer && cachedMoves.size() > 1)
-			return Message.error("you must undo all moves before resigning.");
+			return Message.error("You must undo all moves before resigning.");
 		
 		if(!isGameOver) {
 			gameOverMessage = player.getName() + " has resigned.";
 			isGameOver = true;
+			// this counts as an update, or "submission"
+			lastSubmitTime = System.currentTimeMillis();
 		}
 		return Message.info("You have resigned.");
 	}
@@ -404,30 +341,20 @@ public class CheckersGame {
 	 * @return boolean for whether or not the game is over
 	 *
 	 */
+	@Override
 	public boolean isGameOver() {
 		return isGameOver;
 	}
 	
+	@Override
 	public String getGameOverMessage() {
 		return gameOverMessage;
 	}
 	
-	/**
-	 * Fetches the Player object for the red player (player one).
-	 * 
-	 * @return the red player
-	 */
-	public Player getRedPlayer() {
-		return redPlayer;
-	}
-	
-	/**
-	 * Fetches the Player object for the white player (player two).
-	 *
-	 * @return the white player
-	 */
-	public Player getWhitePlayer() {
-		return whitePlayer;
+	public GameReplayData generateReplayData() {
+		// if(!isGameOver)
+		// 	return null;
+		return new GameReplayData(redPlayer, whitePlayer, gameOverMessage, playedMoves);
 	}
 	
 	/**
@@ -442,32 +369,14 @@ public class CheckersGame {
 		return isGameOver || activePlayer == player;
 	}
 	
-	/**
-	 * Determines the color associated with the active player.
-	 * 
-	 * @return the color of the active player
-	 */
-	public Color getActiveColor() {
-		return activePlayer == redPlayer ? Color.RED : Color.WHITE;
+	@Override
+	public ViewMode getViewMode(Player player) {
+		return player == whitePlayer || player == redPlayer ? ViewMode.PLAY : ViewMode.SPECTATOR;
 	}
 	
-	/*
-	 * Fetches the Player object representing the opponent of the given player in this game.
-	 * If passed the red player, the white player is returned.
-	 * If passed the white player, the red player is returned.
-	 * If passed any other player, null is returned.
-	 * 
-	 * @param player the player to find the opponent of
-	 * @return the opponent of the given player, or null if this player is not part of this game
-	 */
-	/*public Player getOpponent(Player player) {
-		if(player == redPlayer)
-			return whitePlayer;
-		else if(player == whitePlayer)
-			return redPlayer;
-		else
-			return null;
-	}*/
+	public long getLastSubmitTime() {
+		return lastSubmitTime;
+	}
 	
 	/**
 	 * Returns the main board; if the provided player is the active player,
@@ -477,6 +386,7 @@ public class CheckersGame {
 	 * @param player the player requesting the board
 	 * @return the board
 	 */
+	@Override
 	public Piece[][] flushBoard(Player player) {
 		if(player == activePlayer) {
 			copyBoard(board, activeBoard);

@@ -3,7 +3,7 @@ package com.webcheckers.ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Position;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * The unit test suite for the {@link com.webcheckers.model.CheckersGame} component/
+ * The unit test suite for the {@link CheckersGame} component/
  *
  *
  */

@@ -3,24 +3,28 @@ package com.webcheckers.ui;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.ui.route.game.BackupPostRoute;
-import com.webcheckers.ui.route.game.CheckTurnPostRoute;
-import com.webcheckers.ui.route.game.GameGetRoute;
-import com.webcheckers.ui.route.game.ResignGamePostRoute;
-import com.webcheckers.ui.route.game.SubmitPostRoute;
-import com.webcheckers.ui.route.game.ValidatePostRoute;
-import com.webcheckers.ui.route.home.HomeGetRoute;
-import com.webcheckers.ui.route.home.StartGamePostRoute;
-import com.webcheckers.ui.route.home.SignInGetRoute;
-import com.webcheckers.ui.route.home.SignInPostRoute;
-import com.webcheckers.ui.route.home.SignOutPostRoute;
-import spark.TemplateEngine;
+import com.webcheckers.appl.ReplayArchive;
+import com.webcheckers.ui.route.game.*;
+import com.webcheckers.ui.route.game.PlayGameGetRoute;
+import com.webcheckers.ui.route.replay.GameReplayGetRoute;
+import com.webcheckers.ui.route.replay.ReplayEndGetRoute;
+import com.webcheckers.ui.route.replay.ReplayNextPostRoute;
+import com.webcheckers.ui.route.replay.ReplayPrevPostRoute;
+import com.webcheckers.ui.route.spectate.SpectateCheckTurnPostRoute;
+import com.webcheckers.ui.route.spectate.SpectateEndGetRoute;
+import com.webcheckers.ui.route.spectate.SpectateGameGetRoute;
+import com.webcheckers.ui.route.home.*;
+import com.webcheckers.util.ViewMode;
 
+import spark.TemplateEngine;
+import static spark.Spark.before;
 import static spark.Spark.get;
+import static spark.Spark.path;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
+
+import com.google.gson.Gson;
 
 
 /**
@@ -75,8 +79,19 @@ public class WebServer {
 	public static final String CHECK_TURN_URL = "/checkTurn";
 	public static final String RESIGN_URL = "/resignGame";
 	
+	public static final String GAME_END_URL = "/stopWatching";
+	
+	public static final String SPECTATE_URL_PREFIX = "/spectator";
+	public static final String SPECTATE_CHECK_TURN_URL = "/checkTurn";
+	
+	public static final String REPLAY_URL_PREFIX = "/replay";
+	public static final String REPLAY_NEXT_TURN_URL = "/nextTurn";
+	public static final String REPLAY_PREV_TURN_URL = "/previousTurn";
+	
 	// session attributes
 	public static final String PLAYER_ATTR = "player";
+	// allows spectator check turn to determine if a new turn has been played and a refresh is needed.
+	public static final String SUBMIT_TIME_ATTR = "lastSubmit";
 	
 	
 	/**
@@ -90,6 +105,7 @@ public class WebServer {
 	public static final String MESSAGE_KEY = "message";
 	public static final String USER_KEY = "currentUser";
 	public static final String PLAYER_LOBBY_KEY = "lobby";
+	public static final String REPLAY_ARCHIVE_KEY = "archive";
 	
 	
 	//
@@ -97,6 +113,7 @@ public class WebServer {
 	//
 	
 	private final PlayerLobby playerLobby;
+	private final ReplayArchive replayArchive;
 	private final TemplateEngine templateEngine;
 	private final Gson gson;
 	
@@ -107,6 +124,10 @@ public class WebServer {
 	/**
 	 * The constructor for the Web Server.
 	 *
+	 * @param playerLobby
+	 *    The application-tier player manager.
+	 * @param replayArchive
+	 *    The application-tier container for finished, replayable games.
 	 * @param templateEngine
 	 *    The default {@link TemplateEngine} to render page-level HTML views.
 	 * @param gson
@@ -115,13 +136,15 @@ public class WebServer {
 	 * @throws NullPointerException
 	 *    If any of the parameters are {@code null}.
 	 */
-	public WebServer(final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
+	public WebServer(final PlayerLobby playerLobby, final ReplayArchive replayArchive, final TemplateEngine templateEngine, final Gson gson) {
 		// validation
-		Objects.requireNonNull(playerLobby, "serverManager must not be null");
+		Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+		Objects.requireNonNull(replayArchive, "replayArchive must not be null");
 		Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 		Objects.requireNonNull(gson, "gson must not be null");
 		//
 		this.playerLobby = playerLobby;
+		this.replayArchive = replayArchive;
 		this.templateEngine = templateEngine;
 		this.gson = gson;
 	}
@@ -178,26 +201,54 @@ public class WebServer {
 		//// code clean; using small classes.
 		
 		// Shows the Checkers game Home page.
-		final HomeGetRoute home = new HomeGetRoute(HOME_VIEW, playerLobby, templateEngine);
+		final HomeGetRoute home = new HomeGetRoute(playerLobby, replayArchive, templateEngine);
 		get(HOME_URL, home);
 		post(HOME_URL, new StartGamePostRoute(home));
 		
-		final SignInGetRoute signin = new SignInGetRoute(SIGN_IN_VIEW, playerLobby, templateEngine);
+		// manages the sign in page and sign out.
+		final SignInGetRoute signin = new SignInGetRoute(playerLobby, templateEngine);
 		get(SIGN_IN_URL, signin);
 		post(SIGN_IN_URL, new SignInPostRoute(signin));
 		
 		post(SIGN_OUT_URL, new SignOutPostRoute(playerLobby));
 		
-		get(GAME_URL, new GameGetRoute(GAME_VIEW, playerLobby, templateEngine, gson));
+		// the main game view
+		get(GAME_URL, new PlayGameGetRoute(playerLobby, templateEngine, gson));
 		
+		// game management and interaction
 		post(VALIDATE_URL, new ValidatePostRoute(playerLobby, gson));
 		post(BACKUP_URL, new BackupPostRoute(playerLobby, gson));
-		post(SUBMIT_URL, new SubmitPostRoute(playerLobby, gson));
+		post(SUBMIT_URL, new SubmitPostRoute(playerLobby, replayArchive, gson));
 		post(CHECK_TURN_URL, new CheckTurnPostRoute(playerLobby, gson));
-		post(RESIGN_URL, new ResignGamePostRoute(playerLobby, gson));
+		post(RESIGN_URL, new ResignGamePostRoute(playerLobby, replayArchive, gson));
+		
+		// spectator mode
+		path(SPECTATE_URL_PREFIX, () -> {
+			get(GAME_URL, new SpectateGameGetRoute(playerLobby, templateEngine, gson));
+			get(GAME_END_URL, new SpectateEndGetRoute(playerLobby));
+			post(SPECTATE_CHECK_TURN_URL, new SpectateCheckTurnPostRoute(playerLobby, gson));
+		});
+		
+		// replay mode
+		path(REPLAY_URL_PREFIX, () -> {
+			get(GAME_URL, new GameReplayGetRoute(playerLobby, templateEngine, gson));
+			get(GAME_END_URL, new ReplayEndGetRoute(playerLobby));
+			post(REPLAY_NEXT_TURN_URL, new ReplayNextPostRoute(playerLobby, gson));
+			post(REPLAY_PREV_TURN_URL, new ReplayPrevPostRoute(playerLobby, gson));
+		});
 		
 		//
 		LOG.config("WebServer is initialized.");
 	}
 	
+	public static String getGamePath(ViewMode viewMode) {
+		String prefix = "";
+		
+		if(viewMode == ViewMode.SPECTATOR)
+			prefix = SPECTATE_URL_PREFIX;
+		else if(viewMode == ViewMode.REPLAY)
+			prefix = REPLAY_URL_PREFIX;
+		
+		return prefix + GAME_URL;
+	}
 }
