@@ -1,35 +1,26 @@
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.matches;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Piece;
+import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.ui.TemplateEngineTester;
 import com.webcheckers.ui.WebServer;
-import com.webcheckers.ui.route.game.GameGetRoute;
-import java.util.Date;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import com.webcheckers.ui.route.GameGetRoute;
+import com.webcheckers.ui.route.LiveGameGetRoute;
+import com.webcheckers.util.ViewMode;
 
-
-
-import spark.HaltException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Session;
 import spark.TemplateEngine;
+
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GameGetRouteTest {
 
@@ -62,27 +53,25 @@ public class GameGetRouteTest {
     engine = mock(TemplateEngine.class);
 
     gson = new Gson();
-    playerLobby = new PlayerLobby();
+    ReplayArchive archive = new ReplayArchive();
+    playerLobby = new PlayerLobby(archive, false);
 
 
-    playerLobby.tryLoginPlayer("Player1");
-    playerLobby.tryLoginPlayer("Player2");
+    playerLobby.logoutPlayer("Player1");
+    playerLobby.logoutPlayer("Player2");
 
     CG = mock(CheckersGame.class);
 
     //Create a unique CuT for each test.
-    CuT = new GameGetRoute(WebServer.GAME_VIEW,playerLobby,engine,gson);
+    CuT = new LiveGameGetRoute(ViewMode.PLAY, playerLobby, engine, gson);
   }
 
   @Test
   public void new_game(){
 
-
-    playerLobby.tryLoginPlayer("Player1");
-    final Player P1 = playerLobby.iterator().next();
-    playerLobby.tryLoginPlayer("Player2");
-
-    final Player P2 = playerLobby.iterator().next();
+    
+    final Player P1 = playerLobby.tryLoginPlayer("Player1");
+    final Player P2 = playerLobby.tryLoginPlayer("Player2");
 
     //final Player play = playerLobby.iterator().next();
 
@@ -97,11 +86,9 @@ public class GameGetRouteTest {
     when(request.session()).thenReturn(session);
     when(request.session().attribute(WebServer.PLAYER_ATTR)).thenReturn(P1);
 
-
-
-    Player player;
-    player=request.session().attribute(WebServer.PLAYER_ATTR);
-    playerLobby.startGame(P1.getName(),P2.getName());
+    
+    // Player player = playerLobby.tryLoginPlayer("Player2");
+    playerLobby.tryStartGame(P1,P2.getName());
 
     CuT.handle(request,response);
 

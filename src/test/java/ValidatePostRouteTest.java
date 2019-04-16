@@ -1,36 +1,26 @@
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import com.google.gson.Gson;
-import com.webcheckers.model.Move;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.ui.TemplateEngineTester;
 import com.webcheckers.ui.WebServer;
-import com.webcheckers.ui.route.game.GameGetRoute;
 import com.webcheckers.ui.route.game.ValidatePostRoute;
-import com.webcheckers.ui.route.home.HomeGetRoute;
-import com.webcheckers.util.Message;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 
-import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
-
-import spark.HaltException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Session;
 import spark.TemplateEngine;
+
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Tag("game-tier")
 public class ValidatePostRouteTest {
@@ -69,18 +59,19 @@ public class ValidatePostRouteTest {
 
     //build the sercie and model objects
     //the GameCenter and GuessingGame are friendly
-    playerLobby = new PlayerLobby();
+    ReplayArchive archive = new ReplayArchive();
+    playerLobby = new PlayerLobby(archive, false);
     Player P1 = new Player(Player1);
     Player P2 = new Player(Player2);
-    checkersGame = new CheckersGame(P1,P2);
+    checkersGame = new CheckersGame(P1,P2, null);
 
     final Gson gson = new Gson();
-    WS = new WebServer(playerLobby,engine,gson);
+    WS = new WebServer(playerLobby,archive,engine,gson);
 
 
     when(playerLobby.getCurrentGame(P1)).thenReturn(checkersGame);
     // store in the session
-    when(session.attribute(WS.PLAYER_LOBBY_KEY)).thenReturn(playerLobby);
+    when(session.attribute(WebServer.PLAYER_LOBBY_KEY)).thenReturn(playerLobby);
 
     //create a unique CuT for each test
     CuT = new ValidatePostRoute(playerLobby,gson);

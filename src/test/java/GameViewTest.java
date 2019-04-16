@@ -1,21 +1,15 @@
-
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.ui.TemplateEngineTester;
-import com.webcheckers.ui.WebServer;
-import com.webcheckers.ui.route.game.GameGetRoute;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.ui.WebServer;
 
 import spark.ModelAndView;
 import spark.TemplateEngine;
 import spark.template.freemarker.FreeMarkerEngine;
+
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 @Tag("UI-tier")
 public class GameViewTest {

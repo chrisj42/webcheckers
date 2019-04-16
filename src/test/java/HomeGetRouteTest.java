@@ -1,27 +1,23 @@
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.ui.TemplateEngineTester;
-import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.route.home.HomeGetRoute;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 
-import spark.HaltException;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.Session;
 import spark.TemplateEngine;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@Tag("UI-Tier")
 public class HomeGetRouteTest {
   /**
    * The component-under-test (CuT)
@@ -51,8 +47,9 @@ public class HomeGetRouteTest {
 
     // create a unique CuT for each test
     // the GameCenter is friendly but the engine mock will need configuration
-    playerLobby = new PlayerLobby();
-    CuT = new HomeGetRoute(HOME_VIEW, playerLobby, engine);
+    ReplayArchive archive = new ReplayArchive();
+    playerLobby = new PlayerLobby(archive, false);
+    CuT = new HomeGetRoute(playerLobby, archive, engine);
   }
 
   @Test

@@ -13,7 +13,6 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.ui.TemplateEngineTester;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.ui.route.home.SignInGetRoute;
-import org.junit.Before;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -40,7 +39,7 @@ public class SignInGetRouteTest {
   private WebServer webServer;
   private PlayerLobby playerLobby;
 
-  @Before
+  @BeforeEach
   public void setup(){
 
     request = mock(Request.class);
@@ -51,7 +50,7 @@ public class SignInGetRouteTest {
     playerLobby = mock(PlayerLobby.class);
 
 
-    CuT = new SignInGetRoute(WebServer.SIGN_IN_VIEW,playerLobby,engine);
+    CuT = new SignInGetRoute(playerLobby, engine);
 
   }
 

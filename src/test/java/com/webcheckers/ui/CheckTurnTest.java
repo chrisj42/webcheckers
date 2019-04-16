@@ -27,7 +27,7 @@ public class CheckTurnTest {
     Player P1 = new Player(PLAYER1);
     Player P2 = new Player(PLAYER2);
 
-    final CheckersGame CG = new CheckersGame(P1,P2);
+    final CheckersGame CG = new CheckersGame(P1, P2, null);
     //Check if its Player1's turn at start
     assertTrue(CG.isPlayerTurn(P1),"It is P1's turn");
     CG.validateMove(new Move(new Position(1,0),new Position(2,1)),P1);
