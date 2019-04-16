@@ -292,7 +292,7 @@ public class CheckersGame extends AbstractGame {
 		
 		// at this point, the submission is valid
 		
-		Piece promoted = null;
+		Piece promoted = cell;
 		if((cell.getColor() == Color.RED && row == 0) || (cell.getColor() == Color.WHITE && row == 7)) {
 			promoted = new Piece(Type.KING, cell.getColor());
 			setCell(pos, activeBoard, promoted);
