@@ -122,7 +122,7 @@ The application tier contains our PlayerLobby class, which keeps track of all pl
 
 ![The WebCheckers Web Model Tier Classes](model_class_diagram.png)
 
-The model tier contains classes for all the components of a checkers game and game replay. Both inherit from the abstract class AbstractGame, which contains common attributes such as the players and board.
+The model tier contains classes for all the components of a checkers game and game replay. Both extend from the abstract class AbstractGame, which contains common attributes such as the players and board.
 
 The GameReplay class stores all the moves for a game and contains methods for cycling through them. These moves are broken down into TurnReplay, all the moves in a turn, and MoveReplay, the move itself.
 
@@ -142,4 +142,4 @@ All acceptance criteria from sprints 1-3 have been passed.
 
 ### Unit Testing and Code Coverage
 
-Unit tests have not been fully implemented for every class and scenario, but we do have a good number of them. Unfortuantely, this has caused our code coverage to also be extremely low. We expect this to improve as we continue to create new tests.
+Unit tests have not been fully implemented for every class and scenario, but we do have a good number of them. Unfortuantely, this has caused our code coverage to be extremely low. We expect this to improve as we continue to create new tests.
