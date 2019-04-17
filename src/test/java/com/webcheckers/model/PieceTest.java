@@ -21,7 +21,7 @@ class PieceTest {
 	@Test
 	void getColor() {
 		Piece redChecker = new Piece(Type.SINGLE, Color.RED);
-		Piece whiteChecker = new Piece(Type.KING,Color.RED);
+		Piece whiteChecker = new Piece(Type.SINGLE, Color.WHITE);
 		
 		//Checks to see if the correct color is returned.
 		assertEquals(redChecker.getColor(),Color.RED);
