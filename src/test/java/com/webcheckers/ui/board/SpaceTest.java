@@ -1,12 +1,12 @@
 package com.webcheckers.ui.board;
 
-import com.webcheckers.model.Color;
 import com.webcheckers.model.Piece;
-import com.webcheckers.model.Type;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SpaceTest {
 

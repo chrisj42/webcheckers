@@ -3,7 +3,6 @@ package com.webcheckers.ui.route.home;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import com.webcheckers.ui.WebServer;
-import com.webcheckers.ui.route.CheckersRoute;
 import com.webcheckers.ui.route.CheckersWebRoute;
 
 import spark.Request;

@@ -3,8 +3,8 @@ package com.webcheckers.model.game;
 import java.util.Arrays;
 import java.util.List;
 
-import com.webcheckers.model.TurnReplay;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.TurnReplay;
 
 public class GameReplayData {
 	

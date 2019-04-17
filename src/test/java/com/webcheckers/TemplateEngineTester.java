@@ -1,13 +1,17 @@
 package com.webcheckers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Map;
+
+import spark.ModelAndView;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import spark.ModelAndView;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Helper class to extract data from Spark's {@link ModelAndView} objects

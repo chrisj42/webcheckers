@@ -5,12 +5,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
 
-import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.TestMode;
 import com.webcheckers.model.game.AbstractGame;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.game.GameReplay;
 import com.webcheckers.util.PlayerInfo;
+import com.webcheckers.util.TestMode;
 import com.webcheckers.util.ViewMode;
 
 public class PlayerLobby {

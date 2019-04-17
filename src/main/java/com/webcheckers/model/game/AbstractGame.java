@@ -1,7 +1,10 @@
 package com.webcheckers.model.game;
 
-import com.webcheckers.model.*;
-import com.webcheckers.util.TestMode;
+import com.webcheckers.model.Color;
+import com.webcheckers.model.Piece;
+import com.webcheckers.model.Player;
+import com.webcheckers.model.Position;
+import com.webcheckers.model.Type;
 import com.webcheckers.util.ViewMode;
 
 public abstract class AbstractGame {

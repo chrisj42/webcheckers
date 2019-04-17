@@ -1,10 +1,10 @@
 package com.webcheckers.ui.route;
 
+import com.webcheckers.TemplateEngineTester;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.game.CheckersGame;
-import com.webcheckers.TemplateEngineTester;
 import com.webcheckers.ui.WebServer;
 import com.webcheckers.util.ViewMode;
 

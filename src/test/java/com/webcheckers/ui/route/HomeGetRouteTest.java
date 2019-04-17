@@ -1,8 +1,8 @@
 package com.webcheckers.ui.route;
 
+import com.webcheckers.TemplateEngineTester;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.ReplayArchive;
-import com.webcheckers.TemplateEngineTester;
 import com.webcheckers.ui.route.home.HomeGetRoute;
 
 import spark.ModelAndView;

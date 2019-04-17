@@ -7,7 +7,6 @@ import com.webcheckers.appl.PlayerLobby;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.Spark;
 
 // superclass of all Routes implemented in com.webcheckers.ui.
 public abstract class CheckersRoute implements Route {

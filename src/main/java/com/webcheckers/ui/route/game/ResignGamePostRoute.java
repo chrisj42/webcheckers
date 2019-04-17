@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.ReplayArchive;
-import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.ViewMode;
 

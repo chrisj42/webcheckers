@@ -1,18 +1,23 @@
 package com.webcheckers.model.game;
 
+import java.util.List;
+
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Position;
 import com.webcheckers.model.TurnReplay;
-import com.webcheckers.util.Message;
 import com.webcheckers.util.Message.Type;
-import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("Model-Tier")
 class GameReplayTest {
