@@ -26,7 +26,7 @@ public class LiveGameGetRoute extends GameGetRoute {
 	public LiveGameGetRoute(ViewMode viewMode, PlayerLobby playerLobby, TemplateEngine templateEngine, Gson gson) {
 		super(viewMode, playerLobby, templateEngine, gson);
 	}
-	
+
 	@Override
 	protected Map<String, Object> getModeOptions(AbstractGame game) {
 		final Map<String, Object> modeOptions = new HashMap<>(2);

@@ -47,6 +47,7 @@ public class SignInGetRouteTest {
     when(request.session()).thenReturn(session);
     response = mock(Response.class);
     engine = mock(TemplateEngine.class);
+  /**
     playerLobby = mock(PlayerLobby.class);
 
 
@@ -58,11 +59,25 @@ public class SignInGetRouteTest {
   public void new_Login(){
     final TemplateEngineTester testHelper = new TemplateEngineTester();
 
-
     CuT.handle(request,response);
 
-    testHelper.assertViewModelExists();
+  }
 
+  /**
+   * Bad sign in test: have it set up a session where a neame is not accepted
+   * then check that assetViewModelAbsent.?
+   *
+  @Test
+  public void bad_Login{
+
+    when(request);
+    try {
+      CuT.handle(request, response);
+      fail("Redirects invoke halt exceptions.");
+    } catch (HaltException e) {
+      // expected
+    }
+  */
   }
 
 }

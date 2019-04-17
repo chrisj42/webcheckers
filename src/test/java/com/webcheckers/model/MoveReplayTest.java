@@ -9,9 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("Model-Tier")
 class MoveReplayTest {
-	
+
+	private MoveReplay CuT;
+
 	@BeforeEach
 	void setUp() {
+
+
 	}
 	
 	@AfterEach

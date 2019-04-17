@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.when;
 
 @Tag("game-tier")
@@ -61,6 +62,7 @@ public class ValidatePostRouteTest {
     //the GameCenter and GuessingGame are friendly
     ReplayArchive archive = new ReplayArchive();
     playerLobby = new PlayerLobby(archive, false);
+    PlayerLobby playerLobby= mock(PlayerLobby.class);
     Player P1 = new Player(Player1);
     Player P2 = new Player(Player2);
     checkersGame = new CheckersGame(P1,P2, null);

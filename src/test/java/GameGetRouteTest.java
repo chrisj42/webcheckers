@@ -1,6 +1,8 @@
+import com.google.gson.JsonArray;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.ui.TemplateEngineTester;
 import com.webcheckers.ui.WebServer;
@@ -8,6 +10,8 @@ import com.webcheckers.ui.route.GameGetRoute;
 import com.webcheckers.ui.route.LiveGameGetRoute;
 import com.webcheckers.util.ViewMode;
 
+import java.util.HashMap;
+import java.util.Map;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -82,11 +86,8 @@ public class GameGetRouteTest {
     final TemplateEngineTester testHelper = new TemplateEngineTester();
     when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
-
     when(request.session()).thenReturn(session);
     when(request.session().attribute(WebServer.PLAYER_ATTR)).thenReturn(P1);
-
-    
     // Player player = playerLobby.tryLoginPlayer("Player2");
     playerLobby.tryStartGame(P1,P2.getName());
 
@@ -100,9 +101,27 @@ public class GameGetRouteTest {
 
 
   @Test
-  void get() {
+  void testOne() {
+
+    final Player P1 = playerLobby.tryLoginPlayer("Player1");
+    final Player P2 = playerLobby.tryLoginPlayer("Player1");
+
+    //final Player play = playerLobby.iterator().next();
+
+    //final CheckersGame CG = playerLobby.getCurrentGame(P1);
+    when(session.attribute(WebServer.PLAYER_LOBBY_KEY)).thenReturn(playerLobby);
 
 
+    final TemplateEngineTester testHelper = new TemplateEngineTester();
+    when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+    when(request.session()).thenReturn(session);
+    when(request.session().attribute(WebServer.PLAYER_ATTR)).thenReturn(P1);
+
+    playerLobby.tryStartGame(P1,P2.getName());
+    CuT.handle(request,response);
+
+    //testHelper.assertViewModelAttributeIsAbsent(gson.toJson());
 
 
   }
