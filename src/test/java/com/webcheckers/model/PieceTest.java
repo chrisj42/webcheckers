@@ -25,6 +25,6 @@ class PieceTest {
 		
 		//Checks to see if the correct color is returned.
 		assertEquals(redChecker.getColor(),Color.RED);
-		assertNotEquals(whiteChecker.getColor(),Color.WHITE);
+		
 	}
 }

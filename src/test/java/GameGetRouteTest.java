@@ -104,7 +104,7 @@ public class GameGetRouteTest {
   void testOne() {
 
     final Player P1 = playerLobby.tryLoginPlayer("Player1");
-    final Player P2 = playerLobby.tryLoginPlayer("Player1");
+    final Player P2 = playerLobby.tryLoginPlayer("Player2");
 
     //final Player play = playerLobby.iterator().next();
 
