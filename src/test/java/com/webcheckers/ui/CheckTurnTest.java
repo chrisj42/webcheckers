@@ -1,14 +1,14 @@
 package com.webcheckers.ui;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.webcheckers.model.game.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.Position;
+import com.webcheckers.model.game.CheckersGame;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
