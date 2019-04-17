@@ -20,8 +20,6 @@ Web Checkers is a simple web game for playing checkers that Team B++ has underta
 
 Team B++'s purpose with this project is to create an easy to use way for users to play a game of checkers online. Our most important user groups are our professor and our TA, who will be the main users of our game and will expect to have a completely functional, error-free experience. 
 
-Team B++'s purpose with this project is to create an easy to use way for users to play a game of checkers online. Our most important user groups are our professor and our TA, who will be the main users of our game and will expect to have a completely functional, error-free experience. 
-
 ### Glossary and Acronyms
 
 | Term | Definition |
@@ -102,48 +100,46 @@ with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](updated_state_diagram.png)
 
-The user will be directed to the home page first. After the user decides on a 
-username, they will then be directed to a home page that includes online players.
+The user will be directed to the home page first. After the user decides on a username, they will then be directed to a home page that lists both online players and previously played games.
 
-If the user wants to start a game with someone, they can click on the players name and 
-if that player is unoccupied both players will be redirected to a game page. 
+If the user wants to start a game with someone, they can click on the players name and if that player is unoccupied both players will be redirected to a game page. If they are occupied, the user will spectate that game.
 
-Once the game has ended, the players will be shown the ending game screen and can click the exit button to be redirected back to the signed in home page.
+Once the game has ended, the players will be shown the ending game screen and can click the exit button to be redirected back to the signed in home page. Spectators can leave at any time by clicking the exit button.
+
+A user may also select a previously played game to watch a replay of it. They can cycle through the different moves of the game by pressing the previous move and next move buttons. They can also at any time return to the home page by pressing the exit button.
 
 ### UI Tier
 
-Our UI tier classes consist of different Get and Post Route classes, including GetGameRoute, GetHomeRoute, GetSignInRoute, PostHomeRoute, PostSignInRoute, and PostSignOutRoute. These Route classes handle directing users between the home page, the signed-in homepage, and the game page. They also give the template engine information on what the webpage should have/look like.
+Our UI tier classes consist of different Get and Post Route classes for handling transitions between the game, home, replay, and spectate pages. They give the template engine information on what the webpage should have/look like.
 
 We also have our WebServer class that initializes the different routes, as well as Space and Row classes that make up the gameboard interface.
 
 ### Application Tier
 
-The application tier contains our PlayerLobby class, which keeps track of all players and games, handles sign-ins and outs, and creates new games.
+The application tier contains our PlayerLobby class, which keeps track of all players and games, handles sign-ins and outs, and puts players in their games/spectations/replays. It also has a ReplayArchive class, which stores all of the game replays.
 
 ### Model Tier
 
 ![The WebCheckers Web Model Tier Classes](model_class_diagram.png)
 
-The model tier has a CheckersGame class, which keeps track of an individual game's players and board state. It also has classes for the components of the game, including a Piece class, a Player class, and Type/Color enumerations for the pieces.
+The model tier contains classes for all the components of a checkers game and game replay. Both inherit from the abstract class AbstractGame, which contains common attributes such as the players and board.
+
+The GameReplay class stores all the moves for a game and contains methods for cycling through them. These moves are broken down into TurnReplay, all the moves in a turn, and MoveReplay, the move itself.
+
+The CheckersGame class contains a cache of moves in order to allow the user to undo a recently made move. It also stores a list of TurnReplays so that a GameReplay object can later be created using it. Finally, it contains methods for actually playing the game, such as validating and making moves as well as player resignation.  
 
 ### Design Improvements
 
-At this time, we believe that all of our class structures and relationships are working well for us, and there isn't anything we would change. This may change after we discover hot spots in our code, or if we're having trouble creating unit tests.
+One design improvement we could implement is creating a GameCenter class separate from the PlayerLobby class, which stores all the ongoing games. This will help create a division of responsibilities to better follow the single responsiblity principle. We could also look into having the home page do ajax requests to refresh the page.
 
-At this time, we believe that all of our class structures and relationships are working well for us, and there isn't anything we would change. This may change after we discover hot spots in our code, or if we're having trouble creating unit tests.
+If we had time to look into changing the JavaScript, we would replace the beeping sound with something more pleasant.
 
 ## Testing
 
 ### Acceptance Testing
 
-All 18 acceptance criterias for sprint 1 have been met and passed. 
-For the signin feature there where no problems when testing was 
-done. For starting the game there where problems when setting up 
-the color of pieces that appeared on the side of the board. The
-problem was that the colors appeared the same for both players, 
-meaning that both players saw themselves as the red checker pieces
-For sprint 2 we have 7 user stories that have not yet been tested. 
+All acceptance criteria from sprints 1-3 have been passed.
 
 ### Unit Testing and Code Coverage
 
-Unit tests have been written for our CheckersGame class as well as our UI route component classes.
+Unit tests have not been fully implemented for every class and scenario, but we do have a good number of them. Unfortuantely, this has caused our code coverage to also be extremely low. We expect this to improve as we continue to create new tests.
