@@ -10,25 +10,23 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 class BoardViewTest {
-
+	
 	private BoardView CuT;
 	private AbstractGame CG;
 	private Player P1;
 	private Player P2;
-
+	
 	@BeforeEach
-	void Setup(){
+	void setup() {
 		P1 = new Player("P1");
 		CG = new CheckersGame(P1,P2,null);
 		CuT = new BoardView(CG.flushBoard(P1),true);
 	}
-
+	
 	@Test
 	void iterator() {
 		assertNotNull(CuT.iterator());
 		assertEquals(Row.class,CuT.iterator().next().getClass());
-
 	}
 }

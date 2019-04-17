@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SpaceTest {
-
+	
 	private Space CuT;
 	private int row;
 	private int col;
 	private Piece piece;
-
+	
 	@BeforeEach
 	void setUp() {
 		row = 4;

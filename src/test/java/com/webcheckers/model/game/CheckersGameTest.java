@@ -124,7 +124,7 @@ class CheckersGameTest {
 	}
 
 	@Test
-	void resignGame_1(){
+	void resignGame_1() {
 		CuT.activePlayer=redPlayer;
 		assertEquals(Message.Type.INFO,CuT.resignGame(CuT.activePlayer).getType());
 	}

@@ -8,21 +8,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RowTest {
-
+	
 	private Row CuT;
 	private int idx;
 	private Piece[] pieces;
-
-
+	
 	@BeforeEach
-	void setUp(){
+	void setUp() {
 		idx = 5;
 		pieces = new Piece[8];
-
+		
 		CuT = new Row(idx,pieces,true);
-
 	}
-
+	
 	@Test
 	void getIndex() {
 		assertEquals(idx, CuT.getIndex());
