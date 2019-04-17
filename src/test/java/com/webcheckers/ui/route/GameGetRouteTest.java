@@ -1,17 +1,13 @@
-import com.google.gson.JsonArray;
+package com.webcheckers.ui.route;
+
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.ReplayArchive;
 import com.webcheckers.model.Player;
-import com.webcheckers.model.game.AbstractGame;
 import com.webcheckers.model.game.CheckersGame;
-import com.webcheckers.ui.TemplateEngineTester;
+import com.webcheckers.TemplateEngineTester;
 import com.webcheckers.ui.WebServer;
-import com.webcheckers.ui.route.GameGetRoute;
-import com.webcheckers.ui.route.LiveGameGetRoute;
 import com.webcheckers.util.ViewMode;
 
-import java.util.HashMap;
-import java.util.Map;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
