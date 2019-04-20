@@ -15,8 +15,8 @@ public enum TestMode {
 	}),
 	
 	ENDGAME(board -> {
-		board[3][4] = new Piece(Type.KING, Color.WHITE);
-		board[4][3] = new Piece(Type.KING, Color.RED);
+		board[2][3] = new Piece(Type.KING, Color.WHITE);
+		board[1][4] = new Piece(Type.SINGLE, Color.RED);
 	});
 	
 	private final BoardAction action;
